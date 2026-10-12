@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Upload a photo or choose a real industrial sample. See unusual areas and the next checks in SurfaceTrace.">
+  <title>Analyze a photo | SurfaceTrace</title>
+  <link rel="stylesheet" href="./site.css">
+  <script src="./app.js" defer></script>
+</head>
+<body class="inspector-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header inspect-header"><a class="logo" href="./index.html" aria-label="SurfaceTrace home"><span class="logo-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>SurfaceTrace<small>VISUAL INSPECTION</small></span></a><nav class="main-nav" aria-label="Main navigation"><a href="./index.html">← Overview</a><span class="nav-current" aria-current="page">Analyzer</span><span class="header-team">Team 이상무×RIKU</span></nav></header>
+  <main id="main" class="inspect-main">
+    <div class="inspect-intro"><div><p class="section-kicker">VISUAL REVIEW</p><h1>Upload a photo.<br>See where to look.</h1></div><p class="inspect-prompt">PHOTO → HIGHLIGHT → REVIEW</p></div>
+
+    <div class="inspect-grid">
+      <section class="inspect-card image-card" aria-labelledby="image-heading"><div class="inspect-card-head"><h2 id="image-heading">Photo</h2><span class="file-name" id="filename">No photo selected</span></div><div class="upload-row"><label class="upload-button" for="fileInput">＋ Upload photo</label><input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp"><button class="sample-button" id="trySample" type="button">Try a sample</button><span class="file-hint">JPG · PNG · WebP · up to 15 MB</span></div><div class="viewer" id="viewer"><div class="empty" id="empty"><span class="empty-icon" aria-hidden="true">⌗</span><span class="empty-message">Upload a photo or choose a sample</span></div><div class="image-wrap" id="imageWrap"><img id="sourceImage" alt="Original photo for analysis"><img id="heatmap" alt="Anomaly heatmap overlaid on the original photo"></div></div><div class="viewer-foot"><label class="range">Highlight <input id="opacity" type="range" min="0" max="100" value="72" aria-label="Heatmap opacity"></label><span class="legend"><i></i> Red marks areas unlike the reference</span></div></section>
+
+      <div class="result-column"><section class="inspect-card result-card" aria-labelledby="result-heading"><div class="inspect-card-head"><h2 id="result-heading">Result</h2></div><div class="result-body"><span class="status" id="status" role="status">Ready</span><span class="dataset-label" id="datasetLabel" hidden></span><div class="scoreline"><span class="score" id="score">—</span><span class="scorecaption">Anomaly score<br>Not a probability</span></div><div class="meter"><span id="meterFill"></span></div><div class="threshold"><span>0</span><span id="threshold">Review threshold —</span></div><p class="assessment" id="assessment">Choose a photo to begin.</p></div></section><section class="inspect-card action-card" aria-labelledby="action-heading"><div class="inspect-card-head"><h2 id="action-heading">Next check</h2></div><div class="actions"><ol id="actions"><li>Choose a photo.</li></ol><p>An operator makes the final decision.</p></div></section></div>
+    </div>
+
+    <section class="inspect-card samples-section" aria-labelledby="samples-heading"><div class="inspect-card-head"><h2 id="samples-heading">Real photo samples</h2><span class="file-name">KolektorSDD labels</span></div><div class="sample-grid" id="samples"></div></section>
+    <details class="inspect-source"><summary>Image credits</summary><p><a href="https://www.vicos.si/resources/kolektorsdd/" target="_blank" rel="noopener noreferrer">KolektorSDD · ViCoS Lab</a> · <a href="https://doi.org/10.1007/s10845-019-01476-x" target="_blank" rel="noopener noreferrer">Tabernik et al. (2019)</a> · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a></p></details>
+  </main>
+</body>
+</html>
