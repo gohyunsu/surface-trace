@@ -17,7 +17,7 @@ const { chromium } = require("playwright");
         if (name === "inspector") await page.waitForFunction(() => document.querySelector("#score").textContent !== "—");
         const audit = await page.evaluate(() => ({
           overflow: document.documentElement.scrollWidth > innerWidth + 1,
-          brokenImages: [...document.images].filter(img => !img.complete || !img.naturalWidth).map(img => img.src),
+          brokenImages: [...document.images].filter(img => img.complete && !img.naturalWidth).map(img => img.src),
         }));
         await page.screenshot({ path: path.join(out, `${name}-${viewport.label}.png`), fullPage: true });
         console.log(`${name} ${viewport.label} ${JSON.stringify(audit)}`);

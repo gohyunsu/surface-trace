@@ -8,18 +8,18 @@ SurfaceTrace highlights regions unlike normal reference photos and gives an oper
 
 | Path | Purpose |
 | --- | --- |
-| `web/` | Editable HTML, CSS, JavaScript, six attributed demo photos, and two example heatmaps |
+| `web/` | Editable HTML, CSS, JavaScript, held-out photos, landscape display copies, and example heatmaps |
 | `model/` | CPU reference model, saved normal patch bank, browser calibration, and Python evaluation |
 | `scripts/` | Static site build, calibration, and browser checks |
 | `data/ksdd/` | Reproducible item-group split; full dataset images are downloaded separately |
 | `docs/` | Generated static site served by GitHub Pages from `main` / `docs` |
 | `notes/experiment.md` | Experiment protocol, metrics, and limitations |
 
-Edit `web/` or the model source, then run `python scripts/build_site.py`. Commit the resulting `docs/` changes with the source changes. The site performs inference entirely in the browser; uploaded photos are not sent to an analysis server.
+Edit `web/` or the model source, then run `python scripts/build_site.py`. Commit the resulting `docs/` changes with the source changes. The site runs inference in the browser on packaged held-out test photos; it has no upload feature.
 
 ## Run locally
 
-The checked-in model and six photos are enough to rebuild and test the site without downloading the full dataset:
+The checked-in model and held-out test photos are enough to rebuild and test the site without downloading the full dataset:
 
 ```bash
 python -m pip install -r requirements.txt
@@ -28,6 +28,8 @@ python -m http.server 8766 --bind 127.0.0.1 --directory docs
 ```
 
 Open `http://127.0.0.1:8766/`. To run the browser checks, install Node dependencies with `npm install` and a browser with `npx playwright install chromium`, then use `npm run smoke` or `npm run visual`. Set `SITE_URL` to test a deployed site; otherwise the scripts use the local server. Set `CHROME_PATH` to an installed Chrome executable if desired.
+
+To refresh the packaged samples from the original KolektorSDD dataset, run `python scripts/prepare_samples.py` before building. It keeps each original JPEG for model input and creates a landscape copy for display.
 
 ## Reproduce the model and evaluation
 
@@ -49,5 +51,5 @@ This repository is the single source for both code and the GitHub Pages site. Pa
 
 ## Data attribution
 
-The six demo photos and reference model are derived from [KolektorSDD by ViCoS Lab / Kolektor Group](https://www.vicos.si/resources/kolektorsdd/), associated with [Tabernik et al. (2019)](https://doi.org/10.1007/s10845-019-01476-x). The dataset is [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/); check the source terms before commercial use. No license for the original project code is granted by this README.
+The demo photos and reference model are derived from [KolektorSDD by ViCoS Lab / Kolektor Group](https://www.vicos.si/resources/kolektorsdd/), associated with [Tabernik et al. (2019)](https://doi.org/10.1007/s10845-019-01476-x). The dataset is [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/); check the source terms before commercial use. No license for the original project code is granted by this README.
 
