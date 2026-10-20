@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import csv
 import json
 import shutil
 import sys
@@ -13,25 +12,17 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "model"))
 from model import DATA, MODEL  # noqa: E402
+from sample_catalog import test_rows  # noqa: E402
 
 
 WEB = ROOT / "web"
 OUT = ROOT / "docs"
-SAMPLES = [
-    "raw/kos07/Part1.jpg",
-    "raw/kos15/Part3.jpg",
-    "raw/kos02/Part6.jpg",
-    "raw/kos02/Part0.jpg",
-    "raw/kos02/Part1.jpg",
-    "raw/kos02/Part2.jpg",
-]
-
-
 def main() -> None:
     if not MODEL.exists():
         raise SystemExit("Train the reference model with model.py first")
     OUT.mkdir(exist_ok=True)
     (OUT / "samples").mkdir(exist_ok=True)
+    (OUT / "landscape").mkdir(exist_ok=True)
     for source, target in [
         ("landing.html", "index.html"),
         ("inspector.html", "inspect.html"),
@@ -55,18 +46,27 @@ def main() -> None:
     }
     (OUT / "normal_reference.json").write_text(json.dumps(payload, separators=(",", ":")), encoding="utf-8")
 
-    rows = {r["image"]: r for r in csv.DictReader((DATA / "manifest.csv").open(encoding="utf-8"))}
-    for i, path in enumerate(SAMPLES, 1):
-        if rows[path]["split"] != "test":
-            raise SystemExit(f"Sample is not in the test split: {path}")
-        source = WEB / "samples" / f"sample-{i:02d}.jpg"
-        if not source.exists():
-            source = DATA / path
-        shutil.copyfile(source, OUT / "samples" / f"sample-{i:02d}.jpg")
+    samples = test_rows(DATA / "manifest.csv")
+    catalog = []
+    for i, row in enumerate(samples, 1):
+        name = f"sample-{i:02d}.jpg"
+        original = WEB / "samples" / name
+        landscape = WEB / "landscape" / name
+        if not original.exists() or not landscape.exists():
+            raise SystemExit(f"Run scripts/prepare_samples.py before building: {name}")
+        shutil.copyfile(original, OUT / "samples" / name)
+        shutil.copyfile(landscape, OUT / "landscape" / name)
+        catalog.append({
+            "id": i,
+            "label": "Defect" if row["is_anomaly"] == "1" else "Normal",
+            "model": f"./samples/{name}",
+            "display": f"./landscape/{name}",
+        })
+    (OUT / "samples.json").write_text(json.dumps(catalog, separators=(",", ":")), encoding="utf-8")
     for sample in ("01", "04"):
         shutil.copyfile(WEB / "demo_assets" / f"sample-{sample}-heat.png", OUT / "samples" / f"sample-{sample}-heat.png")
     print(f"Built {OUT}")
-    print(f"Static model: {len(payload['bank'])} feature values, {len(SAMPLES)} samples")
+    print(f"Static model: {len(payload['bank'])} feature values, {len(samples)} held-out samples")
 
 
 if __name__ == "__main__":
