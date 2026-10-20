@@ -8,7 +8,7 @@ SurfaceTrace highlights regions unlike normal reference photos and gives an oper
 
 | Path | Purpose |
 | --- | --- |
-| `web/` | Editable HTML, CSS, JavaScript, held-out photos, landscape display copies, and example heatmaps |
+| `web/` | Editable HTML, CSS, JavaScript, six method GIFs, held-out photos, landscape display copies, and example heatmaps |
 | `model/` | CPU reference model, saved normal patch bank, browser calibration, and Python evaluation |
 | `scripts/` | Static site build, calibration, and browser checks |
 | `data/ksdd/` | Reproducible item-group split; full dataset images are downloaded separately |
@@ -30,6 +30,8 @@ python -m http.server 8766 --bind 127.0.0.1 --directory docs
 Open `http://127.0.0.1:8766/`. To run the browser checks, install Node dependencies with `npm install` and a browser with `npx playwright install chromium`, then use `npm run smoke` or `npm run visual`. Set `SITE_URL` to test a deployed site; otherwise the scripts use the local server. Set `CHROME_PATH` to an installed Chrome executable if desired.
 
 To refresh the packaged samples from the original KolektorSDD dataset, run `python scripts/prepare_samples.py` before building. It keeps each original JPEG for model input and creates a landscape copy for display.
+
+The six method animations use actual split-specific photos and model intermediates. They live in `web/method/`; the frames contain no labels, while the short explanations remain in the page. The favicon is `web/favicon.svg`.
 
 ## Reproduce the model and evaluation
 

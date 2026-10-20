@@ -23,14 +23,20 @@ def main() -> None:
     OUT.mkdir(exist_ok=True)
     (OUT / "samples").mkdir(exist_ok=True)
     (OUT / "landscape").mkdir(exist_ok=True)
+    (OUT / "method").mkdir(exist_ok=True)
     for source, target in [
         ("landing.html", "index.html"),
         ("inspector.html", "inspect.html"),
         ("site.css", "site.css"),
+        ("method.js", "method.js"),
+        ("favicon.svg", "favicon.svg"),
     ]:
         shutil.copyfile(WEB / source, OUT / target)
     (OUT / ".nojekyll").touch()
     shutil.copyfile(WEB / "app.js", OUT / "app.js")
+    for asset in (WEB / "method").iterdir():
+        if asset.suffix in {".gif", ".png"}:
+            shutil.copyfile(asset, OUT / "method" / asset.name)
 
     saved = np.load(MODEL)
     calibration_file = ROOT / "model" / "browser_calibration.json"
