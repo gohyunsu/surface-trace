@@ -117,7 +117,13 @@ h1,h2,h3,h4{font-weight:500}
 .result-body .scoreline{margin-top:21px}
 .result-body .assessment{margin-top:16px;line-height:1.55}
 .result-body .assessment:empty{display:none}
-.result-body .threshold{justify-content:flex-end}
+.score-meter{position:relative;margin:20px 0 33px}
+.score-meter .meter{margin:0}
+.score-meter .meter span{background:#7786ca}
+.score-meter.review .meter span{background:#e36d65}
+.threshold-marker{position:absolute;top:-8px;width:3px;height:24px;background:#b93142;transform:translateX(-50%);box-shadow:0 0 0 2px #fff}
+.threshold-marker[hidden]{display:none}
+.threshold-marker span{position:absolute;top:25px;left:50%;transform:translateX(-50%);color:#b93142;font-size:10px;font-variant-numeric:tabular-nums;white-space:nowrap}
 .action-card .actions{padding:17px 24px}
 .action-card .actions li:last-child{padding-bottom:0}
 .samples-section{margin-top:18px}
@@ -159,15 +165,8 @@ h1,h2,h3,h4{font-weight:500}
 .landing-page .example-label{left:16px;bottom:16px}
 .method-animation-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 .method-card{background:#fff;border:1px solid #dce2f0;border-radius:8px;overflow:hidden;min-width:0}
-.method-play{width:100%;aspect-ratio:12/7;position:relative;border:0;background:#f5f6fa;padding:0;display:block;overflow:hidden}
-.method-play img{display:block;width:100%;height:100%;object-fit:contain}
-.method-play:focus-visible{outline:3px solid #6575c3;outline-offset:-3px}
-.play-glyph{position:absolute;right:14px;bottom:14px;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#252d44e8;color:#e6eaff;font-size:11px;transition:transform .2s,opacity .2s}
-.method-play:hover .play-glyph{transform:scale(1.1)}
-.method-play[aria-pressed="true"] .play-glyph{opacity:0}
-.method-play[aria-pressed="true"]:hover .play-glyph,.method-play[aria-pressed="true"]:focus-visible .play-glyph{opacity:1}
-.method-play[aria-pressed="true"] .play-glyph{font-size:0}
-.method-play[aria-pressed="true"] .play-glyph:before{content:"Ⅱ";font-size:15px}
+.method-animation{width:100%;aspect-ratio:12/7;background:#f5f6fa;overflow:hidden}
+.method-animation img{display:block;width:100%;height:100%;object-fit:contain}
 .method-card-copy{display:grid;grid-template-columns:28px 1fr;gap:10px;min-height:99px;padding:16px 18px 19px}
 .method-card-copy>span{color:#6878bb;font-size:11px;padding-top:4px}
 .method-card-copy h3{margin:0 0 6px;font-size:16px;letter-spacing:-.025em}

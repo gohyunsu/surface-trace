@@ -167,8 +167,14 @@ async function analyze(blob, sample, thisRequest) {
     if (thisRequest !== requestId) return;
     $("heatmap").src = result.heatmap;
     $("score").textContent = result.score.toFixed(2);
-    $("threshold").textContent = "Review threshold " + result.threshold.toFixed(2);
-    $("meterFill").style.width = Math.min(100, result.score / Math.max(result.threshold * 1.5, .01) * 100) + "%";
+    const meterMax = Math.max(result.threshold * 1.5, .01);
+    $("threshold").textContent = result.threshold.toFixed(2);
+    $("thresholdMarker").style.left = Math.min(100, result.threshold / meterMax * 100) + "%";
+    $("thresholdMarker").title = "Review threshold " + result.threshold.toFixed(2);
+    $("thresholdMarker").hidden = false;
+    $("meterFill").style.width = Math.min(100, result.score / meterMax * 100) + "%";
+    $("scoreMeter").classList.toggle("review", result.score >= result.threshold);
+    $("scoreMeter").setAttribute("aria-label", `Anomaly score ${result.score.toFixed(2)}; review threshold ${result.threshold.toFixed(2)}`);
     if (result.score >= result.threshold) {
       setStatus("Review needed", "review");
       $("assessment").textContent = sample.label === "Normal"
@@ -218,6 +224,9 @@ async function loadSample(index) {
   $("heatmap").removeAttribute("src");
   $("score").textContent = "—";
   $("meterFill").style.width = "0";
+  $("thresholdMarker").hidden = true;
+  $("scoreMeter").classList.remove("review");
+  $("scoreMeter").setAttribute("aria-label", "Anomaly score and review threshold");
   $("assessment").textContent = "";
   steps([]);
   setStatus("Analyzing");

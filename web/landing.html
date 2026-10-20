@@ -7,7 +7,6 @@
   <title>SurfaceTrace | See where to look</title>
   <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <link rel="stylesheet" href="./site.css">
-  <script src="./method.js" defer></script>
 </head>
 <body class="landing-page">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -38,14 +37,14 @@
       </div>
     </section>
     <section class="method-section" id="workflow"><div class="section method-inner">
-      <div class="method-heading"><div><p class="section-kicker">HOW IT WORKS</p><h2>From photo to highlight.</h2></div><p>Tap a frame to play each step.</p></div>
+      <div class="method-heading"><div><p class="section-kicker">HOW IT WORKS</p><h2>From photo to highlight.</h2></div></div>
       <div class="method-animation-grid">
-<article class="method-card"><button class="method-play" type="button" aria-label="Play step 1: Build the reference" aria-pressed="false" data-poster="./method/01-poster.png" data-animation="./method/01.gif"><img src="./method/01-poster.png" alt=""><span class="play-glyph" aria-hidden="true">▶</span></button><div class="method-card-copy"><span>01</span><div><h3>Build the reference</h3><p>Normal photos become feature maps and stored patch vectors.</p></div></div></article>
-<article class="method-card"><button class="method-play" type="button" aria-label="Play step 2: Prepare the photo" aria-pressed="false" data-poster="./method/02-poster.png" data-animation="./method/02.gif"><img src="./method/02-poster.png" alt=""><span class="play-glyph" aria-hidden="true">▶</span></button><div class="method-card-copy"><span>02</span><div><h3>Prepare the photo</h3><p>Match the reference framing and contrast.</p></div></div></article>
-<article class="method-card"><button class="method-play" type="button" aria-label="Play step 3: Split into patches" aria-pressed="false" data-poster="./method/03-poster.png" data-animation="./method/03.gif"><img src="./method/03-poster.png" alt=""><span class="play-glyph" aria-hidden="true">▶</span></button><div class="method-card-copy"><span>03</span><div><h3>Split into patches</h3><p>Examine small areas across the surface.</p></div></div></article>
-<article class="method-card"><button class="method-play" type="button" aria-label="Play step 4: Measure features" aria-pressed="false" data-poster="./method/04-poster.png" data-animation="./method/04.gif"><img src="./method/04-poster.png" alt=""><span class="play-glyph" aria-hidden="true">▶</span></button><div class="method-card-copy"><span>04</span><div><h3>Measure features</h3><p>Capture brightness, dark gaps, and edges.</p></div></div></article>
-<article class="method-card"><button class="method-play" type="button" aria-label="Play step 5: Find closest normal" aria-pressed="false" data-poster="./method/05-poster.png" data-animation="./method/05.gif"><img src="./method/05-poster.png" alt=""><span class="play-glyph" aria-hidden="true">▶</span></button><div class="method-card-copy"><span>05</span><div><h3>Find closest normal</h3><p>Compare each patch with the normal bank.</p></div></div></article>
-<article class="method-card"><button class="method-play" type="button" aria-label="Play step 6: Map anomalies" aria-pressed="false" data-poster="./method/06-poster.png" data-animation="./method/06.gif"><img src="./method/06-poster.png" alt=""><span class="play-glyph" aria-hidden="true">▶</span></button><div class="method-card-copy"><span>06</span><div><h3>Map anomalies</h3><p>Highlight unusual areas for review.</p></div></div></article>
+<article class="method-card"><div class="method-animation"><img src="./method/01.gif" alt=""></div><div class="method-card-copy"><span>01</span><div><h3>Build the reference</h3><p>Normal photos become feature maps and stored patch vectors.</p></div></div></article>
+<article class="method-card"><div class="method-animation"><img src="./method/02.gif" alt=""></div><div class="method-card-copy"><span>02</span><div><h3>Prepare the photo</h3><p>Match the reference framing and contrast.</p></div></div></article>
+<article class="method-card"><div class="method-animation"><img src="./method/03.gif" alt=""></div><div class="method-card-copy"><span>03</span><div><h3>Split into patches</h3><p>Examine small areas across the surface.</p></div></div></article>
+<article class="method-card"><div class="method-animation"><img src="./method/04.gif" alt=""></div><div class="method-card-copy"><span>04</span><div><h3>Measure features</h3><p>Capture brightness, dark gaps, and edges.</p></div></div></article>
+<article class="method-card"><div class="method-animation"><img src="./method/05.gif" alt=""></div><div class="method-card-copy"><span>05</span><div><h3>Find closest normal</h3><p>Compare each patch with the normal bank.</p></div></div></article>
+<article class="method-card"><div class="method-animation"><img src="./method/06.gif" alt=""></div><div class="method-card-copy"><span>06</span><div><h3>Map anomalies</h3><p>Highlight unusual areas for review.</p></div></div></article>
       </div>
       <div class="evaluation-summary"><div><p class="section-kicker">HELD-OUT TEST</p><h3>KolektorSDD · metal surface photos</h3><p>64 photos · split by product group</p></div><div class="evaluation-metrics"><div><span>0.879</span><small>Image AUROC</small></div><div><span>5 / 8</span><small>Defect images flagged</small></div><div><span>7 / 56</span><small>Normal images flagged</small></div></div></div>
       <div class="method-foot"><p>The score measures distance from normal patches. It is not a defect probability or a rubber belt quality decision.</p><a class="button button-dark" href="./inspect.html">Explore samples <span aria-hidden="true">↗</span></a></div>

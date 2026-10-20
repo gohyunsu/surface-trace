@@ -50,8 +50,10 @@
             <span class="status" id="status" role="status">Loading</span>
             <span class="dataset-label" id="datasetLabel"></span>
             <div class="scoreline"><span class="score" id="score">—</span><span class="scorecaption">Anomaly score<br>Not a probability</span></div>
-            <div class="meter"><span id="meterFill"></span></div>
-            <div class="threshold"><span id="threshold">Review threshold —</span></div>
+            <div class="score-meter" id="scoreMeter" role="img" aria-label="Anomaly score and review threshold">
+              <div class="meter"><span id="meterFill"></span></div>
+              <div class="threshold-marker" id="thresholdMarker" aria-hidden="true" hidden><span id="threshold"></span></div>
+            </div>
             <p class="assessment" id="assessment"></p>
           </div>
         </section>

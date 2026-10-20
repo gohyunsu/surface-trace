@@ -18,11 +18,13 @@ const { chromium } = require("playwright");
     assert.strictEqual(await page.locator(".method-card").count(), 6);
     const landingDimensions = await page.locator(".hero-demo .base-photo").evaluate(img => [img.naturalWidth, img.naturalHeight]);
     assert(landingDimensions[0] > landingDimensions[1], "Landing photo is not landscape");
-    const firstStep = page.locator(".method-play").first();
-    await firstStep.click();
-    assert((await firstStep.locator("img").getAttribute("src")).endsWith("01.gif"));
-    await page.getByRole("button", { name: "Pause step 1: Build the reference" }).click();
-    assert((await firstStep.locator("img").getAttribute("src")).endsWith("01-poster.png"));
+    assert.strictEqual(await page.locator(".method-play").count(), 0);
+    const methodFrames = page.locator(".method-animation img");
+    assert.strictEqual(await methodFrames.count(), 6);
+    for (let i = 0; i < 6; i++) {
+      assert((await methodFrames.nth(i).getAttribute("src")).endsWith(`0${i + 1}.gif`));
+      assert(await methodFrames.nth(i).evaluate(img => img.complete && img.naturalWidth > 0));
+    }
     await page.getByRole("link", { name: /Try a real sample/ }).click();
     assert(page.url().includes("inspect.html?sample=1"));
     await page.waitForFunction(() => document.querySelector("#score").textContent !== "—", null, { timeout: 60000 });
@@ -30,6 +32,9 @@ const { chromium } = require("playwright");
     assert.strictEqual(await page.locator('input[type="file"]').count(), 0);
     const score = Number(await page.locator("#score").textContent());
     assert(score > 2.5 && score < 4.5, `Unexpected sample score: ${score}`);
+    assert.strictEqual(await page.locator("#thresholdMarker").isVisible(), true);
+    assert(Math.abs(parseFloat(await page.locator("#thresholdMarker").evaluate(el => el.style.left)) - 66.67) < .1);
+    assert.strictEqual(await page.locator("#threshold").textContent(), "2.48");
     assert.strictEqual(await page.locator("#status").textContent(), "Review needed");
     const dimensions = await page.evaluate(async () => {
       const source = document.querySelector("#sourceImage");

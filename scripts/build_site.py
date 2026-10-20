@@ -28,7 +28,6 @@ def main() -> None:
         ("landing.html", "index.html"),
         ("inspector.html", "inspect.html"),
         ("site.css", "site.css"),
-        ("method.js", "method.js"),
         ("favicon.svg", "favicon.svg"),
     ]:
         shutil.copyfile(WEB / source, OUT / target)
