@@ -10,17 +10,24 @@ const { chromium } = require("playwright");
   const out = path.join(__dirname, "..", "out", "visual");
   fs.mkdirSync(out, { recursive: true });
   try {
-    for (const viewport of [{ width: 1440, height: 900, label: "desktop" }, { width: 390, height: 844, label: "mobile" }]) {
+    for (const viewport of [
+      { width: 1440, height: 900, label: "desktop" },
+      { width: 768, height: 900, label: "tablet" },
+      { width: 390, height: 844, label: "mobile" },
+      { width: 320, height: 740, label: "compact" },
+    ]) {
       const page = await browser.newPage({ viewport });
       for (const [name, suffix] of [["landing", ""], ["inspector", "inspect.html?sample=1"]]) {
         await page.goto(new URL(suffix, base).href, { waitUntil: "networkidle" });
+        if (name === "landing") await page.locator(".method-animation img").evaluateAll(imgs => Promise.all(imgs.map(img => img.decode())));
         if (name === "inspector") await page.waitForFunction(() => document.querySelector("#score").textContent !== "—");
         const audit = await page.evaluate(() => ({
           overflow: document.documentElement.scrollWidth > innerWidth + 1,
-          brokenImages: [...document.images].filter(img => img.complete && !img.naturalWidth).map(img => img.src),
+          brokenImages: [...document.images].filter(img => img.loading !== "lazy" && img.complete && !img.naturalWidth).map(img => img.src),
         }));
         await page.screenshot({ path: path.join(out, `${name}-${viewport.label}.png`), fullPage: true });
         console.log(`${name} ${viewport.label} ${JSON.stringify(audit)}`);
+        if (audit.overflow || audit.brokenImages.length) throw new Error(`${name} ${viewport.label}: layout or image failure`);
       }
       await page.close();
     }

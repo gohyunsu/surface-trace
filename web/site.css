@@ -182,3 +182,24 @@ h1,h2,h3,h4{font-weight:500}
 .evaluation-metrics small{font-size:11px;color:#55617e;margin-top:5px}
 @media(max-width:1000px){.landing-page .hero-inner{grid-template-columns:1fr;padding-top:72px;padding-bottom:76px}.landing-page .hero-demo{max-width:760px;justify-self:start}.landing-page .hero-team{margin-top:37px}.method-animation-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.landing-page .hero-inner{padding:56px 20px 69px}.landing-page .hero-demo{box-shadow:9px 10px 0 #11182a}.landing-page .hero-team{margin-top:29px}.landing-page .demo-summary{min-height:52px;padding:10px 13px;gap:10px;font-size:11px}.landing-page .section-heading{display:flex;align-items:end;gap:10px}.landing-page .section-heading h2{font-size:31px}.section-link{max-width:95px;font-size:11px;line-height:1.35}.landing-page .example-info{padding:15px 18px 18px}.landing-page .example-info h3{font-size:19px}.method-heading{display:flex;align-items:end}.method-heading h2{font-size:32px}.method-heading>p:last-child{max-width:90px;font-size:11px;text-align:right;margin:0 0 3px}.method-animation-grid{grid-template-columns:1fr;gap:12px}.method-card-copy{min-height:0}.evaluation-summary{grid-template-columns:1fr;gap:18px;padding:21px}.evaluation-metrics{gap:5px}.evaluation-metrics>div{padding-left:9px}.evaluation-metrics span{font-size:22px}.evaluation-metrics small{font-size:10px}.method-foot{display:block}}
+/* Final type and spacing pass */
+.main-nav{font-size:13px}
+.landing-page .hero-team{margin-top:51px;font-size:13px;letter-spacing:.01em}
+.landing-page .demo-top,.landing-page .demo-summary{font-size:12px}
+.landing-page .example-type,.landing-page .example-label{font-size:12px}
+.method-card-copy{grid-template-columns:30px 1fr;gap:12px;min-height:110px;padding:18px 20px 20px}
+.method-card-copy>span{font-size:12px}
+.method-card-copy h3{font-size:17px;line-height:1.3}
+.method-card-copy p{font-size:13px;line-height:1.5}
+.evaluation-summary p:not(.section-kicker),.evaluation-metrics small{font-size:12px;line-height:1.4}
+.method-foot p{font-size:12px}
+.footer-bottom{font-size:12px;line-height:1.65}
+.inspector-page .inspect-prompt{font-size:14px}
+.inspector-page .file-name,.inspector-page .scorecaption,.inspector-page .dataset-label,.inspector-page .status,.inspector-page .legend,.inspector-page .range,.inspector-page .sample-switcher,.inspector-page .sample-filters button{font-size:12px}
+.inspector-page .actions li{font-size:13px}
+.inspector-page .threshold-marker span{font-size:11px}
+.inspector-page .samples-section .sample-name{font-size:12px}
+.inspector-page .samples-section .sample-truth{font-size:11px}
+@media(max-width:1000px){.landing-page .hero-team{margin-top:34px}}
+@media(max-width:700px){.main-nav{font-size:12px}.landing-page .hero-team{margin-top:31px;font-size:12px}.landing-page .demo-summary{font-size:11px}.method-card-copy{min-height:0;padding:16px 18px 18px}.method-card-copy h3{font-size:17px}.method-card-copy p{font-size:12.5px}.evaluation-metrics small{font-size:11px}.inspector-page .samples-section .sample-name{font-size:11px}.inspector-page .samples-section .sample-truth{font-size:10px}}
+@media(max-width:380px){.landing-page .hero-actions{row-gap:14px}.landing-page .section-heading{display:block}.landing-page .section-heading h2{font-size:29px;white-space:nowrap}.landing-page .section-link{display:inline-block;max-width:none;margin-top:12px;padding-bottom:0}.inspector-page .image-card .viewer-foot{display:grid;justify-content:start;gap:9px}.inspector-page .samples-section .inspect-card-head{flex-direction:column;align-items:flex-start;gap:9px}.inspector-page .samples-section .inspect-card-head h2{white-space:nowrap}}

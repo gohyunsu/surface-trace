@@ -1,6 +1,6 @@
 # SurfaceTrace
 
-[Live site](https://gohyunsu.github.io/surface-trace/) · Industrial surface anomaly review demo by ISM×RIKU
+[Live site](https://gohyunsu.github.io/surface-trace/) · Industrial surface anomaly review demo by ISM × RIKU
 
 SurfaceTrace highlights regions unlike normal reference photos and gives an operator a review cue. The current data is **KolektorSDD metal surface imagery**, not rubber belt imagery. The anomaly score is a distance, not a defect probability or a production quality decision.
 
