@@ -26,7 +26,7 @@ This is a project-specific split, not the official three-fold KolektorSDD benchm
 
 ## Held-out browser result
 
-`model/browser_calibration.json` records image AUROC **0.879**, defect images flagged **5/8**, and normal false alarms **7/56** at threshold **2.477**. The test contains only eight defect images, and three were missed. Localization accuracy has not been measured against pixel masks. The six visible site samples are from the test split and are examples, not extra evaluation data.
+`model/browser_calibration.json` records image AUROC **0.879**, defect images flagged **5/8**, and normal false alarms **7/56** at threshold **2.477**. The test contains only eight defect images, and three were missed. Localization accuracy has not been measured against pixel masks. All 64 held-out test photos are available in the site's sample explorer; their dataset labels are separate from the model's review result.
 
 ## Next experiment
 

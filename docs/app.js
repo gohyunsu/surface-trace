@@ -168,7 +168,7 @@ async function analyze(blob, sample, thisRequest) {
     $("heatmap").src = result.heatmap;
     $("score").textContent = result.score.toFixed(2);
     const meterMax = Math.max(result.threshold * 1.5, .01);
-    $("threshold").textContent = result.threshold.toFixed(2);
+    $("threshold").textContent = "Threshold " + result.threshold.toFixed(2);
     $("thresholdMarker").style.left = Math.min(100, result.threshold / meterMax * 100) + "%";
     $("thresholdMarker").title = "Review threshold " + result.threshold.toFixed(2);
     $("thresholdMarker").hidden = false;
@@ -178,15 +178,17 @@ async function analyze(blob, sample, thisRequest) {
     if (result.score >= result.threshold) {
       setStatus("Review needed", "review");
       $("assessment").textContent = sample.label === "Normal"
-        ? "Flagged despite the normal dataset label."
+        ? "False alarm: this photo is labeled normal."
         : "";
-      steps(["Inspect the highlighted area", "Record the decision"]);
+      steps(["Inspect the highlighted area", "Record the inspection result"]);
     } else {
       setStatus("Within range", "ok");
       $("assessment").textContent = sample.label === "Defect"
-        ? "This labeled defect was not flagged."
+        ? "Missed defect: the score is below the review threshold."
         : "";
-      steps(["Check the photo", "Record the result"]);
+      steps(sample.label === "Defect"
+        ? ["Inspect the labeled defect", "Record the missed detection"]
+        : ["Inspect the photo", "Record the inspection result"]);
     }
   } catch {
     if (thisRequest !== requestId) return;
@@ -204,7 +206,7 @@ function visibleIndices() {
 function updateNavigation() {
   const visible = visibleIndices();
   const position = visible.indexOf(currentSample);
-  $("samplePosition").textContent = `${String(currentSample + 1).padStart(2, "0")} / ${String(samples.length).padStart(2, "0")}`;
+  $("samplePosition").textContent = `${String(position + 1).padStart(2, "0")} / ${String(visible.length).padStart(2, "0")}`;
   $("prevSample").disabled = position <= 0;
   $("nextSample").disabled = position < 0 || position >= visible.length - 1;
 }
@@ -220,7 +222,7 @@ async function loadSample(index) {
   source.src = sample.display;
   $("imageWrap").hidden = false;
   $("sampleName").textContent = `Sample ${String(sample.id).padStart(2, "0")}`;
-  $("datasetLabel").textContent = `Dataset: ${sample.label}`;
+  $("datasetLabel").textContent = `Dataset label: ${sample.label}`;
   $("heatmap").removeAttribute("src");
   $("score").textContent = "—";
   $("meterFill").style.width = "0";

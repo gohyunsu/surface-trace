@@ -12,16 +12,16 @@
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <a class="logo" href="./index.html" aria-label="SurfaceTrace home"><span class="logo-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>SurfaceTrace<small>VISUAL INSPECTION</small></span></a>
-    <nav class="main-nav" aria-label="Main navigation"><a href="#experience">Samples</a><a href="#workflow">Method</a><a class="nav-cta" href="./inspect.html">Explore samples <span aria-hidden="true">↗</span></a></nav>
+    <nav class="main-nav" aria-label="Main navigation"><a href="#experience">Examples</a><a href="#workflow">Method</a><a class="nav-cta" href="./inspect.html">Explore all samples <span aria-hidden="true">↗</span></a></nav>
   </header>
   <main id="main">
     <section class="hero"><div class="hero-inner">
       <div class="hero-copy">
-        <p class="eyebrow"><span class="eyebrow-line"></span> SURFACE ANOMALY DEMO</p>
+        <p class="eyebrow"><span class="eyebrow-line"></span> METAL SURFACE DEMO</p>
         <h1>Find the area<br><em>to review.</em></h1>
-        <p class="hero-description">Compare a real surface photo with a normal reference. See the model's signal on the image.</p>
+        <p class="hero-description">Compare a real metal surface photo with the normal reference. See where it differs.</p>
         <div class="hero-actions"><a class="button button-light" href="./inspect.html?sample=1">Try a real sample <span aria-hidden="true">↗</span></a><a class="text-link" href="#workflow">See the method ↓</a></div>
-        <div class="hero-team">Team 이상무×RIKU</div>
+        <div class="hero-team">ISM×RIKU</div>
       </div>
       <a class="hero-demo" href="./inspect.html?sample=1" aria-label="Open the highlighted sample">
         <div class="demo-top"><span>REAL TEST PHOTO</span><span>01 / 64</span></div>
@@ -30,26 +30,26 @@
       </a>
     </div></section>
     <section class="section experience" id="experience">
-      <div class="section-heading"><div><p class="section-kicker">REAL PHOTOS</p><h2>Explore the test set.</h2></div><a class="section-link" href="./inspect.html">View all 64 samples ↗</a></div>
+      <div class="section-heading"><div><p class="section-kicker">REAL PHOTOS</p><h2>See real photos.</h2></div><a class="section-link" href="./inspect.html">View all 64 samples ↗</a></div>
       <div class="example-grid">
-        <a class="example-card" href="./inspect.html?sample=1"><div class="example-photo"><img src="./landscape/sample-01.jpg" alt="Held-out photo labeled as defective"><img class="heat-photo" src="./samples/sample-01-heat.png" alt="Model highlight"><span class="example-label">DEFECT IMAGE</span></div><div class="example-info"><span class="example-type">SAMPLE 01</span><div><h3>Review the signal</h3><span class="example-arrow" aria-hidden="true">↗</span></div></div></a>
+        <a class="example-card" href="./inspect.html?sample=1"><div class="example-photo"><img src="./landscape/sample-01.jpg" alt="Held-out photo labeled as defective"><img class="heat-photo" src="./samples/sample-01-heat.png" alt="Model highlight"><span class="example-label">DEFECT IMAGE</span></div><div class="example-info"><span class="example-type">SAMPLE 01</span><div><h3>View a flagged defect photo</h3><span class="example-arrow" aria-hidden="true">↗</span></div></div></a>
         <a class="example-card" href="./inspect.html?sample=4"><div class="example-photo"><img src="./landscape/sample-04.jpg" alt="Held-out photo labeled as normal"><span class="example-label neutral">NORMAL IMAGE</span></div><div class="example-info"><span class="example-type">SAMPLE 04</span><div><h3>Compare a normal photo</h3><span class="example-arrow" aria-hidden="true">↗</span></div></div></a>
       </div>
     </section>
     <section class="method-section" id="workflow"><div class="section method-inner">
       <div class="method-heading"><div><p class="section-kicker">HOW IT WORKS</p><h2>From photo to highlight.</h2></div></div>
       <div class="method-animation-grid">
-<article class="method-card"><div class="method-animation"><img src="./method/01.gif" alt=""></div><div class="method-card-copy"><span>01</span><div><h3>Build the reference</h3><p>Normal photos become feature maps and stored patch vectors.</p></div></div></article>
-<article class="method-card"><div class="method-animation"><img src="./method/02.gif" alt=""></div><div class="method-card-copy"><span>02</span><div><h3>Prepare the photo</h3><p>Match the reference framing and contrast.</p></div></div></article>
+<article class="method-card"><div class="method-animation"><img src="./method/01.gif" alt=""></div><div class="method-card-copy"><span>01</span><div><h3>Build the reference</h3><p>Normal photos become feature maps; sampled patches form the reference.</p></div></div></article>
+<article class="method-card"><div class="method-animation"><img src="./method/02.gif" alt=""></div><div class="method-card-copy"><span>02</span><div><h3>Prepare the photo</h3><p>Resize, convert to grayscale, and normalize brightness.</p></div></div></article>
 <article class="method-card"><div class="method-animation"><img src="./method/03.gif" alt=""></div><div class="method-card-copy"><span>03</span><div><h3>Split into patches</h3><p>Examine small areas across the surface.</p></div></div></article>
 <article class="method-card"><div class="method-animation"><img src="./method/04.gif" alt=""></div><div class="method-card-copy"><span>04</span><div><h3>Measure features</h3><p>Capture brightness, dark gaps, and edges.</p></div></div></article>
-<article class="method-card"><div class="method-animation"><img src="./method/05.gif" alt=""></div><div class="method-card-copy"><span>05</span><div><h3>Find closest normal</h3><p>Compare each patch with the normal bank.</p></div></div></article>
-<article class="method-card"><div class="method-animation"><img src="./method/06.gif" alt=""></div><div class="method-card-copy"><span>06</span><div><h3>Map anomalies</h3><p>Highlight unusual areas for review.</p></div></div></article>
+<article class="method-card"><div class="method-animation"><img src="./method/05.gif" alt=""></div><div class="method-card-copy"><span>05</span><div><h3>Find the nearest normal patch</h3><p>Score each patch by its closest normal match.</p></div></div></article>
+<article class="method-card"><div class="method-animation"><img src="./method/06.gif" alt=""></div><div class="method-card-copy"><span>06</span><div><h3>Map anomalies</h3><p>Map patch scores and flag photos above the threshold.</p></div></div></article>
       </div>
-      <div class="evaluation-summary"><div><p class="section-kicker">HELD-OUT TEST</p><h3>KolektorSDD · metal surface photos</h3><p>64 photos · split by product group</p></div><div class="evaluation-metrics"><div><span>0.879</span><small>Image AUROC</small></div><div><span>5 / 8</span><small>Defect images flagged</small></div><div><span>7 / 56</span><small>Normal images flagged</small></div></div></div>
+      <div class="evaluation-summary"><div><p class="section-kicker">HELD-OUT TEST</p><h3>KolektorSDD · metal surface photos</h3><p>64 photos · split by product group</p></div><div class="evaluation-metrics"><div><span>0.879</span><small>Image AUROC</small></div><div><span>5 / 8</span><small>Defect images flagged</small></div><div><span>7 / 56</span><small>False alarms on normal images</small></div></div></div>
       <div class="method-foot"><p>The score measures distance from normal patches. It is not a defect probability or a rubber belt quality decision.</p><a class="button button-dark" href="./inspect.html">Explore samples <span aria-hidden="true">↗</span></a></div>
     </div></section>
   </main>
-  <footer class="site-footer"><div class="footer-top"><a class="footer-brand" href="./index.html">SurfaceTrace</a><span>Team 이상무×RIKU</span></div><div class="footer-bottom"><p>Surface review demo.</p><p>Images: <a href="https://www.vicos.si/resources/kolektorsdd/" target="_blank" rel="noopener noreferrer">KolektorSDD · ViCoS Lab</a> · <a href="https://doi.org/10.1007/s10845-019-01476-x" target="_blank" rel="noopener noreferrer">Tabernik et al. (2019)</a> · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a></p></div></footer>
+  <footer class="site-footer"><div class="footer-top"><a class="footer-brand" href="./index.html">SurfaceTrace</a><span>ISM×RIKU</span></div><div class="footer-bottom"><p>© 2026 Hyunsu Go</p><p>Images: <a href="https://www.vicos.si/resources/kolektorsdd/" target="_blank" rel="noopener noreferrer">KolektorSDD · ViCoS Lab</a> · <a href="https://doi.org/10.1007/s10845-019-01476-x" target="_blank" rel="noopener noreferrer">Tabernik et al. (2019)</a> · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a></p></div></footer>
 </body>
 </html>
