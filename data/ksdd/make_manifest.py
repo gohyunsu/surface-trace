@@ -1,10 +1,11 @@
 """Create a group-separated, normal-only training split for a quick anomaly demo.
 
-Run from the repository root with: python data/public/ksdd/make_manifest.py
+Run from the repository root with: python data/ksdd/make_manifest.py
 This is a project split, not the official Kolektor benchmark protocol.
 """
 
 import csv
+import os
 import random
 from pathlib import Path
 
@@ -12,8 +13,8 @@ import numpy as np
 from PIL import Image
 
 
-ROOT = Path(__file__).resolve().parent
-RAW = ROOT / "raw"
+DATA = Path(os.environ["KSDD_DATA_DIR"]).expanduser().resolve() if os.environ.get("KSDD_DATA_DIR") else Path(__file__).resolve().parent
+RAW = DATA / "raw"
 groups = sorted(p for p in RAW.glob("kos*") if p.is_dir())
 if len(groups) != 50:
     raise SystemExit(f"Expected 50 item groups, found {len(groups)}")
@@ -36,8 +37,8 @@ for image in sorted(RAW.glob("kos*/Part*.jpg")):
         split = "excluded_train_group_defect"
     rows.append(
         {
-            "image": image.relative_to(ROOT).as_posix(),
-            "mask": mask.relative_to(ROOT).as_posix(),
+            "image": image.relative_to(DATA).as_posix(),
+            "mask": mask.relative_to(DATA).as_posix(),
             "item_group": image.parent.name,
             "split": split,
             "is_anomaly": int(anomaly),
@@ -47,7 +48,7 @@ for image in sorted(RAW.glob("kos*/Part*.jpg")):
 if len(rows) != 399 or sum(r["is_anomaly"] for r in rows) != 52:
     raise SystemExit("Unexpected image or anomaly count")
 
-with (ROOT / "manifest.csv").open("w", newline="", encoding="utf-8") as file:
+with (DATA / "manifest.csv").open("w", newline="", encoding="utf-8") as file:
     writer = csv.DictWriter(file, fieldnames=rows[0].keys())
     writer.writeheader()
     writer.writerows(rows)

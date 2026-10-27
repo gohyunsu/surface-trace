@@ -1,16 +1,15 @@
 # Unlabeled line-inspection experiment
 
-This directory is independent of the KolektorSDD browser prototype. It does not
-alter the published site. The target-domain method sees no defect labels when
-choosing its reference bank, review threshold, or change threshold. Public
-labels are read only by the audit and evaluation code. The `oracle_normal`
+This directory is independent of the KolektorSDD browser prototype. Curated
+TSFabrics outputs from this experiment appear on the published site; the site
+does not run this model or accept new images. The target-domain method sees no
+defect labels when choosing its reference bank, review threshold, or change
+threshold. Public labels are read only by the audit and evaluation code. The `oracle_normal`
 comparison deliberately uses labels and is reported separately.
 
-## Experiments
+## TSFabrics: continuous production and change
 
-### TSFabrics: continuous production and change
-
-## Data and protocol
+### Data and protocol
 
 The first executable protocol uses the published TSFabrics ZIP without
 extracting all 93k JPEGs. It trains an unlabeled reference on the first 512

@@ -16,8 +16,8 @@ from sample_catalog import test_rows
 
 
 ROOT = Path(__file__).resolve().parents[1]
-MANIFEST = ROOT / "data" / "ksdd" / "manifest.csv"
-RAW = Path(os.environ["KSDD_DATA_DIR"]).expanduser().resolve() if os.environ.get("KSDD_DATA_DIR") else ROOT.parent / "data" / "public" / "ksdd"
+RAW = Path(os.environ["KSDD_DATA_DIR"]).expanduser().resolve() if os.environ.get("KSDD_DATA_DIR") else ROOT / "data" / "ksdd"
+MANIFEST = RAW / "manifest.csv"
 ORIGINALS = ROOT / "web" / "samples"
 LANDSCAPE = ROOT / "web" / "landscape"
 

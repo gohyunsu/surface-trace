@@ -2,6 +2,8 @@
   "name": "surface-trace",
   "private": true,
   "version": "0.1.0",
+  "packageManager": "pnpm@11.25.0",
+  "engines": { "node": ">=20" },
   "description": "Browser-based industrial surface anomaly review demo",
   "scripts": {
     "smoke": "node scripts/smoke.js",

@@ -1,8 +1,10 @@
 # Unlabeled production-image inspection: experiment results
 
 This is an experimental pipeline separate from the KolektorSDD browser MVP.
-The public site has not been changed. All operational reference selection,
-threshold calibration, and change detection use images without defect labels.
+The public site shows curated TSFabrics frames and saved results from this
+experiment; it does not run the research model on new inputs. All operational
+reference selection, threshold calibration, and change detection use images
+without defect labels.
 Public labels are used for evaluation; LUSITANOv2 validation labels additionally
 construct the disclosed rare-defect simulation.
 

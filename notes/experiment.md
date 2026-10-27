@@ -1,4 +1,4 @@
-# Current experiment
+# KolektorSDD browser baseline
 
 ## Scope
 
@@ -28,7 +28,7 @@ This is a project-specific split, not the official three-fold KolektorSDD benchm
 
 `model/browser_calibration.json` records image AUROC **0.879**, defect images flagged **5/8**, and normal false alarms **7/56** at threshold **2.477**. The test contains only eight defect images, and three were missed. Localization accuracy has not been measured against pixel masks. All 64 held-out test photos are available in the site's sample explorer; their dataset labels are separate from the model's review result.
 
-## Next experiment
+## Research pipeline
 
-Compare a pretrained deep-feature method such as PatchCore against this baseline on the same held-out groups. Report defect recall, normal false-alarm rate, image AUROC, heatmap localization accuracy, and per-image latency. After obtaining company photos, define the inspection task and hold out product, lot, or acquisition sessions before selecting a model for that domain.
+The separate [unlabeled production-image experiment](../experiments/unsupervised/README.md) tests frozen DINOv2 features, label-free reference selection, change alarms, and a shadow adaptation candidate on textile production data. It uses different datasets and a time-ordered protocol, so its numbers are not a direct head-to-head comparison with this KolektorSDD baseline. See the [recorded results](../experiments/unsupervised/EXPERIMENT_RESULTS.md). Real rubber-belt photos and inspection criteria are still needed for a domain evaluation.
 

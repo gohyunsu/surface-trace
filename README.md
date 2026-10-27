@@ -1,60 +1,81 @@
 # SurfaceTrace
 
-[Live site](https://gohyunsu.github.io/surface-trace/) · Industrial surface anomaly review demo by ISM × RIKU
+[Live site](https://gohyunsu.github.io/surface-trace/) · [Baseline samples](https://gohyunsu.github.io/surface-trace/inspect.html) · [Change-aware samples](https://gohyunsu.github.io/surface-trace/next-inspect.html)
 
-SurfaceTrace now presents two separate inspection pipelines. The working MVP analyzes **KolektorSDD metal surface photos in the browser**. The newer research pipeline replays recorded DINOv2 anomaly and condition-change results on **TSFabrics production sequences**. Neither dataset is rubber-belt imagery. Anomaly scores are distances, not defect probabilities or production quality decisions. The daily review summary is planned, not implemented.
+SurfaceTrace is an industrial image-review research project by ISM × RIKU. It presents a working browser baseline and a separate, change-aware experiment. The public datasets contain metal or textile surfaces, **not rubber belts**. Anomaly scores are not defect probabilities or production quality decisions.
 
-## Repository layout
+## What is implemented
 
-| Path | Purpose |
+| Pipeline | Data and method | Site behavior |
+| --- | --- | --- |
+| Baseline | KolektorSDD; handcrafted patch features compared with a normal reference bank | Runs inference in the browser on 64 packaged, held-out photos |
+| Change-aware | TSFabrics; frozen DINOv2 patch features, label-free reference selection, visual-change alarms, and a shadow adaptation candidate | Replays saved results on 12 selected production frames; no browser inference |
+| Daily review summary | Proposed handoff of flagged frames, change alerts, and review notes | Planned, not implemented |
+
+Neither sample page accepts arbitrary uploads. The shadow candidate is displayed for comparison and is **never promoted automatically**: the measured reduction in false alarms can also reduce defect recall.
+
+The baseline's grouped test split produced image AUROC **0.879**, **5/8** defect photos flagged, and **7/56** normal false alarms. On one shifted TSFabrics test stream, the selected-reference DINOv2 method produced image AUROC **0.987**, **33/82** defects flagged, and **0/2,290** normal false alarms. These are different datasets and protocols, so the numbers are not a direct comparison. See the [baseline protocol](notes/experiment.md) and [research results](experiments/unsupervised/EXPERIMENT_RESULTS.md) for splits, other conditions, comparison methods, and limitations.
+
+## Repository map
+
+| Path | Role |
 | --- | --- |
-| `web/` | Editable site source, both sample explorers, pipeline animations, and packaged photos |
-| `model/` | CPU reference model, saved normal patch bank, browser calibration, and Python evaluation |
-| `experiments/unsupervised/` | TSFabrics and LUSITANOv2 experiment code, results, and site sample exporters |
-| `scripts/` | Static site build, calibration, and browser checks |
-| `data/ksdd/` | Reproducible item-group split; full dataset images are downloaded separately |
-| `docs/` | Generated static site served by GitHub Pages from `main` / `docs` |
-| `notes/experiment.md` | Experiment protocol, metrics, and limitations |
+| `web/` | Editable HTML, CSS, JavaScript, animation assets, and packaged sample images |
+| `docs/` | Generated GitHub Pages output; commit it with the source changes |
+| `model/` | KolektorSDD baseline, saved reference bank, calibration, and evaluation |
+| `experiments/unsupervised/` | Independent TSFabrics and LUSITANOv2 research code, protocols, and results |
+| `data/ksdd/` | Fixed item-group split; downloaded raw images are excluded from Git |
+| `scripts/` | Site build, sample preparation, calibration, and browser checks |
 
-Edit `web/` or the model source, then run `python scripts/build_site.py`. Commit the resulting `docs/` changes with the source changes. The baseline sample page runs inference in the browser; the new sample page displays recorded experiment outputs. Neither page accepts arbitrary image uploads.
+`web/` is the source of truth for the site. `scripts/build_site.py` packages it with the checked-in baseline model and selected research outputs into `docs/`. Large source datasets and experimental caches stay outside Git. TSFabrics site assets are attributed in [web/next-method/README.md](web/next-method/README.md).
 
-## Run locally
+## Run and check the site locally
 
-The checked-in model and held-out test photos are enough to rebuild and test the site without downloading the full dataset:
+Use Python with the root requirements and Node.js 20 or newer with pnpm. From the repository root:
 
 ```bash
 python -m pip install -r requirements.txt
+pnpm install --frozen-lockfile
+pnpm exec playwright install chromium
 python scripts/build_site.py
 python -m http.server 8766 --bind 127.0.0.1 --directory docs
 ```
 
-Open `http://127.0.0.1:8766/`. To run the browser checks, install Node dependencies with `npm install` and a browser with `npx playwright install chromium`, then use `npm run smoke` or `npm run visual`. Set `SITE_URL` to test a deployed site; otherwise the scripts use the local server. Set `CHROME_PATH` to an installed Chrome executable if desired.
+Open <http://127.0.0.1:8766/>. With the server running, use a second terminal:
 
-To refresh the packaged samples from the original KolektorSDD dataset, run `python scripts/prepare_samples.py` before building. It keeps each original JPEG for model input and creates a landscape copy for display.
+```bash
+pnpm run smoke
+pnpm run visual
+```
 
-Each pipeline has six looping method animations. The baseline assets live in `web/method/`; the new TSFabrics assets and their attribution live in `web/next-method/`. Their short explanations remain in the page. The favicon is `web/favicon.svg`.
+The smoke check exercises both sample explorers. The visual check tests desktop, tablet, and mobile widths for overflow and missing images; screenshots go to the ignored `out/visual/` directory. Set `SITE_URL` to check another served copy or `CHROME_PATH` to use an installed Chrome binary.
 
-## Reproduce the model and evaluation
+## Reproduce the experiments
 
-Download the [original KolektorSDD images and pixel masks](https://www.vicos.si/resources/kolektorsdd/) into `data/ksdd/raw/kosXX/`, preserving the source folder names. The downloaded files are ignored by Git. The checked-in `manifest.csv` records our project split; `python data/ksdd/make_manifest.py` regenerates it. The model commands are:
+**KolektorSDD baseline.** Download the [original dataset](https://www.vicos.si/resources/kolektorsdd/) into `data/ksdd/raw/kosXX/`, preserving its group names. The checked-in `data/ksdd/manifest.csv` fixes the split; `python data/ksdd/make_manifest.py` regenerates it. Then run:
 
 ```bash
 python model/model.py
+python scripts/prepare_samples.py
 python scripts/build_site.py
 python model/evaluate.py
-npm run calibrate
-python scripts/build_site.py
 ```
 
-`npm run calibrate` needs the local static server running and the full dataset. It measures scores through the browser Canvas path and writes `model/browser_calibration.json`; rebuilding then embeds its threshold. See [experiment notes](notes/experiment.md) for the exact split and held-out results.
+For the browser-specific threshold, leave the local site server running, run `pnpm run calibrate`, and rebuild `docs/`. Calibration uses the validation photos and browser Canvas preprocessing. `pnpm run heatmaps` regenerates baseline example overlays when needed. The full dataset is required for retraining and recalibration, but **not** for the local site build or browser checks. To store the dataset elsewhere, set `KSDD_DATA_DIR` to a directory containing `manifest.csv` and `raw/`.
 
-## Deployment
+**Unlabeled production-image experiments.** Follow [experiments/unsupervised/README.md](experiments/unsupervised/README.md) for the GPU environment, dataset checks, fixed time-ordered splits, and run commands. Its dependency list is separate from the lightweight site build. The LUSITANOv2 images remain off the public site because redistribution rights were not stated on the dataset record when checked.
 
-This repository is the single source for both code and the GitHub Pages site. Pages publishes from branch `main`, folder `/docs`. A push containing rebuilt `docs/` files updates the site. The personal homepage repository does not contain this project.
+## Publishing workflow
 
-## Data attribution
+1. Edit `web/`, the relevant model code, or experiment documentation.
+2. Run `python scripts/build_site.py` after site-source or packaged-asset changes.
+3. Run the browser checks and commit both source and generated `docs/` changes.
+4. Push to `main`. GitHub Pages serves `main` / `docs` at the [live site](https://gohyunsu.github.io/surface-trace/).
 
-The demo photos and reference model are derived from [KolektorSDD by ViCoS Lab / Kolektor Group](https://www.vicos.si/resources/kolektorsdd/), associated with [Tabernik et al. (2019)](https://doi.org/10.1007/s10845-019-01476-x). The dataset is [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/); check the source terms before commercial use. No license for the original project code is granted by this README.
+The [site checks](.github/workflows/site-checks.yml) rebuild `docs/` in CI and fail if the committed output is stale. They also run the browser and responsive-layout checks. The personal homepage repository is not used for this project.
 
-The new animation and sample photos are adapted from [TSFabrics by Ni et al. (2026)](https://doi.org/10.1038/s41597-026-06748-9), [dataset DOI](https://doi.org/10.6084/m9.figshare.29573381), released under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). See [animation attribution](web/next-method/README.md) and [experiment results](experiments/unsupervised/EXPERIMENT_RESULTS.md) for scope and limitations.
+## Data rights and scope
 
+KolektorSDD imagery and the derived baseline reference use [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/); see [ViCoS Lab](https://www.vicos.si/resources/kolektorsdd/) and [Tabernik et al. (2019)](https://doi.org/10.1007/s10845-019-01476-x). TSFabrics imagery is [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); see [Ni et al. (2026)](https://doi.org/10.1038/s41597-026-06748-9) and the [dataset](https://doi.org/10.6084/m9.figshare.29573381). These licenses apply to the source datasets and their derived images, not automatically to this repository's code. No separate code license is granted here.
+
+Results on these public datasets do not establish performance on Dongil rubber-belt images. A field evaluation needs company images, defect criteria, and a held-out split by production period or acquisition condition.

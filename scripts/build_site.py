@@ -1,10 +1,11 @@
-"""Build a static GitHub Pages package from the local BeltGuard prototype."""
+"""Build the GitHub Pages site in docs/ from the editable web/ source."""
 
 from __future__ import annotations
 
 import json
 import shutil
 import sys
+import tempfile
 from pathlib import Path
 
 import numpy as np
@@ -17,15 +18,13 @@ from sample_catalog import test_rows  # noqa: E402
 
 WEB = ROOT / "web"
 OUT = ROOT / "docs"
-def main() -> None:
+
+
+def build(out: Path) -> tuple[int, int]:
     if not MODEL.exists():
         raise SystemExit("Train the reference model with model.py first")
-    OUT.mkdir(exist_ok=True)
-    (OUT / "samples").mkdir(exist_ok=True)
-    (OUT / "landscape").mkdir(exist_ok=True)
-    (OUT / "method").mkdir(exist_ok=True)
-    (OUT / "next-method").mkdir(exist_ok=True)
-    (OUT / "next-samples").mkdir(exist_ok=True)
+    for directory in ("samples", "landscape", "method", "next-method", "next-samples"):
+        (out / directory).mkdir(parents=True, exist_ok=True)
     for source, target in [
         ("landing.html", "index.html"),
         ("inspector.html", "inspect.html"),
@@ -35,18 +34,18 @@ def main() -> None:
         ("next-app.js", "next-app.js"),
         ("favicon.svg", "favicon.svg"),
     ]:
-        shutil.copyfile(WEB / source, OUT / target)
-    (OUT / ".nojekyll").touch()
-    shutil.copyfile(WEB / "app.js", OUT / "app.js")
+        shutil.copyfile(WEB / source, out / target)
+    (out / ".nojekyll").touch()
+    shutil.copyfile(WEB / "app.js", out / "app.js")
     for asset in (WEB / "method").iterdir():
         if asset.suffix in {".gif", ".png"}:
-            shutil.copyfile(asset, OUT / "method" / asset.name)
+            shutil.copyfile(asset, out / "method" / asset.name)
     for asset in (WEB / "next-method").iterdir():
         if asset.suffix in {".gif", ".png"}:
-            shutil.copyfile(asset, OUT / "next-method" / asset.name)
+            shutil.copyfile(asset, out / "next-method" / asset.name)
     for asset in (WEB / "next-samples").iterdir():
         if asset.suffix in {".jpg", ".png", ".json"}:
-            shutil.copyfile(asset, OUT / "next-samples" / asset.name)
+            shutil.copyfile(asset, out / "next-samples" / asset.name)
 
     saved = np.load(MODEL)
     calibration_file = ROOT / "model" / "browser_calibration.json"
@@ -60,7 +59,7 @@ def main() -> None:
         "bank_rows": int(saved["bank"].shape[0]),
         "feature_count": int(saved["bank"].shape[1]),
     }
-    (OUT / "normal_reference.json").write_text(json.dumps(payload, separators=(",", ":")), encoding="utf-8")
+    (out / "normal_reference.json").write_text(json.dumps(payload, separators=(",", ":")), encoding="utf-8")
 
     samples = test_rows(DATA / "manifest.csv")
     catalog = []
@@ -70,19 +69,31 @@ def main() -> None:
         landscape = WEB / "landscape" / name
         if not original.exists() or not landscape.exists():
             raise SystemExit(f"Run scripts/prepare_samples.py before building: {name}")
-        shutil.copyfile(original, OUT / "samples" / name)
-        shutil.copyfile(landscape, OUT / "landscape" / name)
+        shutil.copyfile(original, out / "samples" / name)
+        shutil.copyfile(landscape, out / "landscape" / name)
         catalog.append({
             "id": i,
             "label": "Defect" if row["is_anomaly"] == "1" else "Normal",
             "model": f"./samples/{name}",
             "display": f"./landscape/{name}",
         })
-    (OUT / "samples.json").write_text(json.dumps(catalog, separators=(",", ":")), encoding="utf-8")
+    (out / "samples.json").write_text(json.dumps(catalog, separators=(",", ":")), encoding="utf-8")
     for sample in ("01", "04"):
-        shutil.copyfile(WEB / "demo_assets" / f"sample-{sample}-heat.png", OUT / "samples" / f"sample-{sample}-heat.png")
+        shutil.copyfile(WEB / "demo_assets" / f"sample-{sample}-heat.png", out / "samples" / f"sample-{sample}-heat.png")
+    return len(payload["bank"]), len(samples)
+
+
+def main() -> None:
+    # docs/ is generated output. Build completely before replacing it.
+    if OUT.is_symlink() or OUT.resolve() != ROOT.resolve() / "docs":
+        raise SystemExit("Refusing to replace a site directory outside this repository")
+    with tempfile.TemporaryDirectory(prefix="surface-trace-site-", dir=ROOT) as staging:
+        feature_count, sample_count = build(Path(staging))
+        if OUT.exists():
+            shutil.rmtree(OUT)
+        shutil.copytree(staging, OUT)
     print(f"Built {OUT}")
-    print(f"Static model: {len(payload['bank'])} feature values, {len(samples)} held-out samples")
+    print(f"Static model: {feature_count} feature values, {sample_count} held-out samples")
 
 
 if __name__ == "__main__":
