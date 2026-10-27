@@ -29,7 +29,14 @@ jobs:
           node-version: '22'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm exec playwright install --with-deps chromium
+      - name: Select browser
+        run: |
+          browser="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          if [ -n "$browser" ]; then
+            echo "CHROME_PATH=$browser" >> "$GITHUB_ENV"
+          else
+            pnpm exec playwright install --with-deps chromium
+          fi
       - name: Serve generated site
         run: python -m http.server 8766 --bind 127.0.0.1 --directory docs > /tmp/surface-trace-http.log 2>&1 &
       - run: pnpm run smoke
