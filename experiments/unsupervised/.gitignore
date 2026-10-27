@@ -5,4 +5,5 @@ results/*
 .cache/
 .tmp/
 .venv/
+animation_data/
 *.log

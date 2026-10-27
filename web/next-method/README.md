@@ -1,0 +1,31 @@
+# New pipeline animation assets
+
+Six looping, 720 × 420 GIFs and matching poster frames. The intended order is:
+
+1. Continuous production frames
+2. Frozen visual features
+3. Unlabeled reference selection
+4. Patch anomaly localization and review decision
+5. Distribution change detection
+6. Frozen model versus shadow candidate, with a pause on unsafe adaptation
+
+The photographs are real TSFabrics production frames. The feature projection,
+reference choices, anomaly maps, scores, and drift curve come from the recorded
+experiment. Animation timing, arrows, dots, and the pause symbol explain the
+process; they are not camera or model outputs. The example in `06.gif` is a real
+held-out defect flagged by the frozen model and missed by the shadow candidate.
+The fabric dataset is a proxy for the intended rubber-belt application; these
+assets do not show performance on Dongil rubber-belt images.
+
+Source: Yan-Qin Ni, Pei-Kai Huang, Wei-Jen Wang, Deron Liang, and Chia-Yu Lin,
+*TSFabrics: A Time-Series Fabric Dataset for Real-Time Defect Detection on
+Circular Knitting Machines*, Scientific Data (2026),
+https://doi.org/10.1038/s41597-026-06748-9.
+Dataset: https://doi.org/10.6084/m9.figshare.29573381. The authors state that
+the dataset is released under CC BY 4.0. These images were cropped, resized,
+colored with model-derived overlays, and composed into animations. Retain this
+attribution and a visible dataset credit when the assets are placed on a site.
+
+To regenerate: run `experiments/unsupervised/export_animation_data.py` on the
+experiment machine, transfer its ignored `animation_data/` folder to the same
+repository path locally, then run `scripts/generate_next_method_gifs.py`.
