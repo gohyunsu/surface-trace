@@ -22,7 +22,7 @@ const { chromium } = require("playwright");
       assert((await link.getAttribute("href")).endsWith(destination));
       assert.strictEqual(await link.getAttribute("target"), "_blank");
     }
-    assert(await page.getByText("Daily review summary").isVisible());
+    assert(await page.getByRole("heading", { name: "Daily review summary", exact: true }).isVisible());
 
     await page.goto(new URL("inspect.html?sample=1", base).href, { waitUntil: "networkidle" });
     await page.waitForFunction(() => document.querySelector("#score").textContent !== "—");
@@ -35,7 +35,7 @@ const { chromium } = require("playwright");
     assert.strictEqual(await page.locator(".stream-sample").count(), 12);
     assert.strictEqual(await page.locator("#streamStatus").textContent(), "Review needed");
     assert.strictEqual(await page.locator("#frameTruth").textContent(), "Dataset label: Defect");
-    assert.strictEqual(await page.locator("#changeState").textContent(), "Change detected");
+    assert.strictEqual(await page.locator("#changeState").textContent(), "Change alert");
     const currentHeat = await page.locator("#frameHeat").getAttribute("src");
     await page.getByRole("button", { name: "Candidate", exact: true }).click();
     assert.strictEqual(await page.locator("#streamStatus").textContent(), "Within range");
@@ -45,6 +45,10 @@ const { chromium } = require("playwright");
     assert.strictEqual(await page.locator(".stream-sample").count(), 6);
     assert.strictEqual(await page.locator("#framePosition").textContent(), "01 / 06");
     assert((await page.locator("#frameTruth").textContent()).includes("Normal"));
+    await page.goto(new URL("next-inspect.html?sample=1", base).href, { waitUntil: "networkidle" });
+    assert.strictEqual(await page.locator("#changeState").textContent(), "No alert");
+    const visiblePoints = (await page.locator("#changeChart polyline").getAttribute("points")).split(" ").length;
+    assert(visiblePoints < 100, "Change plot should stop at the selected frame");
     assert.deepStrictEqual(errors, []);
     console.log(JSON.stringify({ baselineSamples: 64, newSamples: 12, candidateMiss: true, pageErrors: errors }));
   } finally {

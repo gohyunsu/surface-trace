@@ -21,29 +21,30 @@ function drawChange(sample) {
   chart.replaceChildren();
   const values = stream.change_scores;
   const ends = stream.change_ends;
-  const minX = ends[0], maxX = ends[ends.length - 1];
-  const maxY = Math.max(...values, stream.change_threshold) * 1.12;
+  const nextIndex = ends.findIndex(end => end > sample.frame + 1);
+  const markerIndex = nextIndex < 0 ? ends.length - 1 : Math.max(0, nextIndex - 1);
+  const observed = values.slice(0, markerIndex + 1);
+  const minX = ends[0], maxX = Math.max(minX + 1, ends[markerIndex]);
+  const maxY = Math.max(...observed, stream.change_threshold * 1.8) * 1.08;
   const x = end => 12 + 396 * (end - minX) / (maxX - minX);
   const y = value => 85 - 70 * value / maxY;
   chart.append(svgNode("line", { x1: 12, y1: y(stream.change_threshold), x2: 408,
     y2: y(stream.change_threshold), class: "change-threshold" }));
   chart.append(svgNode("polyline", {
-    points: values.map((value, index) => `${x(ends[index]).toFixed(1)},${y(value).toFixed(1)}`).join(" "),
+    points: observed.map((value, index) => `${x(ends[index]).toFixed(1)},${y(value).toFixed(1)}`).join(" "),
     class: "change-trace"
   }));
-  const index = ends.findIndex(end => end >= sample.frame);
-  const markerIndex = index < 0 ? ends.length - 1 : index;
   chart.append(svgNode("line", { x1: x(ends[markerIndex]), y1: 12,
     x2: x(ends[markerIndex]), y2: 88, class: "change-cursor" }));
   chart.append(svgNode("circle", { cx: x(ends[markerIndex]), cy: y(values[markerIndex]),
     r: 5, class: "change-dot" }));
   const alerted = stream.first_alarm !== null && sample.frame >= stream.first_alarm;
-  $("changeState").textContent = alerted ? "Change detected" : "No change alert";
+  $("changeState").textContent = alerted ? "Change alert" : "No alert";
   $("changeState").classList.toggle("detected", alerted);
   $("changeNote").textContent = alerted
     ? `First alert at frame ${stream.first_alarm.toLocaleString()}.`
     : "No alert by this frame.";
-  chart.setAttribute("aria-label", `Condition-change score for ${stream.title}; ${$("changeState").textContent.toLowerCase()}`);
+  chart.setAttribute("aria-label", `Visual change score through this frame in ${stream.title}; ${$("changeState").textContent.toLowerCase()}`);
 }
 
 function renderResult() {

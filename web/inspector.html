@@ -4,16 +4,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Explore held-out industrial surface photos and inspect the model's highlighted regions.">
-  <title>Explore samples | SurfaceTrace</title>
+  <title>Baseline samples | SurfaceTrace</title>
   <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <link rel="stylesheet" href="./site.css">
+  <link rel="stylesheet" href="./pipeline.css">
   <script src="./app.js" defer></script>
 </head>
-<body class="inspector-page">
+<body class="inspector-page baseline-page">
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header inspect-header">
     <a class="logo" href="./index.html" aria-label="SurfaceTrace home"><span class="logo-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>SurfaceTrace<small>VISUAL INSPECTION</small></span></a>
-    <nav class="main-nav" aria-label="Main navigation"><a href="./index.html">← Overview</a><span class="nav-current" aria-current="page">Baseline samples</span><span class="header-team">ISM × RIKU</span></nav>
+    <nav class="main-nav" aria-label="Main navigation"><a href="./index.html">← Overview</a><a href="./next-inspect.html" target="_blank" rel="noopener">Change-aware samples</a><span class="nav-current" aria-current="page">Baseline samples</span></nav>
   </header>
   <main id="main" class="inspect-main">
     <div class="inspect-intro">
@@ -52,7 +53,7 @@
             <div class="scoreline"><span class="score" id="score">—</span><span class="scorecaption">Anomaly score<br>Not a probability</span></div>
             <div class="score-meter" id="scoreMeter" role="img" aria-label="Anomaly score and review threshold">
               <div class="meter"><span id="meterFill"></span></div>
-              <div class="threshold-marker" id="thresholdMarker" aria-hidden="true" hidden><span id="threshold"></span></div>
+              <div class="threshold-marker" id="thresholdMarker" aria-hidden="true" hidden></div>
             </div>
             <p class="assessment" id="assessment"></p>
           </div>

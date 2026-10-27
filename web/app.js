@@ -168,7 +168,6 @@ async function analyze(blob, sample, thisRequest) {
     $("heatmap").src = result.heatmap;
     $("score").textContent = result.score.toFixed(2);
     const meterMax = Math.max(result.threshold * 1.5, .01);
-    $("threshold").textContent = "Threshold " + result.threshold.toFixed(2);
     $("thresholdMarker").style.left = Math.min(100, result.threshold / meterMax * 100) + "%";
     $("thresholdMarker").title = "Review threshold " + result.threshold.toFixed(2);
     $("thresholdMarker").hidden = false;

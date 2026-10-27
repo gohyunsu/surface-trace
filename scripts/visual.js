@@ -19,7 +19,10 @@ const { chromium } = require("playwright");
       const page = await browser.newPage({ viewport });
       for (const [name, suffix] of [["landing", ""], ["inspector", "inspect.html?sample=1"], ["next-inspector", "next-inspect.html?sample=7"]]) {
         await page.goto(new URL(suffix, base).href, { waitUntil: "networkidle" });
-        if (name === "landing") await page.locator(".method-animation img").evaluateAll(imgs => Promise.all(imgs.map(img => img.decode())));
+        if (name === "landing") await page.locator(".method-animation img").evaluateAll(imgs => {
+          imgs.forEach(img => { img.loading = "eager"; });
+          return Promise.all(imgs.map(img => img.decode()));
+        });
         if (name === "inspector") await page.waitForFunction(() => document.querySelector("#score").textContent !== "—");
         if (name === "next-inspector") await page.waitForFunction(() => document.querySelector("#streamScore").textContent !== "—");
         const audit = await page.evaluate(() => ({

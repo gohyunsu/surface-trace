@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Explore two visual inspection pipelines: a surface-defect baseline and an unlabeled, change-aware production-stream experiment.">
+  <meta name="description" content="Explore a browser-based surface inspection baseline and a change-aware experiment on production images.">
   <title>SurfaceTrace | Visual inspection across changing conditions</title>
   <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <link rel="stylesheet" href="./site.css">
@@ -13,22 +13,20 @@
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <a class="logo" href="./index.html" aria-label="SurfaceTrace home"><span class="logo-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>SurfaceTrace<small>VISUAL INSPECTION</small></span></a>
-    <nav class="main-nav" aria-label="Main navigation"><a href="#baseline">Baseline</a><a href="#feedback">Feedback</a><a href="#next">New pipeline</a></nav>
+    <nav class="main-nav" aria-label="Main navigation"><a href="#baseline">Baseline</a><a href="#feedback">Feedback</a><a href="#next">Change-aware</a></nav>
   </header>
   <main id="main">
     <section class="hero"><div class="hero-inner">
       <div class="hero-copy">
-        <p class="eyebrow"><span class="eyebrow-line"></span> TWO PIPELINES · ONE INSPECTION GOAL</p>
-        <h1>See defects.<br><em>Track change.</em></h1>
-        <p class="hero-description">A surface-inspection baseline and a new pipeline for changing production streams.</p>
+        <p class="eyebrow"><span class="eyebrow-line"></span> TWO INSPECTION PIPELINES</p>
+        <h1>Find unusual areas.<br><em>Track change.</em></h1>
+        <p class="hero-description">A baseline for single photos and a change-aware experiment on production streams.</p>
         <a class="text-link hero-scroll" href="#baseline">Explore the pipelines ↓</a>
-        <div class="hero-team">A project by ISM × RIKU</div>
       </div>
       <div class="pipeline-hero-visual" aria-label="Preview of both inspection methods">
-        <div class="hero-visual-top"><span>VISUAL INSPECTION</span><span>01 → 02</span></div>
         <div class="hero-visual-grid">
           <div><img src="./method/06-poster.png" alt="Baseline patch comparison and anomaly map"><span>01 <i></i> BASELINE</span></div>
-          <div><img src="./next-method/04-poster.png" alt="New pipeline localizes an unusual region in a production photo"><span>02 <i></i> CHANGE AWARE</span></div>
+          <div><img src="./next-method/04-poster.png" alt="New pipeline highlights an unusual region in a production photo"><span>02 <i></i> CHANGE-AWARE</span></div>
         </div>
       </div>
     </div></section>
@@ -48,11 +46,11 @@
     </div></section>
 
     <section class="feedback-section" id="feedback"><div class="section feedback-inner">
-      <div class="feedback-heading"><p class="section-kicker">FIELD FEEDBACK</p><h2>What changed in the brief.</h2></div>
+      <div class="feedback-heading"><p class="section-kicker">FIELD FEEDBACK</p><h2>Feedback shaped the next pipeline.</h2></div>
       <div class="feedback-grid">
-        <div><span>01</span><h3>Few defect labels</h3><p>Build the reference from unlabeled frames.</p></div>
-        <div><span>02</span><h3>Unreported condition shifts</h3><p>Detect change before considering a model update.</p></div>
-        <div><span>03</span><h3>Limited shared context</h3><p>Prepare a daily review handoff.</p></div>
+        <div><span>01</span><h3>Defect labels unavailable</h3><p>Select reference frames without labels.</p></div>
+        <div><span>02</span><h3>Unreported changes</h3><p>Monitor shifts in the image stream.</p></div>
+        <div><span>03</span><h3>Limited shared context</h3><p>Plan a daily review summary.</p></div>
       </div>
     </div></section>
 
@@ -61,14 +59,14 @@
       <div class="method-animation-grid">
 <article class="method-card"><div class="method-animation"><img src="./next-method/01.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>01</span><div><h3>Follow the stream</h3><p>Read consecutive production frames.</p></div></div></article>
 <article class="method-card"><div class="method-animation"><img src="./next-method/02.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>02</span><div><h3>Extract visual features</h3><p>A frozen DINOv2 model maps image patches.</p></div></div></article>
-<article class="method-card"><div class="method-animation"><img src="./next-method/03.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>03</span><div><h3>Build an unlabeled reference</h3><p>Keep stable startup frames without defect labels.</p></div></div></article>
+<article class="method-card"><div class="method-animation"><img src="./next-method/03.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>03</span><div><h3>Build an unlabeled reference</h3><p>Keep common startup patterns without labels.</p></div></div></article>
 <article class="method-card"><div class="method-animation"><img src="./next-method/04.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>04</span><div><h3>Localize unusual regions</h3><p>Compare patches and flag high scores.</p></div></div></article>
-<article class="method-card"><div class="method-animation"><img src="./next-method/05.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>05</span><div><h3>Detect condition shifts</h3><p>Watch the image stream for distribution change.</p></div></div></article>
-<article class="method-card"><div class="method-animation"><img src="./next-method/06.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>06</span><div><h3>Test updates safely</h3><p>Compare a candidate reference before switching.</p></div></div></article>
+<article class="method-card"><div class="method-animation"><img src="./next-method/05.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>05</span><div><h3>Detect visual shifts</h3><p>Signal when image features change.</p></div></div></article>
+<article class="method-card"><div class="method-animation"><img src="./next-method/06.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>06</span><div><h3>Evaluate a candidate</h3><p>Keep the current reference during review.</p></div></div></article>
       </div>
-      <div class="evaluation-summary next-evaluation"><div><p class="section-kicker">SHIFTED STREAM · HELD-OUT</p><h3>TSFabrics</h3><p>Frozen reference · selected DINOv2 features</p></div><div class="evaluation-metrics"><div><span>0.987</span><small>Image AUROC</small></div><div><span>33 / 82</span><small>Defects flagged</small></div><div><span>0 / 2,290</span><small>Normal false alarms</small></div></div></div>
-      <div class="method-foot"><p>Public textile data tests the workflow; it does not validate rubber-belt performance.</p><a class="button button-dark" href="./next-inspect.html" target="_blank" rel="noopener">Open new pipeline samples <span aria-hidden="true">↗</span></a></div>
-      <div class="summary-next"><div><span class="summary-icon" aria-hidden="true"><i></i><i></i><i></i></span><div><p class="section-kicker">FINAL STEP · PLANNED</p><h3>Daily review summary</h3><p>Bring flagged frames, condition shifts, and reviewer notes into one handoff.</p></div></div><span class="summary-state">In development</span></div>
+      <div class="evaluation-summary next-evaluation"><div><p class="section-kicker">SHIFTED STREAM · HELD-OUT</p><h3>TSFabrics</h3><p>Frozen DINOv2 · selected reference frames</p></div><div class="evaluation-metrics"><div><span>0.987</span><small>Image AUROC</small></div><div><span>33 / 82</span><small>Defects flagged</small></div><div><span>0 / 2,290</span><small>Normal false alarms</small></div></div></div>
+      <div class="method-foot"><p>Public textile data tests the workflow; it does not validate rubber-belt performance.</p><a class="button button-dark" href="./next-inspect.html" target="_blank" rel="noopener">Open change-aware samples <span aria-hidden="true">↗</span></a></div>
+      <div class="summary-next"><div><span class="summary-icon" aria-hidden="true"><i></i><i></i><i></i></span><div><p class="section-kicker">PLANNED</p><h3>Daily review summary</h3><p>Flagged frames, visual shifts, and review notes in one handoff.</p></div></div></div>
     </div></section>
   </main>
   <footer class="site-footer"><div class="footer-top"><a class="footer-brand" href="./index.html">SurfaceTrace</a><span>ISM × RIKU</span></div><div class="footer-bottom"><p>© 2026 Hyunsu Go</p><p>Images: <a href="https://www.vicos.si/resources/kolektorsdd/" target="_blank" rel="noopener noreferrer">KolektorSDD</a> · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a> / <a href="https://doi.org/10.6084/m9.figshare.29573381" target="_blank" rel="noopener noreferrer">TSFabrics</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a></p></div></footer>
