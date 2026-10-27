@@ -6,4 +6,5 @@ results/*
 .tmp/
 .venv/
 animation_data/
+site_export/
 *.log

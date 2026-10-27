@@ -17,10 +17,11 @@ const { chromium } = require("playwright");
       { width: 320, height: 740, label: "compact" },
     ]) {
       const page = await browser.newPage({ viewport });
-      for (const [name, suffix] of [["landing", ""], ["inspector", "inspect.html?sample=1"]]) {
+      for (const [name, suffix] of [["landing", ""], ["inspector", "inspect.html?sample=1"], ["next-inspector", "next-inspect.html?sample=7"]]) {
         await page.goto(new URL(suffix, base).href, { waitUntil: "networkidle" });
         if (name === "landing") await page.locator(".method-animation img").evaluateAll(imgs => Promise.all(imgs.map(img => img.decode())));
         if (name === "inspector") await page.waitForFunction(() => document.querySelector("#score").textContent !== "—");
+        if (name === "next-inspector") await page.waitForFunction(() => document.querySelector("#streamScore").textContent !== "—");
         const audit = await page.evaluate(() => ({
           overflow: document.documentElement.scrollWidth > innerWidth + 1,
           brokenImages: [...document.images].filter(img => img.loading !== "lazy" && img.complete && !img.naturalWidth).map(img => img.src),

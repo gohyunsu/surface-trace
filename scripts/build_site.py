@@ -24,10 +24,15 @@ def main() -> None:
     (OUT / "samples").mkdir(exist_ok=True)
     (OUT / "landscape").mkdir(exist_ok=True)
     (OUT / "method").mkdir(exist_ok=True)
+    (OUT / "next-method").mkdir(exist_ok=True)
+    (OUT / "next-samples").mkdir(exist_ok=True)
     for source, target in [
         ("landing.html", "index.html"),
         ("inspector.html", "inspect.html"),
+        ("next-inspector.html", "next-inspect.html"),
         ("site.css", "site.css"),
+        ("pipeline.css", "pipeline.css"),
+        ("next-app.js", "next-app.js"),
         ("favicon.svg", "favicon.svg"),
     ]:
         shutil.copyfile(WEB / source, OUT / target)
@@ -36,6 +41,12 @@ def main() -> None:
     for asset in (WEB / "method").iterdir():
         if asset.suffix in {".gif", ".png"}:
             shutil.copyfile(asset, OUT / "method" / asset.name)
+    for asset in (WEB / "next-method").iterdir():
+        if asset.suffix in {".gif", ".png"}:
+            shutil.copyfile(asset, OUT / "next-method" / asset.name)
+    for asset in (WEB / "next-samples").iterdir():
+        if asset.suffix in {".jpg", ".png", ".json"}:
+            shutil.copyfile(asset, OUT / "next-samples" / asset.name)
 
     saved = np.load(MODEL)
     calibration_file = ROOT / "model" / "browser_calibration.json"

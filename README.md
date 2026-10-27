@@ -2,20 +2,21 @@
 
 [Live site](https://gohyunsu.github.io/surface-trace/) · Industrial surface anomaly review demo by ISM × RIKU
 
-SurfaceTrace highlights regions unlike normal reference photos and gives an operator a review cue. The current data is **KolektorSDD metal surface imagery**, not rubber belt imagery. The anomaly score is a distance, not a defect probability or a production quality decision.
+SurfaceTrace now presents two separate inspection pipelines. The working MVP analyzes **KolektorSDD metal surface photos in the browser**. The newer research pipeline replays recorded DINOv2 anomaly and condition-change results on **TSFabrics production sequences**. Neither dataset is rubber-belt imagery. Anomaly scores are distances, not defect probabilities or production quality decisions. The daily review summary is planned, not implemented.
 
 ## Repository layout
 
 | Path | Purpose |
 | --- | --- |
-| `web/` | Editable HTML, CSS, JavaScript, six method GIFs, held-out photos, landscape display copies, and example heatmaps |
+| `web/` | Editable site source, both sample explorers, pipeline animations, and packaged photos |
 | `model/` | CPU reference model, saved normal patch bank, browser calibration, and Python evaluation |
+| `experiments/unsupervised/` | TSFabrics and LUSITANOv2 experiment code, results, and site sample exporters |
 | `scripts/` | Static site build, calibration, and browser checks |
 | `data/ksdd/` | Reproducible item-group split; full dataset images are downloaded separately |
 | `docs/` | Generated static site served by GitHub Pages from `main` / `docs` |
 | `notes/experiment.md` | Experiment protocol, metrics, and limitations |
 
-Edit `web/` or the model source, then run `python scripts/build_site.py`. Commit the resulting `docs/` changes with the source changes. The site runs inference in the browser on packaged held-out test photos; it has no upload feature.
+Edit `web/` or the model source, then run `python scripts/build_site.py`. Commit the resulting `docs/` changes with the source changes. The baseline sample page runs inference in the browser; the new sample page displays recorded experiment outputs. Neither page accepts arbitrary image uploads.
 
 ## Run locally
 
@@ -31,7 +32,7 @@ Open `http://127.0.0.1:8766/`. To run the browser checks, install Node dependenc
 
 To refresh the packaged samples from the original KolektorSDD dataset, run `python scripts/prepare_samples.py` before building. It keeps each original JPEG for model input and creates a landscape copy for display.
 
-The six method animations use actual split-specific photos and model intermediates. They live in `web/method/`; the frames contain no labels, while the short explanations remain in the page. The favicon is `web/favicon.svg`.
+Each pipeline has six looping method animations. The baseline assets live in `web/method/`; the new TSFabrics assets and their attribution live in `web/next-method/`. Their short explanations remain in the page. The favicon is `web/favicon.svg`.
 
 ## Reproduce the model and evaluation
 
@@ -54,4 +55,6 @@ This repository is the single source for both code and the GitHub Pages site. Pa
 ## Data attribution
 
 The demo photos and reference model are derived from [KolektorSDD by ViCoS Lab / Kolektor Group](https://www.vicos.si/resources/kolektorsdd/), associated with [Tabernik et al. (2019)](https://doi.org/10.1007/s10845-019-01476-x). The dataset is [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/); check the source terms before commercial use. No license for the original project code is granted by this README.
+
+The new animation and sample photos are adapted from [TSFabrics by Ni et al. (2026)](https://doi.org/10.1038/s41597-026-06748-9), [dataset DOI](https://doi.org/10.6084/m9.figshare.29573381), released under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). See [animation attribution](web/next-method/README.md) and [experiment results](experiments/unsupervised/EXPERIMENT_RESULTS.md) for scope and limitations.
 

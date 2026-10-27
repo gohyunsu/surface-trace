@@ -8,6 +8,7 @@ curve are from the actual TSFabrics experiment; the movement is explanatory.
 from __future__ import annotations
 
 import json
+import math
 from pathlib import Path
 
 import numpy as np
@@ -90,6 +91,22 @@ def gauge(draw: ImageDraw.ImageDraw, x: int, y: int, width: int, score: float,
     draw.ellipse((dotx - 6, y - 6, dotx + 6, y + 6), fill=color)
 
 
+def focus_ring(draw: ImageDraw.ImageDraw, values: np.ndarray,
+               box: tuple[int, int, int, int], tick: int, progress: float) -> None:
+    if progress < .28:
+        return
+    row, col = np.unravel_index(np.argmax(values), values.shape)
+    x, y, width, height = box
+    cx = round(x + (col + .5) * width / values.shape[1])
+    cy = round(y + (row + .5) * height / values.shape[0])
+    radius = 11 + round(3 * math.sin(tick * math.pi / 3))
+    draw.ellipse((cx - radius, cy - radius, cx + radius, cy + radius),
+                 outline=WHITE, width=5)
+    draw.ellipse((cx - radius, cy - radius, cx + radius, cy + radius),
+                 outline=RED, width=2)
+    draw.ellipse((cx - 2, cy - 2, cx + 2, cy + 2), fill=RED)
+
+
 def animation_01(meta: dict) -> list[Image.Image]:
     frames = [picture(f"stream_{i:02d}.jpg") for i in range(5)]
     output = []
@@ -103,6 +120,11 @@ def animation_01(meta: dict) -> list[Image.Image]:
         photo(base, frames[center], (185, 70, 350, 280), outline=INDIGO)
         draw = ImageDraw.Draw(base)
         scan = 191 + int(338 * ((tick % 4) / 3))
+        beam = Image.new("RGBA", base.size, (0, 0, 0, 0))
+        ImageDraw.Draw(beam).rectangle((scan - 12, 78, scan + 12, 342),
+                                       fill=INDIGO + (26,))
+        base = Image.alpha_composite(base, beam)
+        draw = ImageDraw.Draw(base)
         draw.line((scan, 78, scan, 342), fill=INDIGO, width=2)
         for i in range(5):
             draw.rounded_rectangle((309 + 22 * i, 376, 322 + 22 * i, 381),
@@ -131,6 +153,10 @@ def animation_02(meta: dict) -> list[Image.Image]:
         line_arrow(draw, 340, 210, 380)
         draw.rounded_rectangle((408, 98, 687, 321), radius=10, fill=(245, 247, 253), outline=LINE, width=2)
         for row in range(26):
+            for col in range(32):
+                x, y = 420 + 8 * col, 106 + 8 * row
+                draw.rounded_rectangle((x, y, x + 6, y + 6), radius=2, fill=(230, 234, 247))
+        for row in range(26):
             for col in range(reveal):
                 strength = np.clip((values[row, col] - lo) / max(hi - lo, 1e-5), 0, 1)
                 color = tuple(int(226 + (72 - 226) * strength) if channel == 0 else
@@ -138,6 +164,14 @@ def animation_02(meta: dict) -> list[Image.Image]:
                               int(248 + (179 - 248) * strength) for channel in range(3))
                 x, y = 420 + 8 * col, 106 + 8 * row
                 draw.rounded_rectangle((x, y, x + 6, y + 6), radius=2, fill=color)
+        if reveal:
+            col = min(reveal - 1, 31)
+            row = (tick * 3) % 26
+            fx = 32 + round(col * 280 / 32)
+            fy = 98 + round(row * 224 / 26)
+            draw.rectangle((fx, fy, fx + 9, fy + 9), outline=AMBER, width=2)
+            tx, ty = 420 + col * 8, 106 + row * 8
+            draw.ellipse((tx - 3, ty - 3, tx + 9, ty + 9), outline=AMBER, width=2)
         output.append(base.convert("RGB"))
     return output
 
@@ -164,7 +198,16 @@ def animation_03(meta: dict) -> list[Image.Image]:
                              fill=TEAL if selected else WHITE,
                              outline=TEAL if selected else MUTED, width=2)
         line_arrow(draw, 470, 209, 506)
+        active = min(5, int(progress * 6))
+        if progress > .15 and examples[active]["selected"]:
+            travel = (tick % 5) / 4
+            dot_x = round(470 + 36 * travel)
+            draw.ellipse((dot_x - 4, 205, dot_x + 4, 213), fill=TEAL)
         draw.rounded_rectangle((523, 68, 690, 352), radius=11, fill=(247, 249, 253), outline=LINE, width=2)
+        for i in range(14 * 22):
+            row, col = divmod(i, 14)
+            x, y = 531 + col * 11, 80 + row * 12
+            draw.rounded_rectangle((x, y, x + 8, y + 8), radius=2, fill=(226, 232, 246))
         cells = int(14 * 22 * progress)
         for i in range(cells):
             row, col = divmod(i, 14)
@@ -186,6 +229,7 @@ def animation_04(meta: dict) -> list[Image.Image]:
         photo(base, image, box, outline=INDIGO)
         heat(base, values, box, progress)
         draw = ImageDraw.Draw(base)
+        focus_ring(draw, values, box, tick, progress)
         draw.rounded_rectangle((463, 77, 688, 343), radius=11, fill=(247, 249, 254), outline=LINE, width=2)
         quantiles = np.quantile(values, [.10, .25, .40, .55, .70, .82, .93, .99])
         low, high = float(quantiles[0]), float(quantiles[-1])
@@ -236,6 +280,7 @@ def animation_05(meta: dict) -> list[Image.Image]:
         threshold_y = coordinate(limit)
         for x in range(plot[0], plot[2], 16):
             draw.line((x, threshold_y, min(x + 9, plot[2]), threshold_y), fill=AMBER, width=2)
+        draw.line(points, fill=PALE, width=2, joint="curve")
         count = max(1, int(len(points) * progress))
         if count > 1:
             draw.line(points[:min(count, len(source_points))], fill=INDIGO, width=4, joint="curve")
@@ -246,7 +291,9 @@ def animation_05(meta: dict) -> list[Image.Image]:
         alarm_x, alarm_y = points[alarm_index]
         if count > alarm_index:
             draw.line((alarm_x, alarm_y + 12, alarm_x, threshold_y - 5), fill=AMBER, width=2)
-            draw.ellipse((alarm_x - 10, alarm_y - 10, alarm_x + 10, alarm_y + 10),
+            pulse = 10 + round(3 * math.sin(tick * math.pi / 3))
+            draw.ellipse((alarm_x - pulse, alarm_y - pulse,
+                          alarm_x + pulse, alarm_y + pulse),
                          outline=AMBER, width=3)
         output.append(base.convert("RGB"))
     return output
@@ -272,6 +319,7 @@ def animation_06(meta: dict) -> list[Image.Image]:
         heat(base, current, left, progress, shared)
         heat(base, shadow, right, progress, shared)
         draw = ImageDraw.Draw(base)
+        focus_ring(draw, current, left, tick, progress)
         gauge(draw, 65, 367, 238, meta["hero_score"], meta["hero_threshold"], progress,
               color=RED)
         gauge(draw, 417, 367, 238, meta["shadow_score"], meta["shadow_threshold"], progress,
