@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 216" role="img" aria-labelledby="title desc">
+<title id="title">Visual change across separate production runs</title>
+<desc id="desc">The maximum change score over 59 source holdout windows is 0.032, below the alert limit 0.064. The first three changed-run windows ending at frames 128, 160, and 192 score 0.93, 0.94, and 0.91, all above the limit. The third consecutive crossing confirms the alert.</desc>
+<style>
+text{font-family:Segoe UI,Arial,sans-serif}
+.group{fill:#59698f;font-size:10px;letter-spacing:1.3px}
+.note{fill:#687791;font-size:11px}
+.frame-label{fill:#53617d;font-size:11px}
+.bar-value{fill:white;font-size:11px;font-weight:500}
+</style>
+<text x="28" y="23" class="group">REFERENCE RUN</text>
+<text x="282" y="23" class="group">CHANGED RUN · NORMAL</text>
+<line x1="246" x2="246" y1="14" y2="202" stroke="#cbd2e1" stroke-dasharray="4 5"/>
+<line x1="28" x2="572" y1="162.9" y2="162.9" stroke="#bf8e71" stroke-width="1.5" stroke-dasharray="5 5"/>
+<rect x="27" y="142.9" width="104" height="17" rx="3" fill="#eef1f9"/>
+<text x="32" y="154.9" class="note">ALERT LIMIT</text>
+<rect x="153" y="166.9" width="54" height="4.1" rx="2" fill="#7988be"/>
+<circle cx="180" cy="166.9" r="4" fill="#7988be"/>
+<text x="180" y="156.9" text-anchor="middle" class="note">0.032</text>
+<text x="180" y="193" text-anchor="middle" class="frame-label">MAX · 59 WINDOWS</text>
+<rect x="282" y="53.9" width="54" height="117.1" rx="4" fill="#d98387"/><text x="309" y="73.9" text-anchor="middle" class="bar-value">0.93</text><text x="309" y="193" text-anchor="middle" class="frame-label">128</text><rect x="377" y="52.3" width="54" height="118.7" rx="4" fill="#d98387"/><text x="404" y="72.3" text-anchor="middle" class="bar-value">0.94</text><text x="404" y="193" text-anchor="middle" class="frame-label">160</text><rect x="472" y="56.3" width="54" height="114.7" rx="4" fill="#d98387"/><text x="499" y="76.3" text-anchor="middle" class="bar-value">0.91</text><text x="499" y="193" text-anchor="middle" class="frame-label">192</text>
+<path d="M282 38 H526" fill="none" stroke="#d98387" stroke-width="1.5"/>
+<text x="404" y="34" text-anchor="middle" class="note">3 IN A ROW</text>
+<text x="499" y="210" text-anchor="middle" class="group">ALERT</text>
+</svg>

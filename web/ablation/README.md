@@ -13,6 +13,16 @@ the same reference-bank capacity as the selected-reference method. It shows
 the same normal frame as the three-step false-alarm chart. Its score, threshold,
 and result are recorded under `all_unlabeled` in `catalog.json`.
 
+`change-figure.svg` visualizes recorded MMD change scores. The source bar is
+the maximum of all 59 windows in the held-out source run (0.0323), below the
+source-calibrated limit (0.0639). The three target bars are the first windows
+ending at frames 128, 160, and 192 in the all-normal changed run (0.9297,
+0.9417, 0.9100). Three consecutive crossings confirm the first alert at frame
+192. `change-figure.json` preserves the full source-window trace and those
+target values. Regenerate it with `experiments/unsupervised/export_change_figure.py`
+on the experiment server; regenerate the SVG with
+`scripts/generate_change_figure.py` locally.
+
 The cases shown on the site are a changed normal frame cleared by the selected
 reference, a large-shift defect flagged only by the selected reference, and a
 related-run defect flagged only by the handcrafted method. They were selected

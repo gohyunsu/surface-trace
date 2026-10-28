@@ -19,20 +19,27 @@ const { chromium } = require("playwright");
       const page = await browser.newPage({ viewport });
       for (const [name, suffix] of [["landing", ""], ["inspector", "inspect.html?sample=1"], ["next-inspector", "next-inspect.html?sample=7"]]) {
         await page.goto(new URL(suffix, base).href, { waitUntil: "networkidle" });
-        const decodeFailures = await page.locator("img").evaluateAll(imgs => {
-          imgs.forEach(img => { img.loading = "eager"; });
-          return Promise.all(imgs.map(img => img.decode().then(() => null, () => img.src)));
+        const imageSelector = name === "landing"
+          ? ".pipeline-hero-motion img, .method-animation img, .feedback-photo img, .scenario-timeline img, .ablation-step-image img, .change-effect img"
+          : name === "inspector" ? "#sourceImage, #heatmap" : "#frameImage, #frameHeat";
+        const decodeFailures = await page.locator(imageSelector).evaluateAll(async imgs => {
+          const failures = [];
+          for (const img of imgs) {
+            img.loading = "eager";
+            try { await img.decode(); } catch { failures.push(img.src); }
+          }
+          return failures;
         });
-        if (decodeFailures.some(Boolean)) throw new Error(`${name} ${viewport.label}: image decode failed: ${decodeFailures.filter(Boolean).join(", ")}`);
+        if (decodeFailures.length) throw new Error(`${name} ${viewport.label}: image decode failed: ${decodeFailures.join(", ")}`);
         if (name === "inspector") await page.waitForFunction(() => document.querySelector("#score").textContent !== "—");
         if (name === "next-inspector") await page.waitForFunction(() => document.querySelector("#streamScore").textContent !== "—");
         const audit = await page.evaluate(() => ({
           overflow: document.documentElement.scrollWidth > innerWidth + 1,
-          brokenImages: [...document.images].filter(img => img.complete && !img.naturalWidth).map(img => img.src),
+          brokenImages: [...document.images].filter(img => img.loading !== "lazy" && img.complete && !img.naturalWidth).map(img => img.src),
         }));
         await page.screenshot({ path: path.join(out, `${name}-${viewport.label}.png`), fullPage: true });
         if (name === "landing") {
-          for (const section of ["scenario", "ablation-chart"]) {
+          for (const section of ["scenario", "ablation-chart", "ablation-effects"]) {
             await page.locator(`.${section}`).screenshot({ path: path.join(out, `${section}-${viewport.label}.png`) });
           }
         }

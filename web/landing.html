@@ -99,8 +99,8 @@
           <p>DINOv2 with all startup frames barely changed false alarms here. Selecting representative startup frames reduced them from 971 to 11.</p>
         </div>
         <div class="ablation-effects">
-          <article><span>04 / VISUAL CHANGE</span><div><strong>Frame 192</strong><p>First sustained change alert after the new run began. None on the source holdout.</p></div></article>
-          <article><span>05 / CANDIDATE UPDATE</span><div><strong>Keep the current reference</strong><p>Updating cut false alarms 11 → 3 on the normal shift, but defect recall fell 40.2% → 6.1% on the larger shift.</p></div></article>
+          <article class="change-effect"><span>04 / VISUAL CHANGE</span><div class="change-effect-content"><img src="./ablation/change-figure.svg" alt="The reference run stays below the alert limit. Three consecutive windows in the changed normal run exceed it, confirming an alert at frame 192." width="600" height="216" loading="lazy"><div><strong>Alert at frame 192</strong><p>Three consecutive windows crossed the limit. The reference run stayed below it.</p></div></div></article>
+          <article class="candidate-effect"><span>05 / CANDIDATE UPDATE</span><div><strong>Keep the current reference</strong><p>Updating cut false alarms 11 → 3 on the normal shift, but defect recall fell 40.2% → 6.1% on the larger shift.</p></div></article>
         </div>
         <div class="ablation-gallery">
           <div class="ablation-gallery-head"><div><p class="section-kicker">PAIRED FRAMES</p><h4>Same photo. Two heatmaps.</h4></div><p>Recorded results from held-out frames.</p></div>

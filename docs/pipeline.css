@@ -74,9 +74,13 @@
 .ablation-step-image figcaption{margin-top:6px;color:#bc6563;font-size:11px;text-align:right}
 .ablation-step.selected .ablation-step-image figcaption{color:#258f83}
 .ablation-chart>p{border-top:1px solid #e9ecf3;margin:0;padding-top:17px;color:#596684;font-size:12px;line-height:1.55}
-.ablation-effects{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}
-.ablation-effects article{display:flex;flex-direction:column;justify-content:space-between;gap:23px;min-height:159px;padding:22px 24px;background:#eef1f9;border:1px solid #dae0ee;border-radius:7px}
+.ablation-effects{display:grid;grid-template-columns:1fr;gap:10px;margin-top:14px}
+.ablation-effects article{display:flex;flex-direction:column;gap:18px;padding:22px 24px;background:#eef1f9;border:1px solid #dae0ee;border-radius:7px}
 .ablation-effects article>span{color:#6b79af;font-size:10px;letter-spacing:.13em}
+.change-effect-content{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(220px,.65fr);align-items:center;gap:34px}
+.change-effect img{display:block;width:100%;height:auto;max-width:600px}
+.ablation-effects .candidate-effect{display:grid;grid-template-columns:180px 1fr;align-items:center;gap:24px}
+.ablation-effects .candidate-effect strong{font-size:22px}
 .ablation-effects strong{display:block;margin:0 0 7px;color:#344169;font-size:27px;font-weight:500;letter-spacing:-.045em;line-height:1.1}
 .ablation-effects p{max-width:500px;margin:0;color:#67728b;font-size:12px;line-height:1.55}
 .ablation-gallery{margin-top:28px;padding:26px 28px 28px}
@@ -235,7 +239,9 @@
   .ablation-step-image figcaption{font-size:9px}
   .ablation-bar{height:10px}
   .ablation-effects{grid-template-columns:1fr;gap:9px}
-  .ablation-effects article{min-height:0;gap:15px;padding:19px}
+  .ablation-effects article{gap:15px;padding:19px}
+  .change-effect-content{grid-template-columns:1fr;gap:9px}
+  .ablation-effects .candidate-effect{display:flex;align-items:stretch;gap:15px}
   .ablation-gallery{margin-top:20px}
   .ablation-tabs{gap:6px}
   .ablation-tabs button{font-size:10px;padding:8px 9px}
