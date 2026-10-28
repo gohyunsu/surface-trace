@@ -16,19 +16,12 @@
     <nav class="main-nav" aria-label="Main navigation"><a href="#baseline">Baseline</a><a href="#feedback">Feedback</a><a href="#next">Change-aware</a></nav>
   </header>
   <main id="main">
-    <section class="hero"><div class="hero-inner">
-      <div class="hero-copy">
-        <p class="eyebrow"><span class="eyebrow-line"></span> TWO INSPECTION PIPELINES</p>
-        <h1>Find unusual areas.<br><em>Track change.</em></h1>
-        <p class="hero-description">A baseline for single photos and a change-aware experiment on production streams.</p>
-        <a class="text-link hero-scroll" href="#baseline">Explore the pipelines ↓</a>
-      </div>
-      <div class="pipeline-hero-visual" aria-label="Preview of both inspection methods">
-        <div class="hero-visual-grid">
-          <div><img src="./method/06-poster.png" alt="Baseline patch comparison and anomaly map"><span>01 <i></i> BASELINE</span></div>
-          <div><img src="./next-method/04-poster.png" alt="New pipeline highlights an unusual region in a production photo"><span>02 <i></i> CHANGE-AWARE</span></div>
-        </div>
-      </div>
+    <section class="hero" aria-label="Change-aware inspection pipeline"><div class="hero-inner">
+      <h1 class="visually-hidden">SurfaceTrace visual inspection</h1>
+      <picture class="pipeline-hero-motion">
+        <source media="(prefers-reduced-motion: reduce)" srcset="./next-method/04-poster.png">
+        <img src="./next-method/hero.webp" alt="Production frames become visual features and an unlabeled reference, then unusual regions and process changes are identified and a candidate reference is evaluated." width="720" height="420" fetchpriority="high">
+      </picture>
     </div></section>
 
     <section class="method-section baseline-section" id="baseline"><div class="section method-inner">

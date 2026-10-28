@@ -41,7 +41,7 @@ def build(out: Path) -> tuple[int, int]:
         if asset.suffix in {".gif", ".png"}:
             shutil.copyfile(asset, out / "method" / asset.name)
     for asset in (WEB / "next-method").iterdir():
-        if asset.suffix in {".gif", ".png"}:
+        if asset.suffix in {".gif", ".png", ".webp"}:
             shutil.copyfile(asset, out / "next-method" / asset.name)
     for asset in (WEB / "next-samples").iterdir():
         if asset.suffix in {".jpg", ".png", ".json"}:

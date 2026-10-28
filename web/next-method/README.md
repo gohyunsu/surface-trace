@@ -1,6 +1,7 @@
 # New pipeline animation assets
 
-Six looping, 720 × 420 GIFs and matching poster frames. The intended order is:
+Six looping, 720 × 420 GIFs and matching poster frames. `hero.webp` combines
+the six loops into the text-free landing animation. The intended order is:
 
 1. Continuous production frames
 2. Frozen visual features
@@ -29,3 +30,4 @@ attribution and a visible dataset credit when the assets are placed on a site.
 To regenerate: run `experiments/unsupervised/export_animation_data.py` on the
 experiment machine, transfer its ignored `animation_data/` folder to the same
 repository path locally, then run `scripts/generate_next_method_gifs.py`.
+Run `scripts/generate_hero_animation.py` afterward to rebuild the landing loop.

@@ -15,6 +15,12 @@ const { chromium } = require("playwright");
     page.on("pageerror", error => errors.push(error.message));
     await page.goto(base, { waitUntil: "networkidle" });
     assert((await page.title()).includes("SurfaceTrace"));
+    assert.strictEqual(await page.locator(".hero .hero-copy, .hero .hero-visual-grid").count(), 0);
+    assert.strictEqual(await page.locator(".pipeline-hero-motion img").evaluate(image => image.complete && image.naturalWidth > 0), true);
+    const heroImage = page.locator(".pipeline-hero-motion img");
+    const firstFrame = await heroImage.screenshot();
+    await page.waitForTimeout(3100);
+    assert.notDeepStrictEqual(await heroImage.screenshot(), firstFrame, "Hero animation should advance automatically");
     assert.strictEqual(await page.locator("#baseline .method-card").count(), 6);
     assert.strictEqual(await page.locator("#next .method-card").count(), 6);
     for (const [section, destination] of [["baseline", "inspect.html"], ["next", "next-inspect.html"]]) {
