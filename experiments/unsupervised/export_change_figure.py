@@ -26,7 +26,7 @@ def main() -> None:
     detector = DriftDetector(np.asarray(source[:2048]))
     heldout = np.asarray(source[2112:4096])
     source_ends, source_scores = detector.sequence_scores(heldout)
-    target_ends, target_scores = detector.sequence_scores(np.asarray(target[:192]))
+    target_ends, target_scores = detector.sequence_scores(np.asarray(target[:608]))
     assert detector.first_alarm(heldout) is None
     assert detector.first_alarm(np.asarray(target)) == 192
     payload = {

@@ -39,7 +39,7 @@ const { chromium } = require("playwright");
         }));
         await page.screenshot({ path: path.join(out, `${name}-${viewport.label}.png`), fullPage: true });
         if (name === "landing") {
-          for (const section of ["scenario", "ablation-chart", "ablation-effects"]) {
+          for (const section of ["scenario", "ablation-chart", "ablation-effects", "ablation-gallery"]) {
             await page.locator(`.${section}`).screenshot({ path: path.join(out, `${section}-${viewport.label}.png`) });
           }
         }

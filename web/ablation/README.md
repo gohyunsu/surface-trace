@@ -1,6 +1,6 @@
 # Paired TSFabrics heatmaps
 
-The three transparent `sample-XX-classic.png` overlays come from the
+The twelve transparent `sample-XX-classic.png` overlays come from the
 handcrafted eight-feature pipeline re-run on the same held-out TSFabrics frames
 used by the change-aware sample explorer. Their scores, source-calibrated
 threshold, and frame identities are recorded in `catalog.json`. The DINOv2
@@ -19,19 +19,22 @@ the source-derived methods keep their source calibration. The trial is shown
 alongside the others to explain why lower false alarms alone did not justify
 promoting it.
 
-`change-figure.svg` and `change-figure-mobile.svg` plot recorded MMD scores as
-two separate time-ordered traces on the same 0–1 scale. All 59 held-out source
-windows stay below the source-calibrated limit (0.0639; maximum 0.0323). The
-first changed-run windows end at frames 128, 160, and 192 (0.9297, 0.9417,
-0.9100); the third consecutive crossing confirms the alert at frame 192.
+`change-figure.svg` and `change-figure-mobile.svg` plot all 59 source windows
+and the first 16 changed-run windows at equal x-axis intervals on the same
+0–1 score scale. The line crosses a marked run boundary, so it does not imply
+one continuous production run. All 59 held-out source windows stay below the source-calibrated
+limit (0.0639; maximum 0.0323). The first changed-run windows end at frames
+128, 160, and 192 (0.9297, 0.9417, 0.9100); the third consecutive crossing
+confirms the alert at frame 192. The chart continues through frame 608.
 `change-figure.json` preserves the source trace and target values. Regenerate
 it with `experiments/unsupervised/export_change_figure.py` on the experiment
 server, then regenerate both SVGs with `scripts/generate_change_figure.py`.
 
-The cases shown on the site are a changed normal frame cleared by the selected
-reference, a large-shift defect flagged only by the selected reference, and a
-related-run defect flagged only by the handcrafted method. They were selected
-from the existing 12 public-site sample frames and show both gains and misses.
+The paired-frame gallery cycles through all 12 public-site sample frames. It
+opens with a changed normal frame cleared by the selected reference, a
+large-shift defect flagged only by the selected reference, and a related-run
+defect flagged only by the handcrafted method, then continues through the
+remaining examples. These are curated examples, not a random test sample.
 
 Regenerate the handcrafted overlays with
 `experiments/unsupervised/export_ablation_comparison.py` on the experiment

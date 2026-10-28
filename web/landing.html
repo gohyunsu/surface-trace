@@ -103,31 +103,12 @@
           <article class="change-effect"><span>VISUAL CHANGE</span><div class="change-effect-content"><picture><source media="(max-width: 700px)" srcset="./ablation/change-figure-mobile.svg"><img src="./ablation/change-figure.svg" alt="The reference run's change scores stay below the alert limit. Three consecutive score windows in the changed normal run exceed it, confirming an alert at frame 192." width="600" height="238" loading="lazy"></picture><div><strong>Alert at frame 192</strong><p>Three consecutive windows crossed the limit. The reference run stayed below it.</p></div></div></article>
         </div>
         <div class="ablation-gallery">
-          <div class="ablation-gallery-head"><div><p class="section-kicker">PAIRED FRAMES</p><h4>Same photo. Two heatmaps.</h4></div></div>
-          <div class="ablation-tabs" aria-label="Comparison example">
-            <button type="button" data-ablation-case="normal" aria-pressed="true">Normal shift</button>
-            <button type="button" data-ablation-case="detected" aria-pressed="false">DINOv2 finds defect</button>
-            <button type="button" data-ablation-case="missed" aria-pressed="false">DINOv2 misses defect</button>
-          </div>
-          <div class="ablation-case" data-ablation-panel="normal">
-            <div class="ablation-case-label"><span>Normal · changed run</span><small>Frame 1,264</small></div>
+          <div class="ablation-gallery-head"><div><p class="section-kicker">PAIRED FRAMES</p><h4>Same photo. Two heatmaps.</h4></div><div class="ablation-gallery-controls"><span id="pairedCounter">01 / 12</span><button type="button" id="pairedPrev" aria-label="Previous photo">←</button><button type="button" id="pairedNext" aria-label="Next photo">→</button></div></div>
+          <div class="ablation-case" id="pairedCase">
+            <div class="ablation-case-label"><span id="pairedLabel">Normal · changed run</span><small id="pairedFrame">Frame 1,264</small></div>
             <div class="ablation-pair">
-              <figure><div class="ablation-heat"><img src="./next-samples/sample-06.jpg" alt="Normal textile frame with the handcrafted anomaly map" loading="lazy"><img src="./ablation/sample-06-classic.png" alt="" loading="lazy"></div><figcaption><span>Handcrafted</span><strong class="ablation-review">False alarm</strong></figcaption></figure>
-              <figure><div class="ablation-heat"><img src="./next-samples/sample-06.jpg" alt="Same normal textile frame with the selected-reference anomaly map" loading="lazy"><img src="./next-samples/sample-06-current.png" alt="" loading="lazy"></div><figcaption><span>DINOv2 + selection</span><strong class="ablation-clear">No false alarm</strong></figcaption></figure>
-            </div>
-          </div>
-          <div class="ablation-case" data-ablation-panel="detected" hidden>
-            <div class="ablation-case-label"><span>Defect · larger shift</span><small>Frame 1,509</small></div>
-            <div class="ablation-pair">
-              <figure><div class="ablation-heat"><img src="./next-samples/sample-07.jpg" alt="Defective textile frame with the handcrafted anomaly map" loading="lazy"><img src="./ablation/sample-07-classic.png" alt="" loading="lazy"></div><figcaption><span>Handcrafted</span><strong class="ablation-miss">Missed defect</strong></figcaption></figure>
-              <figure><div class="ablation-heat"><img src="./next-samples/sample-07.jpg" alt="Same defective textile frame with the selected-reference anomaly map" loading="lazy"><img src="./next-samples/sample-07-current.png" alt="" loading="lazy"></div><figcaption><span>DINOv2 + selection</span><strong class="ablation-clear">Flagged defect</strong></figcaption></figure>
-            </div>
-          </div>
-          <div class="ablation-case" data-ablation-panel="missed" hidden>
-            <div class="ablation-case-label"><span>Defect · related run</span><small>Frame 3,011</small></div>
-            <div class="ablation-pair">
-              <figure><div class="ablation-heat"><img src="./next-samples/sample-04.jpg" alt="Defective textile frame with the handcrafted anomaly map" loading="lazy"><img src="./ablation/sample-04-classic.png" alt="" loading="lazy"></div><figcaption><span>Handcrafted</span><strong class="ablation-clear">Flagged defect</strong></figcaption></figure>
-              <figure><div class="ablation-heat"><img src="./next-samples/sample-04.jpg" alt="Same defective textile frame with the selected-reference anomaly map" loading="lazy"><img src="./next-samples/sample-04-current.png" alt="" loading="lazy"></div><figcaption><span>DINOv2 + selection</span><strong class="ablation-miss">Missed defect</strong></figcaption></figure>
+              <figure><div class="ablation-heat"><img id="pairedClassicPhoto" src="./next-samples/sample-06.jpg" alt="Normal textile frame with the handcrafted anomaly map" loading="lazy"><img id="pairedClassicMap" src="./ablation/sample-06-classic.png" alt="" loading="lazy"></div><figcaption><span>Handcrafted</span><strong id="pairedClassicResult" class="ablation-review">False alarm</strong></figcaption></figure>
+              <figure><div class="ablation-heat"><img id="pairedSelectedPhoto" src="./next-samples/sample-06.jpg" alt="Same normal textile frame with the selected-reference anomaly map" loading="lazy"><img id="pairedSelectedMap" src="./next-samples/sample-06-current.png" alt="" loading="lazy"></div><figcaption><span>DINOv2 + selection</span><strong id="pairedSelectedResult" class="ablation-clear">No false alarm</strong></figcaption></figure>
             </div>
           </div>
         </div>

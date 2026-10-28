@@ -1,5 +1,35 @@
 [
   {
+    "id": 1,
+    "scenario": "T1_S148_I108_2",
+    "frame": 2057,
+    "dataset_label": "Defect",
+    "score": 4.044304370880127,
+    "threshold": 3.7415819525718748,
+    "alert": true,
+    "overlay": "sample-01-classic.png"
+  },
+  {
+    "id": 2,
+    "scenario": "T1_S148_I108_2",
+    "frame": 4091,
+    "dataset_label": "Normal",
+    "score": 1.2600871324539185,
+    "threshold": 3.7415819525718748,
+    "alert": false,
+    "overlay": "sample-02-classic.png"
+  },
+  {
+    "id": 3,
+    "scenario": "T1_S148_I108_2",
+    "frame": 2314,
+    "dataset_label": "Normal",
+    "score": 2.75429630279541,
+    "threshold": 3.7415819525718748,
+    "alert": false,
+    "overlay": "sample-03-classic.png"
+  },
+  {
     "id": 4,
     "scenario": "T1_S148_I108_2",
     "frame": 3010,
@@ -8,6 +38,16 @@
     "threshold": 3.7415819525718748,
     "alert": true,
     "overlay": "sample-04-classic.png"
+  },
+  {
+    "id": 5,
+    "scenario": "T1_S164_I36_1",
+    "frame": 1595,
+    "dataset_label": "Normal",
+    "score": 4.212963104248047,
+    "threshold": 3.7415819525718748,
+    "alert": true,
+    "overlay": "sample-05-classic.png"
   },
   {
     "id": 6,
@@ -34,5 +74,55 @@
     "threshold": 3.7415819525718748,
     "alert": false,
     "overlay": "sample-07-classic.png"
+  },
+  {
+    "id": 8,
+    "scenario": "T1_S478_I118_2",
+    "frame": 1031,
+    "dataset_label": "Defect",
+    "score": 3.6764121055603027,
+    "threshold": 3.7415819525718748,
+    "alert": false,
+    "overlay": "sample-08-classic.png"
+  },
+  {
+    "id": 9,
+    "scenario": "T1_S478_I118_2",
+    "frame": 2674,
+    "dataset_label": "Normal",
+    "score": 2.074317455291748,
+    "threshold": 3.7415819525718748,
+    "alert": false,
+    "overlay": "sample-09-classic.png"
+  },
+  {
+    "id": 10,
+    "scenario": "T1_S478_I118_2",
+    "frame": 2472,
+    "dataset_label": "Defect",
+    "score": 3.16723895072937,
+    "threshold": 3.7415819525718748,
+    "alert": false,
+    "overlay": "sample-10-classic.png"
+  },
+  {
+    "id": 11,
+    "scenario": "T1_S478_I118_2",
+    "frame": 1989,
+    "dataset_label": "Defect",
+    "score": 2.9470443725585938,
+    "threshold": 3.7415819525718748,
+    "alert": false,
+    "overlay": "sample-11-classic.png"
+  },
+  {
+    "id": 12,
+    "scenario": "T1_S478_I118_2",
+    "frame": 2168,
+    "dataset_label": "Normal",
+    "score": 1.3997595310211182,
+    "threshold": 3.7415819525718748,
+    "alert": false,
+    "overlay": "sample-12-classic.png"
   }
 ]

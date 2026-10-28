@@ -44,14 +44,13 @@ def main() -> None:
     exported = []
 
     for sample in catalog["samples"]:
-        if sample["id"] not in EXPECTED:
-            continue
         scenario, frame = sample["scenario"], int(sample["frame"])
         features = np.load(ROOT / "features" / f"{scenario}.classic.npy", mmap_mode="r")
         scores, maps = scorer.score(features[frame:frame + 1])
         classic_alert = bool(scores[0] >= threshold)
         selected_alert = bool(sample["current"]["score"] >= sample["current"]["threshold"])
-        assert (sample["label"], classic_alert, selected_alert) == EXPECTED[sample["id"]]
+        if sample["id"] in EXPECTED:
+            assert (sample["label"], classic_alert, selected_alert) == EXPECTED[sample["id"]]
         original = ROOT / "site_export" / f"sample-{sample['id']:02d}.jpg"
         with Image.open(original) as image:
             size = image.size

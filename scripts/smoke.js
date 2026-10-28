@@ -28,11 +28,27 @@ const { chromium } = require("playwright");
     assert(await page.getByRole("heading", { name: "How each method handled the shift." }).isVisible());
     assert.strictEqual(await page.locator(".ablation-step").count(), 4);
     assert((await page.locator(".ablation-chart-labels").textContent()).includes("FRAME 1,264"));
-    await page.getByRole("button", { name: "DINOv2 finds defect" }).click();
-    assert(await page.locator('[data-ablation-panel="detected"]').isVisible());
-    assert.strictEqual(await page.locator('[data-ablation-panel="normal"]').isVisible(), false);
-    await page.getByRole("button", { name: "DINOv2 misses defect" }).click();
-    assert(await page.locator('[data-ablation-panel="missed"]').isVisible());
+    await page.locator(".ablation-gallery").scrollIntoViewIfNeeded();
+    await page.waitForFunction(() => document.querySelector(".ablation-gallery").dataset.ready === "true");
+    assert.strictEqual(await page.locator("#pairedCounter").textContent(), "01 / 12");
+    assert.strictEqual(await page.locator("#pairedClassicResult").textContent(), "False alarm");
+    await page.getByRole("button", { name: "Next photo" }).click();
+    assert.strictEqual(await page.locator("#pairedCounter").textContent(), "02 / 12");
+    assert.strictEqual(await page.locator("#pairedSelectedResult").textContent(), "Flagged defect");
+    await page.waitForFunction(() => document.querySelector("#pairedCounter").textContent === "03 / 12", null, { timeout: 6000 });
+    assert.strictEqual(await page.locator("#pairedClassicResult").textContent(), "Flagged defect");
+    assert.strictEqual(await page.locator("#pairedSelectedResult").textContent(), "Missed defect");
+    for (let i = 0; i < 12; i++) {
+      const failures = await page.locator("#pairedCase img").evaluateAll(async images => {
+        const failed = [];
+        for (const image of images) {
+          try { await image.decode(); } catch { failed.push(image.src); }
+        }
+        return failed;
+      });
+      assert.deepStrictEqual(failures, [], "Each paired photo and heatmap should load");
+      await page.getByRole("button", { name: "Next photo" }).click();
+    }
     for (const [section, destination] of [["baseline", "inspect.html"], ["next", "next-inspect.html"]]) {
       const link = page.locator(`#${section} .method-foot a`);
       assert((await link.getAttribute("href")).endsWith(destination));

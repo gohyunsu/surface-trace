@@ -87,12 +87,14 @@
 .ablation-gallery{margin-top:28px;padding:26px 28px 28px}
 .ablation-gallery-head{margin-bottom:20px}
 .ablation-gallery-head h4{font-size:clamp(23px,2.4vw,31px)}
-.ablation-tabs{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:21px}
-.ablation-tabs button{border:1px solid #d8deeb;border-radius:5px;padding:9px 13px;background:#f8f9fc;color:#66728f;font:inherit;font-size:11px;cursor:pointer;transition:background .15s,border-color .15s,color .15s}
-.ablation-tabs button:hover{border-color:#7786c0}
-.ablation-tabs button:focus-visible{outline:2px solid #7786c0;outline-offset:2px}
-.ablation-tabs button[aria-pressed="true"]{border-color:#465788;background:#465788;color:#fff}
-.ablation-case[hidden]{display:none}
+.ablation-gallery-controls{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.ablation-gallery-controls span{margin-right:6px;color:#7c88a4;font-size:11px;font-variant-numeric:tabular-nums;letter-spacing:.08em}
+.ablation-gallery-controls button{width:33px;height:33px;border:1px solid #d8deeb;border-radius:50%;background:#f8f9fc;color:#465788;font:inherit;font-size:17px;cursor:pointer;transition:background .15s,border-color .15s}
+.ablation-gallery-controls button:hover{background:#e9edf8;border-color:#7786c0}
+.ablation-gallery-controls button:focus-visible{outline:2px solid #7786c0;outline-offset:2px}
+.ablation-case.is-changing .ablation-pair{animation:paired-enter .28s ease-out}
+@keyframes paired-enter{from{opacity:.6;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.ablation-case.is-changing .ablation-pair{animation:none}}
 .ablation-case-label{display:flex;justify-content:space-between;gap:12px;margin-bottom:11px;color:#445172;font-size:12px}
 .ablation-case-label small{color:#8a95ad;font-size:11px}
 .ablation-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
@@ -242,8 +244,7 @@
   .ablation-effects article{gap:15px;padding:19px}
   .change-effect-content{grid-template-columns:1fr;gap:9px}
   .ablation-gallery{margin-top:20px}
-  .ablation-tabs{gap:6px}
-  .ablation-tabs button{font-size:10px;padding:8px 9px}
+  .ablation-gallery-controls{margin-top:15px}
   .ablation-pair{grid-template-columns:1fr;gap:12px}
   .summary-next{padding:20px}
   .summary-next>div{gap:13px}

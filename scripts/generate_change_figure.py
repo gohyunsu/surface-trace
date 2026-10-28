@@ -1,4 +1,4 @@
-"""Draw the change figure from recorded TSFabrics scores."""
+"""Draw a continuous, evenly spaced change trace from recorded TSFabrics scores."""
 
 from __future__ import annotations
 
@@ -9,28 +9,26 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "web" / "ablation" / "change-figure.json"
 OUT = ROOT / "web" / "ablation"
+SOURCE_COLOR = "#7788bf"
+CHANGED_COLOR = "#d98387"
 
 
 def y(score: float, top: float, bottom: float) -> float:
     return bottom - (bottom - top) * score
 
 
-def trace(scores: list[float], left: float, right: float, top: float, bottom: float) -> str:
-    return " ".join(
-        f"{left + (right - left) * i / (len(scores) - 1):.1f},{y(score, top, bottom):.1f}"
-        for i, score in enumerate(scores)
-    )
+def points(scores: list[float], xs: list[float], top: float, bottom: float) -> str:
+    return " ".join(f"{x:.1f},{y(score, top, bottom):.1f}" for x, score in zip(xs, scores))
 
 
 def svg(width: int, height: int, content: str) -> str:
     return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
 <title id="title">Visual change across two production runs</title>
-<desc id="desc">The reference run's 59 windows stay below the alert limit. Three consecutive windows in a separate changed normal run exceed it, confirming an alert at frame 192. The traces share a zero-to-one score scale.</desc>
+<desc id="desc">All 59 consecutive reference windows and the first 16 windows of a separate changed normal run are plotted at equal intervals. The reference windows stay below the alert limit. The first three changed-run windows exceed it, confirming an alert at frame 192; the chart continues through frame 608.</desc>
 <style>
 text{{font-family:Segoe UI,Arial,sans-serif}}
 .heading{{fill:#59698f;font-size:11px;letter-spacing:1px}}
 .axis{{fill:#75829b;font-size:10px}}
-.value{{fill:#53617d;font-size:11px}}
 .alert{{fill:#ba676c;font-size:10px;letter-spacing:1px}}
 </style>
 {content}
@@ -38,89 +36,59 @@ text{{font-family:Segoe UI,Arial,sans-serif}}
 '''
 
 
-def desktop(source: list[float], target: list[float], limit: float) -> str:
-    top, bottom = 57, 180
-    xs = (354, 451, 548)
-    source_max = max(source)
-    max_x = 54 + 230 * source.index(source_max) / (len(source) - 1)
+def figure(source: list[float], target: list[float], limit: float, mobile: bool) -> str:
+    left, right = (35, 274) if mobile else (54, 548)
+    top, bottom = (44, 163) if mobile else (57, 180)
+    width, height = (300, 223) if mobile else (600, 238)
+    xs = [left + (right - left) * i / (len(source) + len(target) - 1)
+          for i in range(len(source) + len(target))]
+    boundary = (xs[len(source) - 1] + xs[len(source)]) / 2
+    source_xs = xs[:len(source)]
+    target_xs = xs[len(source):]
     lines = [
-        '<text x="54" y="26" class="heading">REFERENCE RUN</text>',
-        '<text x="354" y="26" class="heading">CHANGED RUN · NORMAL</text>',
-        '<line x1="319" x2="319" y1="35" y2="210" stroke="#cbd2e1" stroke-dasharray="4 5"/>',
+        f'<text x="{left}" y="{24 if mobile else 26}" class="heading">REFERENCE RUN</text>',
+        f'<text x="{right}" y="{24 if mobile else 26}" text-anchor="end" class="heading">NEW RUN</text>',
+        f'<line x1="{boundary:.1f}" x2="{boundary:.1f}" y1="{top - 8}" y2="{bottom + 9}" stroke="#cbd2e1" stroke-dasharray="4 5"/>',
     ]
     for level in (1.0, 0.5, 0.0):
         pos = y(level, top, bottom)
-        lines.append(f'<line x1="54" x2="548" y1="{pos:.1f}" y2="{pos:.1f}" stroke="#dce2ef"/>')
-        lines.append(f'<text x="43" y="{pos + 3:.1f}" text-anchor="end" class="axis">{level:g}</text>')
-    ly = y(limit, top, bottom)
-    lines.extend([
-        f'<line x1="54" x2="548" y1="{ly:.1f}" y2="{ly:.1f}" stroke="#ba8f71" stroke-width="1.5" stroke-dasharray="5 4"/>',
-        f'<text x="54" y="{ly - 8:.1f}" class="axis">ALERT LIMIT · {limit:.3f}</text>',
-        f'<polyline points="{trace(source, 54, 284, top, bottom)}" fill="none" stroke="#7788bf" stroke-width="2" stroke-linejoin="round"/>',
-        f'<circle cx="{max_x:.1f}" cy="{y(source_max, top, bottom):.1f}" r="3.5" fill="#7788bf"/>',
-        f'<text x="284" y="157" text-anchor="end" class="value">MAX {source_max:.3f}</text>',
-        '<text x="54" y="201" class="axis">START</text>',
-        '<text x="284" y="201" text-anchor="end" class="axis">59 WINDOWS</text>',
-        f'<polyline points="{trace(target, xs[0], xs[-1], top, bottom)}" fill="none" stroke="#d98387" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>',
-    ])
-    for x, end, score in zip(xs, (128, 160, 192), target):
-        pos = y(score, top, bottom)
         lines.extend([
-            f'<circle cx="{x}" cy="{pos:.1f}" r="5" fill="#d98387"/>',
-            f'<text x="{x}" y="{pos - 11:.1f}" text-anchor="middle" class="value">{score:.2f}</text>',
-            f'<text x="{x}" y="201" text-anchor="middle" class="axis">{end}</text>',
+            f'<line x1="{left}" x2="{right}" y1="{pos:.1f}" y2="{pos:.1f}" stroke="#dce2ef"/>',
+            f'<text x="{left - 10}" y="{pos + 3:.1f}" text-anchor="end" class="axis">{level:g}</text>',
         ])
+    limit_y = y(limit, top, bottom)
     lines.extend([
-        f'<circle cx="548" cy="{y(target[-1], top, bottom):.1f}" r="8" fill="none" stroke="#ba676c" stroke-width="1.5"/>',
-        '<text x="354" y="225" class="axis">FRAME</text>',
-        '<text x="548" y="225" text-anchor="middle" class="alert">ALERT</text>',
+        f'<line x1="{left}" x2="{right}" y1="{limit_y:.1f}" y2="{limit_y:.1f}" stroke="#ba8f71" stroke-width="1.5" stroke-dasharray="5 4"/>',
+        f'<text x="{left}" y="{limit_y - 8:.1f}" class="axis">ALERT LIMIT · {limit:.3f}</text>',
+        f'<polyline points="{points(source, source_xs, top, bottom)}" fill="none" stroke="{SOURCE_COLOR}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+        f'<polyline points="{points([source[-1], *target], [source_xs[-1], *target_xs], top, bottom)}" fill="none" stroke="{CHANGED_COLOR}" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>',
     ])
-    return svg(600, 238, "\n".join(lines))
-
-
-def mobile(source: list[float], target: list[float], limit: float) -> str:
-    lines = []
-    for title, scores, top, bottom, color in (
-        ("REFERENCE RUN · 59 WINDOWS", source, 45, 142, "#7788bf"),
-        ("CHANGED RUN · NORMAL", target, 213, 310, "#d98387"),
-    ):
-        lines.extend([
-            f'<text x="37" y="{top - 17}" class="heading">{title}</text>',
-            f'<line x1="37" x2="274" y1="{top}" y2="{top}" stroke="#dce2ef"/>',
-            f'<line x1="37" x2="274" y1="{bottom}" y2="{bottom}" stroke="#dce2ef"/>',
-            f'<text x="30" y="{top + 3}" text-anchor="end" class="axis">1</text>',
-            f'<text x="30" y="{bottom + 3}" text-anchor="end" class="axis">0</text>',
-            f'<line x1="37" x2="274" y1="{y(limit, top, bottom):.1f}" y2="{y(limit, top, bottom):.1f}" stroke="#ba8f71" stroke-width="1.5" stroke-dasharray="5 4"/>',
-            f'<polyline points="{trace(scores, 37, 274, top, bottom)}" fill="none" stroke="{color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>',
-        ])
-        if len(scores) == 3:
-            for x, end, score in zip((37, 155.5, 274), (128, 160, 192), scores):
-                lines.extend([
-                    f'<circle cx="{x}" cy="{y(score, top, bottom):.1f}" r="4.5" fill="{color}"/>',
-                    f'<text x="{x}" y="{y(score, top, bottom) - 10:.1f}" text-anchor="middle" class="value">{score:.2f}</text>',
-                    f'<text x="{x}" y="{bottom + 17}" text-anchor="middle" class="axis">{end}</text>',
-                ])
-            lines.extend([
-                f'<circle cx="274" cy="{y(scores[-1], top, bottom):.1f}" r="8" fill="none" stroke="#ba676c" stroke-width="1.5"/>',
-                '<text x="274" y="349" text-anchor="middle" class="alert">ALERT</text>',
-            ])
-        else:
-            lines.extend([
-                f'<text x="37" y="{y(limit, top, bottom) - 8:.1f}" class="axis">LIMIT {limit:.3f}</text>',
-                f'<text x="274" y="{bottom - 12}" text-anchor="end" class="value">MAX {max(scores):.3f}</text>',
-            ])
-    return svg(300, 362, "\n".join(lines))
+    marker_radius = 1.2 if mobile else 1.7
+    for scores, positions, color in ((source, source_xs, SOURCE_COLOR), (target, target_xs, CHANGED_COLOR)):
+        for x, score in zip(positions, scores):
+            lines.append(
+                f'<circle cx="{x:.1f}" cy="{y(score, top, bottom):.1f}" r="{marker_radius}" fill="{color}"/>'
+            )
+    alert_x, alert_y = target_xs[2], y(target[2], top, bottom)
+    lines.extend([
+        f'<circle cx="{alert_x:.1f}" cy="{alert_y:.1f}" r="8" fill="none" stroke="#ba676c" stroke-width="1.5"/>',
+        f'<text x="{alert_x:.1f}" y="{bottom + 22}" text-anchor="middle" class="axis">192</text>',
+        f'<text x="{alert_x:.1f}" y="{bottom + 45}" text-anchor="middle" class="alert">ALERT</text>',
+    ])
+    if not mobile:
+        lines.append(f'<text x="{right}" y="{bottom + 22}" text-anchor="end" class="axis">608</text>')
+    return svg(width, height, "\n".join(lines))
 
 
 def main() -> None:
     data = json.loads(DATA.read_text(encoding="utf-8"))
     source = data["source_holdout"]["scores"]
     target = data["target_start"]["scores"]
-    assert len(source) == 59 and data["target_start"]["ends"] == [128, 160, 192]
+    assert len(source) == 59 and data["target_start"]["ends"] == list(range(128, 609, 32))
     assert data["target_start"]["first_alarm"] == 192
-    assert max(source) < data["limit"] < min(target)
-    (OUT / "change-figure.svg").write_text(desktop(source, target, data["limit"]), encoding="utf-8")
-    (OUT / "change-figure-mobile.svg").write_text(mobile(source, target, data["limit"]), encoding="utf-8")
+    assert max(source) < data["limit"] < min(target[:3])
+    (OUT / "change-figure.svg").write_text(figure(source, target, data["limit"], False), encoding="utf-8")
+    (OUT / "change-figure-mobile.svg").write_text(figure(source, target, data["limit"], True), encoding="utf-8")
     print("Wrote desktop and mobile change figures")
 
 

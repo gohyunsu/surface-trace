@@ -1,38 +1,101 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 362" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 223" role="img" aria-labelledby="title desc">
 <title id="title">Visual change across two production runs</title>
-<desc id="desc">The reference run's 59 windows stay below the alert limit. Three consecutive windows in a separate changed normal run exceed it, confirming an alert at frame 192. The traces share a zero-to-one score scale.</desc>
+<desc id="desc">All 59 consecutive reference windows and the first 16 windows of a separate changed normal run are plotted at equal intervals. The reference windows stay below the alert limit. The first three changed-run windows exceed it, confirming an alert at frame 192; the chart continues through frame 608.</desc>
 <style>
 text{font-family:Segoe UI,Arial,sans-serif}
 .heading{fill:#59698f;font-size:11px;letter-spacing:1px}
 .axis{fill:#75829b;font-size:10px}
-.value{fill:#53617d;font-size:11px}
 .alert{fill:#ba676c;font-size:10px;letter-spacing:1px}
 </style>
-<text x="37" y="28" class="heading">REFERENCE RUN · 59 WINDOWS</text>
-<line x1="37" x2="274" y1="45" y2="45" stroke="#dce2ef"/>
-<line x1="37" x2="274" y1="142" y2="142" stroke="#dce2ef"/>
-<text x="30" y="48" text-anchor="end" class="axis">1</text>
-<text x="30" y="145" text-anchor="end" class="axis">0</text>
-<line x1="37" x2="274" y1="135.8" y2="135.8" stroke="#ba8f71" stroke-width="1.5" stroke-dasharray="5 4"/>
-<polyline points="37.0,140.7 41.1,140.1 45.2,139.8 49.3,140.7 53.3,139.7 57.4,139.5 61.5,140.2 65.6,140.0 69.7,139.5 73.8,140.2 77.9,139.9 81.9,140.2 86.0,139.7 90.1,138.9 94.2,140.5 98.3,139.5 102.4,139.3 106.5,140.1 110.6,139.1 114.6,139.4 118.7,139.9 122.8,139.4 126.9,140.4 131.0,139.8 135.1,139.6 139.2,140.7 143.2,140.0 147.3,139.4 151.4,140.9 155.5,140.1 159.6,139.5 163.7,139.9 167.8,139.9 171.8,140.2 175.9,139.4 180.0,140.0 184.1,140.6 188.2,140.0 192.3,140.0 196.4,140.7 200.4,139.8 204.5,140.1 208.6,140.5 212.7,139.6 216.8,140.5 220.9,140.1 225.0,140.1 229.1,140.8 233.1,140.2 237.2,139.7 241.3,140.7 245.4,140.4 249.5,139.9 253.6,140.5 257.7,139.7 261.7,140.4 265.8,139.9 269.9,139.8 274.0,140.5" fill="none" stroke="#7788bf" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="37" y="127.8" class="axis">LIMIT 0.064</text>
-<text x="274" y="130" text-anchor="end" class="value">MAX 0.032</text>
-<text x="37" y="196" class="heading">CHANGED RUN · NORMAL</text>
-<line x1="37" x2="274" y1="213" y2="213" stroke="#dce2ef"/>
-<line x1="37" x2="274" y1="310" y2="310" stroke="#dce2ef"/>
-<text x="30" y="216" text-anchor="end" class="axis">1</text>
-<text x="30" y="313" text-anchor="end" class="axis">0</text>
-<line x1="37" x2="274" y1="303.8" y2="303.8" stroke="#ba8f71" stroke-width="1.5" stroke-dasharray="5 4"/>
-<polyline points="37.0,219.8 155.5,218.7 274.0,221.7" fill="none" stroke="#d98387" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="37" cy="219.8" r="4.5" fill="#d98387"/>
-<text x="37" y="209.8" text-anchor="middle" class="value">0.93</text>
-<text x="37" y="327" text-anchor="middle" class="axis">128</text>
-<circle cx="155.5" cy="218.7" r="4.5" fill="#d98387"/>
-<text x="155.5" y="208.7" text-anchor="middle" class="value">0.94</text>
-<text x="155.5" y="327" text-anchor="middle" class="axis">160</text>
-<circle cx="274" cy="221.7" r="4.5" fill="#d98387"/>
-<text x="274" y="211.7" text-anchor="middle" class="value">0.91</text>
-<text x="274" y="327" text-anchor="middle" class="axis">192</text>
-<circle cx="274" cy="221.7" r="8" fill="none" stroke="#ba676c" stroke-width="1.5"/>
-<text x="274" y="349" text-anchor="middle" class="alert">ALERT</text>
+<text x="35" y="24" class="heading">REFERENCE RUN</text>
+<text x="274" y="24" text-anchor="end" class="heading">NEW RUN</text>
+<line x1="223.9" x2="223.9" y1="36" y2="172" stroke="#cbd2e1" stroke-dasharray="4 5"/>
+<line x1="35" x2="274" y1="44.0" y2="44.0" stroke="#dce2ef"/>
+<text x="25" y="47.0" text-anchor="end" class="axis">1</text>
+<line x1="35" x2="274" y1="103.5" y2="103.5" stroke="#dce2ef"/>
+<text x="25" y="106.5" text-anchor="end" class="axis">0.5</text>
+<line x1="35" x2="274" y1="163.0" y2="163.0" stroke="#dce2ef"/>
+<text x="25" y="166.0" text-anchor="end" class="axis">0</text>
+<line x1="35" x2="274" y1="155.4" y2="155.4" stroke="#ba8f71" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="35" y="147.4" class="axis">ALERT LIMIT · 0.064</text>
+<polyline points="35.0,161.4 38.2,160.6 41.5,160.4 44.7,161.5 47.9,160.1 51.1,159.9 54.4,160.8 57.6,160.6 60.8,159.9 64.1,160.8 67.3,160.4 70.5,160.7 73.8,160.2 77.0,159.2 80.2,161.1 83.4,159.9 86.7,159.6 89.9,160.6 93.1,159.5 96.4,159.9 99.6,160.5 102.8,159.8 106.1,161.1 109.3,160.3 112.5,160.1 115.7,161.5 119.0,160.6 122.2,159.8 125.4,161.6 128.7,160.7 131.9,159.9 135.1,160.5 138.4,160.4 141.6,160.8 144.8,159.8 148.0,160.6 151.3,161.3 154.5,160.5 157.7,160.6 161.0,161.4 164.2,160.4 167.4,160.7 170.6,161.1 173.9,160.0 177.1,161.1 180.3,160.6 183.6,160.7 186.8,161.5 190.0,160.8 193.3,160.2 196.5,161.4 199.7,161.0 202.9,160.5 206.2,161.2 209.4,160.2 212.6,161.1 215.9,160.4 219.1,160.3 222.3,161.2" fill="none" stroke="#7788bf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="222.3,161.2 225.6,52.4 228.8,50.9 232.0,54.7 235.2,56.8 238.5,52.4 241.7,53.3 244.9,52.2 248.2,52.7 251.4,55.0 254.6,52.5 257.9,50.3 261.1,53.7 264.3,51.2 267.5,54.2 270.8,57.3 274.0,51.3" fill="none" stroke="#d98387" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="35.0" cy="161.4" r="1.2" fill="#7788bf"/>
+<circle cx="38.2" cy="160.6" r="1.2" fill="#7788bf"/>
+<circle cx="41.5" cy="160.4" r="1.2" fill="#7788bf"/>
+<circle cx="44.7" cy="161.5" r="1.2" fill="#7788bf"/>
+<circle cx="47.9" cy="160.1" r="1.2" fill="#7788bf"/>
+<circle cx="51.1" cy="159.9" r="1.2" fill="#7788bf"/>
+<circle cx="54.4" cy="160.8" r="1.2" fill="#7788bf"/>
+<circle cx="57.6" cy="160.6" r="1.2" fill="#7788bf"/>
+<circle cx="60.8" cy="159.9" r="1.2" fill="#7788bf"/>
+<circle cx="64.1" cy="160.8" r="1.2" fill="#7788bf"/>
+<circle cx="67.3" cy="160.4" r="1.2" fill="#7788bf"/>
+<circle cx="70.5" cy="160.7" r="1.2" fill="#7788bf"/>
+<circle cx="73.8" cy="160.2" r="1.2" fill="#7788bf"/>
+<circle cx="77.0" cy="159.2" r="1.2" fill="#7788bf"/>
+<circle cx="80.2" cy="161.1" r="1.2" fill="#7788bf"/>
+<circle cx="83.4" cy="159.9" r="1.2" fill="#7788bf"/>
+<circle cx="86.7" cy="159.6" r="1.2" fill="#7788bf"/>
+<circle cx="89.9" cy="160.6" r="1.2" fill="#7788bf"/>
+<circle cx="93.1" cy="159.5" r="1.2" fill="#7788bf"/>
+<circle cx="96.4" cy="159.9" r="1.2" fill="#7788bf"/>
+<circle cx="99.6" cy="160.5" r="1.2" fill="#7788bf"/>
+<circle cx="102.8" cy="159.8" r="1.2" fill="#7788bf"/>
+<circle cx="106.1" cy="161.1" r="1.2" fill="#7788bf"/>
+<circle cx="109.3" cy="160.3" r="1.2" fill="#7788bf"/>
+<circle cx="112.5" cy="160.1" r="1.2" fill="#7788bf"/>
+<circle cx="115.7" cy="161.5" r="1.2" fill="#7788bf"/>
+<circle cx="119.0" cy="160.6" r="1.2" fill="#7788bf"/>
+<circle cx="122.2" cy="159.8" r="1.2" fill="#7788bf"/>
+<circle cx="125.4" cy="161.6" r="1.2" fill="#7788bf"/>
+<circle cx="128.7" cy="160.7" r="1.2" fill="#7788bf"/>
+<circle cx="131.9" cy="159.9" r="1.2" fill="#7788bf"/>
+<circle cx="135.1" cy="160.5" r="1.2" fill="#7788bf"/>
+<circle cx="138.4" cy="160.4" r="1.2" fill="#7788bf"/>
+<circle cx="141.6" cy="160.8" r="1.2" fill="#7788bf"/>
+<circle cx="144.8" cy="159.8" r="1.2" fill="#7788bf"/>
+<circle cx="148.0" cy="160.6" r="1.2" fill="#7788bf"/>
+<circle cx="151.3" cy="161.3" r="1.2" fill="#7788bf"/>
+<circle cx="154.5" cy="160.5" r="1.2" fill="#7788bf"/>
+<circle cx="157.7" cy="160.6" r="1.2" fill="#7788bf"/>
+<circle cx="161.0" cy="161.4" r="1.2" fill="#7788bf"/>
+<circle cx="164.2" cy="160.4" r="1.2" fill="#7788bf"/>
+<circle cx="167.4" cy="160.7" r="1.2" fill="#7788bf"/>
+<circle cx="170.6" cy="161.1" r="1.2" fill="#7788bf"/>
+<circle cx="173.9" cy="160.0" r="1.2" fill="#7788bf"/>
+<circle cx="177.1" cy="161.1" r="1.2" fill="#7788bf"/>
+<circle cx="180.3" cy="160.6" r="1.2" fill="#7788bf"/>
+<circle cx="183.6" cy="160.7" r="1.2" fill="#7788bf"/>
+<circle cx="186.8" cy="161.5" r="1.2" fill="#7788bf"/>
+<circle cx="190.0" cy="160.8" r="1.2" fill="#7788bf"/>
+<circle cx="193.3" cy="160.2" r="1.2" fill="#7788bf"/>
+<circle cx="196.5" cy="161.4" r="1.2" fill="#7788bf"/>
+<circle cx="199.7" cy="161.0" r="1.2" fill="#7788bf"/>
+<circle cx="202.9" cy="160.5" r="1.2" fill="#7788bf"/>
+<circle cx="206.2" cy="161.2" r="1.2" fill="#7788bf"/>
+<circle cx="209.4" cy="160.2" r="1.2" fill="#7788bf"/>
+<circle cx="212.6" cy="161.1" r="1.2" fill="#7788bf"/>
+<circle cx="215.9" cy="160.4" r="1.2" fill="#7788bf"/>
+<circle cx="219.1" cy="160.3" r="1.2" fill="#7788bf"/>
+<circle cx="222.3" cy="161.2" r="1.2" fill="#7788bf"/>
+<circle cx="225.6" cy="52.4" r="1.2" fill="#d98387"/>
+<circle cx="228.8" cy="50.9" r="1.2" fill="#d98387"/>
+<circle cx="232.0" cy="54.7" r="1.2" fill="#d98387"/>
+<circle cx="235.2" cy="56.8" r="1.2" fill="#d98387"/>
+<circle cx="238.5" cy="52.4" r="1.2" fill="#d98387"/>
+<circle cx="241.7" cy="53.3" r="1.2" fill="#d98387"/>
+<circle cx="244.9" cy="52.2" r="1.2" fill="#d98387"/>
+<circle cx="248.2" cy="52.7" r="1.2" fill="#d98387"/>
+<circle cx="251.4" cy="55.0" r="1.2" fill="#d98387"/>
+<circle cx="254.6" cy="52.5" r="1.2" fill="#d98387"/>
+<circle cx="257.9" cy="50.3" r="1.2" fill="#d98387"/>
+<circle cx="261.1" cy="53.7" r="1.2" fill="#d98387"/>
+<circle cx="264.3" cy="51.2" r="1.2" fill="#d98387"/>
+<circle cx="267.5" cy="54.2" r="1.2" fill="#d98387"/>
+<circle cx="270.8" cy="57.3" r="1.2" fill="#d98387"/>
+<circle cx="274.0" cy="51.3" r="1.2" fill="#d98387"/>
+<circle cx="232.0" cy="54.7" r="8" fill="none" stroke="#ba676c" stroke-width="1.5"/>
+<text x="232.0" y="185" text-anchor="middle" class="axis">192</text>
+<text x="232.0" y="208" text-anchor="middle" class="alert">ALERT</text>
 </svg>
