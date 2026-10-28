@@ -16,8 +16,13 @@
     <nav class="main-nav" aria-label="Main navigation"><a href="#baseline">Baseline</a><a href="#feedback">Feedback</a><a href="#next">Change-aware</a></nav>
   </header>
   <main id="main">
-    <section class="hero" aria-label="Change-aware inspection pipeline"><div class="hero-inner">
-      <h1 class="visually-hidden">SurfaceTrace visual inspection</h1>
+    <section class="hero"><div class="hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="eyebrow-line"></span> TWO INSPECTION PIPELINES</p>
+        <h1>Find unusual areas.<br><em>Track change.</em></h1>
+        <p class="hero-description">A baseline for single photos and a change-aware experiment on production streams.</p>
+        <a class="text-link hero-scroll" href="#baseline">Explore the pipelines ↓</a>
+      </div>
       <picture class="pipeline-hero-motion">
         <source media="(prefers-reduced-motion: reduce)" srcset="./next-method/04-poster.png">
         <img src="./next-method/hero.webp" alt="Production frames become visual features and an unlabeled reference, then unusual regions and process changes are identified and a candidate reference is evaluated." width="720" height="420" fetchpriority="high">
@@ -40,6 +45,7 @@
 
     <section class="feedback-section" id="feedback"><div class="section feedback-inner">
       <div class="feedback-heading"><p class="section-kicker">FIELD FEEDBACK</p><h2>What we heard. What we changed.</h2></div>
+      <figure class="feedback-photo"><img src="./feedback/meeting-watercolor.png" alt="Watercolor illustration of four participants at the project advisory meeting" width="1672" height="941" fetchpriority="low"><figcaption>ISM met with Dongil Rubber Belt for a project advisory session.</figcaption></figure>
       <div class="feedback-grid">
         <article class="feedback-card"><span class="feedback-index">01 / DATA</span><h3>Rare, unlabeled defects</h3><p>Defect examples are scarce, and new cases may lack an agreed label.</p><div class="feedback-response"><span>RESPONSE</span><p>Build the reference from unlabeled startup frames.</p></div></article>
         <article class="feedback-card"><span class="feedback-index">02 / CHANGE</span><h3>Changes go unreported</h3><p>Materials, process settings, and capture conditions may shift without reaching the AI team.</p><div class="feedback-response"><span>RESPONSE</span><p>Flag visual shifts independently of anomaly scores.</p></div></article>
