@@ -32,7 +32,7 @@
     </div></section>
 
     <section class="method-section baseline-section" id="baseline"><div class="section method-inner">
-      <div class="method-heading"><div><p class="section-kicker">01 / WORKING MVP</p><h2>Compare with normal.</h2></div><p>KolektorSDD · metal surface photos</p></div>
+      <div class="method-heading"><div><p class="section-kicker">01 / WORKING MVP</p><h2>Compare with normal.</h2></div><p>KolektorSDD · commutator plastic embedding</p></div>
       <div class="method-animation-grid">
 <article class="method-card"><div class="method-animation"><img src="./method/01.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>01</span><div><h3>Build the reference</h3><p>Collect normal patches.</p></div></div></article>
 <article class="method-card"><div class="method-animation"><img src="./method/02.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>02</span><div><h3>Prepare the photo</h3><p>Align size and brightness.</p></div></div></article>
@@ -42,20 +42,21 @@
 <article class="method-card"><div class="method-animation"><img src="./method/06.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>06</span><div><h3>Map unusual areas</h3><p>Highlight regions for review.</p></div></div></article>
       </div>
       <div class="evaluation-summary"><div><p class="section-kicker">HELD-OUT TEST</p><h3>KolektorSDD</h3><p>64 photos · grouped split</p></div><div class="evaluation-metrics"><div><span>0.879</span><small>Image AUROC</small></div><div><span>5 / 8</span><small>Defects flagged</small></div><div><span>7 / 56</span><small>Normal false alarms</small></div></div></div>
-      <div class="method-foot"><p>Scores are distances from normal patches, not defect probabilities.</p><a class="button button-dark" href="./inspect.html" target="_blank" rel="noopener">Open baseline samples <span aria-hidden="true">↗</span></a></div>
+      <div class="method-foot"><a class="button button-dark" href="./inspect.html" target="_blank" rel="noopener">Open baseline samples <span aria-hidden="true">↗</span></a></div>
     </div></section>
 
     <section class="feedback-section" id="feedback"><div class="section feedback-inner">
-      <div class="feedback-heading"><p class="section-kicker">FIELD FEEDBACK</p><h2>Feedback shaped the next pipeline.</h2></div>
+      <div class="feedback-heading"><p class="section-kicker">FIELD FEEDBACK</p><h2>What we heard. What we changed.</h2></div>
       <div class="feedback-grid">
-        <div><span>01</span><h3>Defect labels unavailable</h3><p>Select reference frames without labels.</p></div>
-        <div><span>02</span><h3>Unreported changes</h3><p>Monitor shifts in the image stream.</p></div>
-        <div><span>03</span><h3>Limited shared context</h3><p>Plan a daily review summary.</p></div>
+        <article class="feedback-card"><span class="feedback-index">01 / DATA</span><h3>Rare, unlabeled defects</h3><p>Defect examples are scarce, and new cases may lack an agreed label.</p><div class="feedback-response"><span>RESPONSE</span><p>Build the reference from unlabeled startup frames.</p></div></article>
+        <article class="feedback-card"><span class="feedback-index">02 / CHANGE</span><h3>Changes go unreported</h3><p>Materials, process settings, and capture conditions may shift without reaching the AI team.</p><div class="feedback-response"><span>RESPONSE</span><p>Flag visual shifts independently of anomaly scores.</p></div></article>
+        <article class="feedback-card"><span class="feedback-index">03 / DECISION</span><h3>Review has a cost</h3><p>Missed defects and false alarms both affect whether a model is usable.</p><div class="feedback-response"><span>RESPONSE</span><p>Compare both outcomes before a reference update.</p></div></article>
+        <article class="feedback-card"><span class="feedback-index">04 / HANDOFF</span><h3>Individual alerts add work</h3><p>Managers need a useful summary rather than a message for every frame.</p><div class="feedback-response"><span>PLANNED</span><p>Bring flagged frames and visual shifts into a daily handoff.</p></div></article>
       </div>
     </div></section>
 
     <section class="method-section next-section" id="next"><div class="section method-inner">
-      <div class="method-heading"><div><p class="section-kicker">02 / RESEARCH PIPELINE</p><h2>Inspect the stream. Notice change.</h2></div><p>TSFabrics · real, time-ordered production photos</p></div>
+      <div class="method-heading"><div><p class="section-kicker">02 / RESEARCH PIPELINE</p><h2>Inspect the stream. Notice change.</h2></div><p>TSFabrics · time-ordered knitting-line frames</p></div>
       <div class="method-animation-grid">
 <article class="method-card"><div class="method-animation"><img src="./next-method/01.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>01</span><div><h3>Follow the stream</h3><p>Read consecutive production frames.</p></div></div></article>
 <article class="method-card"><div class="method-animation"><img src="./next-method/02.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>02</span><div><h3>Extract visual features</h3><p>A frozen DINOv2 model maps image patches.</p></div></div></article>
@@ -65,7 +66,7 @@
 <article class="method-card"><div class="method-animation"><img src="./next-method/06.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>06</span><div><h3>Evaluate a candidate</h3><p>Keep the current reference during review.</p></div></div></article>
       </div>
       <div class="evaluation-summary next-evaluation"><div><p class="section-kicker">SHIFTED STREAM · HELD-OUT</p><h3>TSFabrics</h3><p>Frozen DINOv2 · selected reference frames</p></div><div class="evaluation-metrics"><div><span>0.987</span><small>Image AUROC</small></div><div><span>33 / 82</span><small>Defects flagged</small></div><div><span>0 / 2,290</span><small>Normal false alarms</small></div></div></div>
-      <div class="method-foot"><p>Public textile data tests the workflow; it does not validate rubber-belt performance.</p><a class="button button-dark" href="./next-inspect.html" target="_blank" rel="noopener">Open change-aware samples <span aria-hidden="true">↗</span></a></div>
+      <div class="method-foot"><a class="button button-dark" href="./next-inspect.html" target="_blank" rel="noopener">Open change-aware samples <span aria-hidden="true">↗</span></a></div>
       <div class="summary-next"><div><span class="summary-icon" aria-hidden="true"><i></i><i></i><i></i></span><div><p class="section-kicker">PLANNED</p><h3>Daily review summary</h3><p>Flagged frames, visual shifts, and review notes in one handoff.</p></div></div></div>
     </div></section>
   </main>

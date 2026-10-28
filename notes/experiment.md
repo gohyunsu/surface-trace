@@ -2,7 +2,7 @@
 
 ## Scope
 
-This is a small, CPU-only baseline used to test an image review workflow. It is not PatchCore or a calibrated defect probability. The data contains industrial metal surface photos, so the results do not estimate rubber belt performance.
+This is a small, CPU-only baseline used to test an image review workflow. It is not PatchCore or a calibrated defect probability. KolektorSDD shows cracks in the plastic embedding of electrical commutators, not metal-surface damage. The results do not estimate rubber-belt performance.
 
 ## Split
 

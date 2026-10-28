@@ -2,7 +2,7 @@
 
 [Live site](https://gohyunsu.github.io/surface-trace/) · [Baseline samples](https://gohyunsu.github.io/surface-trace/inspect.html) · [Change-aware samples](https://gohyunsu.github.io/surface-trace/next-inspect.html)
 
-SurfaceTrace is an industrial image-review research project by ISM × RIKU. It presents a working browser baseline and a separate, change-aware experiment. The public datasets contain metal or textile surfaces, **not rubber belts**. Anomaly scores are not defect probabilities or production quality decisions.
+SurfaceTrace is an industrial image-review research project by ISM × RIKU. It presents a working browser baseline and a separate, change-aware experiment. KolektorSDD depicts cracks in the plastic embedding of electrical commutators; TSFabrics depicts textile production. Anomaly scores are not calibrated defect probabilities.
 
 ## What is implemented
 

@@ -17,11 +17,14 @@
 .feedback-heading{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:28px}
 .feedback-heading .section-kicker{margin:0}
 .feedback-heading h2{font-size:clamp(29px,3vw,43px);letter-spacing:-.055em;font-weight:500;line-height:1.2;margin:0}
-.feedback-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.feedback-grid>div{background:#fff;border:1px solid #dfe3ec;border-radius:7px;padding:25px 26px 27px;min-height:164px}
-.feedback-grid span{font-size:11px;color:#7785b7}
-.feedback-grid h3{font-size:18px;letter-spacing:-.035em;margin:21px 0 8px}
-.feedback-grid p{font-size:13px;line-height:1.6;color:#697287;margin:0;max-width:310px}
+.feedback-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.feedback-card{display:flex;flex-direction:column;background:#fff;border:1px solid #dfe3ec;border-radius:7px;padding:25px 27px 26px;min-height:226px}
+.feedback-index{font-size:11px;letter-spacing:.12em;color:#7785b7}
+.feedback-card h3{font-size:20px;letter-spacing:-.035em;margin:18px 0 7px}
+.feedback-card>p{font-size:13px;line-height:1.6;color:#697287;margin:0;max-width:500px}
+.feedback-response{display:flex;gap:17px;align-items:baseline;margin-top:auto;padding-top:18px;border-top:1px solid #e8eaf2}
+.feedback-response span{flex:0 0 72px;font-size:10px;letter-spacing:.09em;color:#6a78ae}
+.feedback-response p{font-size:13px;line-height:1.5;color:#38476e;margin:0}
 .next-section{background:#f3f5fb}
 .next-evaluation{background:#e9edf9}
 .summary-next{display:flex;align-items:center;justify-content:space-between;gap:25px;margin-top:38px;padding:24px 28px;background:#fff;border:1px solid #dce2ee;border-radius:7px}
@@ -32,7 +35,7 @@
 .summary-icon{flex:0 0 43px;width:43px;height:43px;border:1px solid #c7bed0;border-radius:6px;display:flex;flex-direction:column;justify-content:center;gap:5px;padding:10px}
 .summary-icon i{display:block;height:2px;background:#ad9ab6;border-radius:2px}
 .summary-icon i:nth-child(2){width:78%}.summary-icon i:nth-child(3){width:58%}
-.pipeline-landing .method-foot{padding-top:28px}
+.pipeline-landing .method-foot{justify-content:flex-end;padding-top:28px}
 
 .stream-page{background:#f4f5f9}
 .stream-page .stream-main{max-width:1380px;padding:52px 24px 72px}
@@ -92,7 +95,6 @@
 .stream-daily h2{font-size:19px;letter-spacing:-.04em;margin:0 0 5px}
 .stream-daily p:last-child{font-size:12px;color:#66718b;margin:0;line-height:1.5}
 .stream-daily>span{font-size:23px;color:#a8b1cc}
-.stream-method-note{max-width:900px;margin:17px 2px 0;color:#758098;font-size:11px;line-height:1.55}
 
 @media(max-width:1000px){
   .pipeline-landing .hero-inner{grid-template-columns:1fr;padding-top:70px;padding-bottom:75px}
@@ -115,8 +117,10 @@
   .feedback-heading{display:block}
   .feedback-heading h2{margin-top:12px}
   .feedback-grid{grid-template-columns:1fr;gap:9px}
-  .feedback-grid>div{min-height:0;padding:19px 20px}
-  .feedback-grid h3{margin:10px 0 5px;font-size:17px}
+  .feedback-card{min-height:0;padding:19px 20px}
+  .feedback-card h3{margin:12px 0 5px;font-size:18px}
+  .feedback-response{margin-top:18px;padding-top:14px}
+  .pipeline-landing .method-foot .button{margin-top:0}
   .summary-next{padding:20px}
   .summary-next>div{gap:13px}
   .summary-next h3{font-size:17px}
