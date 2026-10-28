@@ -23,7 +23,7 @@ OUT = ROOT / "docs"
 def build(out: Path) -> tuple[int, int]:
     if not MODEL.exists():
         raise SystemExit("Train the reference model with model.py first")
-    for directory in ("samples", "landscape", "method", "next-method", "next-samples", "feedback", "ablation"):
+    for directory in ("samples", "landscape", "method", "next-method", "next-samples", "feedback", "ablation", "scenario"):
         (out / directory).mkdir(parents=True, exist_ok=True)
     for source, target in [
         ("landing.html", "index.html"),
@@ -50,6 +50,7 @@ def build(out: Path) -> tuple[int, int]:
     for asset in (WEB / "ablation").iterdir():
         if asset.suffix in {".png", ".json"}:
             shutil.copyfile(asset, out / "ablation" / asset.name)
+    shutil.copyfile(WEB / "scenario" / "reference-run.jpg", out / "scenario" / "reference-run.jpg")
     shutil.copyfile(WEB / "feedback" / "meeting-watercolor.png", out / "feedback" / "meeting-watercolor.png")
 
     saved = np.load(MODEL)

@@ -16,7 +16,7 @@ Neither sample page accepts arbitrary uploads. The shadow candidate is displayed
 
 The baseline's grouped test split produced image AUROC **0.879**, **5/8** defect photos flagged, and **7/56** normal false alarms. On one shifted TSFabrics test stream, the selected-reference DINOv2 method produced image AUROC **0.987**, **33/82** defects flagged, and **0/2,290** normal false alarms. These are different datasets and protocols, so the numbers are not a direct comparison. See the [baseline protocol](notes/experiment.md) and [research results](experiments/unsupervised/EXPERIMENT_RESULTS.md) for splits, other conditions, comparison methods, and limitations.
 
-The landing page's stepwise comparison instead re-runs the handcrafted method on the **same TSFabrics streams** as DINOv2. The paired heatmaps are recorded outputs for identical held-out frames; see [asset provenance](web/ablation/README.md) and the [export script](experiments/unsupervised/export_ablation_comparison.py).
+The landing page's stepwise comparison re-runs the handcrafted method on the **same TSFabrics streams** as DINOv2. Its three-step chart uses one normal frame and actual heatmaps for every method; the paired defect examples show both gains and misses. The scenario illustration uses two real frames from separate production runs. See [comparison provenance](web/ablation/README.md), [scenario provenance](web/scenario/README.md), and the [export script](experiments/unsupervised/export_ablation_comparison.py).
 
 ## Repository map
 

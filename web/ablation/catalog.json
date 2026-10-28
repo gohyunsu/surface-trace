@@ -17,7 +17,13 @@
     "score": 4.580361366271973,
     "threshold": 3.7415819525718748,
     "alert": true,
-    "overlay": "sample-06-classic.png"
+    "overlay": "sample-06-classic.png",
+    "all_unlabeled": {
+      "score": 0.20412202179431915,
+      "threshold": 0.20342822186648854,
+      "alert": true,
+      "overlay": "sample-06-all.png"
+    }
   },
   {
     "id": 7,

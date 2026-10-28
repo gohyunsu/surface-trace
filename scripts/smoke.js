@@ -25,7 +25,7 @@ const { chromium } = require("playwright");
     assert.notDeepStrictEqual(await heroImage.screenshot(), firstFrame, "Hero animation should advance automatically");
     assert.strictEqual(await page.locator("#baseline .method-card").count(), 6);
     assert.strictEqual(await page.locator("#next .method-card").count(), 6);
-    assert(await page.getByRole("heading", { name: "What each step changed." }).isVisible());
+    assert(await page.getByRole("heading", { name: "How each step handled the shift." }).isVisible());
     assert.strictEqual(await page.locator(".ablation-step").count(), 3);
     await page.getByRole("button", { name: "Detected defect" }).click();
     assert(await page.locator('[data-ablation-panel="detected"]').isVisible());

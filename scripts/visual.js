@@ -19,17 +19,23 @@ const { chromium } = require("playwright");
       const page = await browser.newPage({ viewport });
       for (const [name, suffix] of [["landing", ""], ["inspector", "inspect.html?sample=1"], ["next-inspector", "next-inspect.html?sample=7"]]) {
         await page.goto(new URL(suffix, base).href, { waitUntil: "networkidle" });
-        if (name === "landing") await page.locator(".method-animation img").evaluateAll(imgs => {
+        const decodeFailures = await page.locator("img").evaluateAll(imgs => {
           imgs.forEach(img => { img.loading = "eager"; });
-          return Promise.all(imgs.map(img => img.decode()));
+          return Promise.all(imgs.map(img => img.decode().then(() => null, () => img.src)));
         });
+        if (decodeFailures.some(Boolean)) throw new Error(`${name} ${viewport.label}: image decode failed: ${decodeFailures.filter(Boolean).join(", ")}`);
         if (name === "inspector") await page.waitForFunction(() => document.querySelector("#score").textContent !== "—");
         if (name === "next-inspector") await page.waitForFunction(() => document.querySelector("#streamScore").textContent !== "—");
         const audit = await page.evaluate(() => ({
           overflow: document.documentElement.scrollWidth > innerWidth + 1,
-          brokenImages: [...document.images].filter(img => img.loading !== "lazy" && img.complete && !img.naturalWidth).map(img => img.src),
+          brokenImages: [...document.images].filter(img => img.complete && !img.naturalWidth).map(img => img.src),
         }));
         await page.screenshot({ path: path.join(out, `${name}-${viewport.label}.png`), fullPage: true });
+        if (name === "landing") {
+          for (const section of ["scenario", "ablation-chart"]) {
+            await page.locator(`.${section}`).screenshot({ path: path.join(out, `${section}-${viewport.label}.png`) });
+          }
+        }
         console.log(`${name} ${viewport.label} ${JSON.stringify(audit)}`);
         if (audit.overflow || audit.brokenImages.length) throw new Error(`${name} ${viewport.label}: layout or image failure`);
       }

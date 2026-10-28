@@ -8,6 +8,11 @@ selected-reference overlays are the matching `web/next-samples/*-current.png`
 files. Both sets use the same rendering rule relative to each method's own
 threshold; their raw scores have different units.
 
+`sample-06-all.png` is the frozen DINOv2 pipeline using all startup frames at
+the same reference-bank capacity as the selected-reference method. It shows
+the same normal frame as the three-step false-alarm chart. Its score, threshold,
+and result are recorded under `all_unlabeled` in `catalog.json`.
+
 The cases shown on the site are a changed normal frame cleared by the selected
 reference, a large-shift defect flagged only by the selected reference, and a
 related-run defect flagged only by the handcrafted method. They were selected
