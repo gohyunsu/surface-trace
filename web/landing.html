@@ -60,13 +60,23 @@
       <div class="method-heading"><div><p class="section-kicker">02 / RESEARCH PIPELINE</p><h2>Inspect the stream. Notice change.</h2></div></div>
       <div class="dataset-note"><span>TSFabrics</span><p>93,196 time-ordered knitting-line frames across 22 production scenarios.</p></div>
       <section class="scenario" aria-labelledby="scenario-title">
-        <div class="scenario-intro"><p class="section-kicker">FEEDBACK → TEST SETUP</p><h3 id="scenario-title">When a new run looks different.</h3><p>Build a fixed reference from one run. Test it on three other time-ordered runs.</p></div>
-        <div class="scenario-photos">
-          <figure><img src="./scenario/reference-run.jpg" alt="Light gray fabric from the reference production run" width="800" height="640" loading="lazy"><figcaption><span>REFERENCE RUN</span><strong>Unlabeled startup</strong></figcaption></figure>
-          <span class="scenario-arrow" aria-hidden="true">→</span>
-          <figure><img src="./next-samples/sample-06.jpg" alt="Dark fabric from a different, normal production run" width="800" height="640" loading="lazy"><figcaption><span>CHANGED RUN</span><strong>Normal photo, new appearance</strong></figcaption></figure>
+        <div class="scenario-intro"><p class="section-kicker">FEEDBACK → TEST SETUP</p><h3 id="scenario-title">When a new run looks different.</h3><p>Keep the reference from one run. Inspect a separate, normal-only run.</p></div>
+        <div class="scenario-timeline" aria-label="Real frames from separate TSFabrics production runs">
+          <div class="scenario-run"><div class="scenario-run-head"><span>REFERENCE RUN</span><small>Unlabeled startup</small></div><div class="scenario-frames">
+            <figure><img src="./scenario/source-509.jpg" alt="Light gray fabric, reference frame 509" width="400" height="320" loading="lazy"><figcaption>509</figcaption></figure>
+            <figure><img src="./scenario/source-510.jpg" alt="Light gray fabric, reference frame 510" width="400" height="320" loading="lazy"><figcaption>510</figcaption></figure>
+            <figure><img src="./scenario/source-511.jpg" alt="Light gray fabric, reference frame 511" width="400" height="320" loading="lazy"><figcaption>511</figcaption></figure>
+            <figure><img src="./scenario/source-512.jpg" alt="Light gray fabric, reference frame 512" width="400" height="320" loading="lazy"><figcaption>512</figcaption></figure>
+          </div></div>
+          <div class="scenario-switch"><span>NEW TEST RUN</span><i aria-hidden="true">→</i></div>
+          <div class="scenario-run"><div class="scenario-run-head"><span>CHANGED RUN</span><small>Normal frames</small></div><div class="scenario-frames">
+            <figure><img src="./scenario/target-001.jpg" alt="Dark fabric, test frame 1" width="400" height="320" loading="lazy"><figcaption>1</figcaption></figure>
+            <figure><img src="./scenario/target-064.jpg" alt="Dark fabric, test frame 64" width="400" height="320" loading="lazy"><figcaption>64</figcaption></figure>
+            <figure><img src="./scenario/target-128.jpg" alt="Dark fabric, test frame 128" width="400" height="320" loading="lazy"><figcaption>128</figcaption></figure>
+            <figure class="scenario-alert-frame"><img src="./scenario/target-192.jpg" alt="Dark fabric, test frame 192 when the first change alert is confirmed" width="400" height="320" loading="lazy"><figcaption>192 <span>ALERT</span></figcaption></figure>
+          </div></div>
         </div>
-        <p class="scenario-outcome"><span>THE CHECK</span> Can we avoid false defect alerts while still detecting the visual shift?</p>
+        <p class="scenario-outcome"><span>THE BOUNDARY</span> Separate recordings; the first sustained change alert comes after 192 test frames.</p>
       </section>
       <div class="method-animation-grid">
 <article class="method-card"><div class="method-animation"><img src="./next-method/01.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>01</span><div><h3>Follow the stream</h3><p>Read consecutive production frames.</p></div></div></article>

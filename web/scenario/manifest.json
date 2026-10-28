@@ -1,0 +1,58 @@
+[
+  {
+    "file": "source-509.jpg",
+    "scenario": "T1_S174_I111_1",
+    "index": 508,
+    "display_frame": 509,
+    "dataset_label": "Normal"
+  },
+  {
+    "file": "source-510.jpg",
+    "scenario": "T1_S174_I111_1",
+    "index": 509,
+    "display_frame": 510,
+    "dataset_label": "Normal"
+  },
+  {
+    "file": "source-511.jpg",
+    "scenario": "T1_S174_I111_1",
+    "index": 510,
+    "display_frame": 511,
+    "dataset_label": "Normal"
+  },
+  {
+    "file": "source-512.jpg",
+    "scenario": "T1_S174_I111_1",
+    "index": 511,
+    "display_frame": 512,
+    "dataset_label": "Normal"
+  },
+  {
+    "file": "target-001.jpg",
+    "scenario": "T1_S164_I36_1",
+    "index": 0,
+    "display_frame": 1,
+    "dataset_label": "Normal"
+  },
+  {
+    "file": "target-064.jpg",
+    "scenario": "T1_S164_I36_1",
+    "index": 63,
+    "display_frame": 64,
+    "dataset_label": "Normal"
+  },
+  {
+    "file": "target-128.jpg",
+    "scenario": "T1_S164_I36_1",
+    "index": 127,
+    "display_frame": 128,
+    "dataset_label": "Normal"
+  },
+  {
+    "file": "target-192.jpg",
+    "scenario": "T1_S164_I36_1",
+    "index": 191,
+    "display_frame": 192,
+    "dataset_label": "Normal"
+  }
+]

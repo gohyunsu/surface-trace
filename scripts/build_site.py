@@ -50,7 +50,9 @@ def build(out: Path) -> tuple[int, int]:
     for asset in (WEB / "ablation").iterdir():
         if asset.suffix in {".png", ".json"}:
             shutil.copyfile(asset, out / "ablation" / asset.name)
-    shutil.copyfile(WEB / "scenario" / "reference-run.jpg", out / "scenario" / "reference-run.jpg")
+    for asset in (WEB / "scenario").iterdir():
+        if asset.suffix in {".jpg", ".json"}:
+            shutil.copyfile(asset, out / "scenario" / asset.name)
     shutil.copyfile(WEB / "feedback" / "meeting-watercolor.png", out / "feedback" / "meeting-watercolor.png")
 
     saved = np.load(MODEL)
