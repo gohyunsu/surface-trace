@@ -38,7 +38,7 @@ function drawChange(sample) {
     x2: x(ends[markerIndex]), y2: 88, class: "change-cursor" }));
   chart.append(svgNode("circle", { cx: x(ends[markerIndex]), cy: y(values[markerIndex]),
     r: 5, class: "change-dot" }));
-  const alerted = stream.first_alarm !== null && sample.frame >= stream.first_alarm;
+  const alerted = stream.first_alarm !== null && sample.frame + 1 >= stream.first_alarm;
   $("changeState").textContent = alerted ? "Change alert" : "No alert";
   $("changeState").classList.toggle("detected", alerted);
   $("changeNote").textContent = alerted
@@ -53,10 +53,10 @@ function renderResult() {
   const flagged = result.score >= result.threshold;
   $("frameHeat").src = result.heatmap;
   $("streamScore").textContent = result.score.toFixed(2);
-  $("streamStatus").textContent = flagged ? "Review needed" : "Within range";
+  $("streamStatus").textContent = flagged ? "Review needed" : "Below threshold";
   $("streamStatus").className = "status " + (flagged ? "review" : "ok");
   $("modelState").textContent = state.reference === "candidate"
-    ? "Candidate · held for review" : "Current reference";
+    ? "This-run reference · trial" : "Source-run reference";
   const maximum = Math.max(.72, result.threshold * 1.4);
   $("streamMeterFill").style.width = Math.min(100, result.score / maximum * 100) + "%";
   $("streamThresholdMarker").style.left = result.threshold / maximum * 100 + "%";
@@ -67,14 +67,28 @@ function renderResult() {
     ? "Missed defect in this frame."
     : sample.label === "Normal" && flagged
       ? "False alarm on a labeled normal frame." : "";
+  $("streamAssessment").classList.toggle("mismatch",
+    (sample.label === "Defect" && !flagged) || (sample.label === "Normal" && flagged));
   document.querySelectorAll("[data-reference]").forEach(button =>
     button.setAttribute("aria-pressed", button.dataset.reference === state.reference ? "true" : "false"));
 }
 
 function renderSamples() {
-  const grid = $("streamSamples");
-  grid.replaceChildren();
+  const container = $("streamSamples");
+  container.replaceChildren();
+  const groups = new Map();
   for (const sample of visibleSamples()) {
+    if (!groups.has(sample.scenario)) {
+      const section = document.createElement("section");
+      section.className = "stream-sample-group";
+      const heading = document.createElement("h3");
+      heading.textContent = state.catalog.streams[sample.scenario].title;
+      const grid = document.createElement("div");
+      grid.className = "stream-sample-grid";
+      section.append(heading, grid);
+      container.append(section);
+      groups.set(sample.scenario, grid);
+    }
     const button = document.createElement("button");
     button.type = "button";
     button.className = "stream-sample";
@@ -84,13 +98,12 @@ function renderSamples() {
     const image = document.createElement("img");
     image.src = sample.image;
     image.alt = "";
-    image.loading = "lazy";
     const info = document.createElement("span");
     info.innerHTML = `<span>SAMPLE ${String(sample.id).padStart(2, "0")}</span><small></small>`;
     info.querySelector("small").textContent = sample.label;
     button.append(image, info);
     button.addEventListener("click", () => selectSample(sample.id));
-    grid.append(button);
+    groups.get(sample.scenario).append(button);
   }
 }
 

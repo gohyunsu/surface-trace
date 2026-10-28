@@ -26,6 +26,11 @@ an oracle normal-only reference, MMD change alarms, and a shadow adaptation
 candidate. This implementation is inspired by MuSc/PatchCore-style matching;
 it is not an official reproduction of either method.
 
+The equal-capacity DINOv2 banks isolate the effect of reference-frame
+selection. The handcrafted method uses a different representation; the shadow
+candidate changes both the reference and its calibration threshold. Those
+comparisons are not single-factor ablations.
+
 ## 1. TSFabrics: changes and contaminated startup
 
 The primary source is `T1_S174_I111_1`. Its first 512 frames contain no

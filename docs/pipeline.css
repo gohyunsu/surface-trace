@@ -53,7 +53,6 @@
 .ablation-heading,.ablation-gallery-head{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:20px}
 .ablation-heading .section-kicker,.ablation-gallery-head .section-kicker{margin:0 0 9px;color:#6878bb}
 .ablation-heading h3,.ablation-gallery-head h4{font-size:clamp(26px,2.7vw,37px);font-weight:500;line-height:1.15;letter-spacing:-.05em;margin:0}
-.ablation-heading>p,.ablation-gallery-head>p{max-width:270px;margin:0 0 3px;color:#697287;font-size:12px;line-height:1.5;text-align:right}
 .ablation-chart,.ablation-gallery{background:#fff;border:1px solid #dce2ee;border-radius:8px}
 .ablation-chart{padding:23px 28px 20px}
 .ablation-chart-head{display:flex;justify-content:space-between;gap:12px;color:#6979b1;font-size:10px;letter-spacing:.13em}
@@ -157,6 +156,8 @@
 .stream-result-body .score{font-size:52px;color:#2d3a63}
 .stream-result-body .score-meter{margin:22px 0 26px}
 .stream-result-body .assessment{margin:0;min-height:20px;font-size:12px;line-height:1.5}
+.inspector-page .status.ok{background:#eef0f7;color:#53617e}
+.inspector-page .assessment.mismatch{color:#b8585d}
 .stream-change-card .inspect-card-head{align-items:center}
 .change-state{font-size:11px;color:#66718c;background:#eef0f7;padding:7px 10px;border-radius:4px;white-space:nowrap}
 .change-state.detected{color:#8e6634;background:#fff3e4}
@@ -173,23 +174,19 @@
 .change-body p{margin:10px 2px 0;color:#748099;font-size:11px;line-height:1.5}
 .stream-samples{margin-top:18px}
 .stream-samples .inspect-card-head p{font-size:11px;color:#7a849c;margin:5px 0 0}
-.stream-sample-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;padding:20px 22px 23px}
+.stream-sample-groups{display:grid;gap:20px;padding:18px 22px 23px}
+.stream-sample-group h3{margin:0 0 10px;color:#6676a4;font-size:11px;font-weight:500;letter-spacing:.04em}
+.stream-sample-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
 .stream-sample{padding:0;text-align:left;min-width:0;border:1px solid #dce2ee;border-radius:5px;background:#fbfcff;overflow:hidden;transition:border-color .15s,transform .15s}
 .stream-sample:hover,.stream-sample:focus-visible{transform:translateY(-2px);border-color:#8492ca;outline:none}
 .stream-sample[aria-pressed="true"]{border-color:#5b6cb6;box-shadow:0 0 0 2px #c9d0ed}
 .stream-sample img{display:block;width:100%;aspect-ratio:5/4;object-fit:cover}
 .stream-sample>span{display:flex;justify-content:space-between;gap:5px;padding:9px 10px;color:#586482;font-size:11px}
 .stream-sample small{font-size:10px;color:#8a7180}
-.stream-daily{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-top:24px;padding:24px 28px;background:#edf0f8;border:1px solid #d6ddeb;border-radius:7px}
-.stream-daily .section-kicker{margin:0 0 6px;font-size:10px}
-.stream-daily h2{font-size:19px;letter-spacing:-.04em;margin:0 0 5px}
-.stream-daily p:last-child{font-size:12px;color:#66718b;margin:0;line-height:1.5}
-.stream-daily>span{font-size:23px;color:#a8b1cc}
 
 @media(max-width:1000px){
   .pipeline-landing .hero-inner{grid-template-columns:1fr;padding-top:70px;padding-bottom:75px}
   .pipeline-hero-motion{justify-self:start;max-width:760px}
-  .ablation-heading>p,.ablation-gallery-head>p{max-width:220px}
   .stream-layout{grid-template-columns:1fr}
   .stream-results{grid-template-columns:1fr 1fr}
   .stream-sample-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
@@ -225,7 +222,6 @@
   .pipeline-landing .method-foot .button{margin-top:0}
   .ablation{margin-top:34px}
   .ablation-heading,.ablation-gallery-head{display:block}
-  .ablation-heading>p,.ablation-gallery-head>p{max-width:none;margin-top:10px;text-align:left}
   .ablation-chart,.ablation-gallery{padding:21px 18px}
   .ablation-chart-head{font-size:9px}
   .ablation-chart-labels{display:none}
@@ -259,12 +255,12 @@
   .stream-results{grid-template-columns:1fr;gap:13px}
   .stream-layout{gap:13px}
   .stream-viewer{padding:12px}
-  .stream-sample-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;padding:12px}
+  .stream-sample-groups{gap:16px;padding:14px 12px 18px}
+  .stream-sample-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
   .stream-sample>span{display:block;padding:7px;font-size:10px}
   .stream-sample small{display:block;margin-top:3px;font-size:9px}
   .stream-samples .inspect-card-head{align-items:flex-start;gap:10px}
   .stream-photo-meta{padding:13px;font-size:11px}
-  .stream-daily{padding:20px}
 }
 @media(max-width:420px){
   .pipeline-landing .main-nav a[href="#baseline"]{display:none!important}

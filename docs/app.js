@@ -178,16 +178,19 @@ async function analyze(blob, sample, thisRequest) {
       $("assessment").textContent = sample.label === "Normal"
         ? "False alarm: this photo is labeled normal."
         : "";
+      $("assessment").classList.toggle("mismatch", sample.label === "Normal");
     } else {
-      setStatus("Within range", "ok");
+      setStatus("Below threshold", "ok");
       $("assessment").textContent = sample.label === "Defect"
         ? "Missed defect: the score is below the review threshold."
         : "";
+      $("assessment").classList.toggle("mismatch", sample.label === "Defect");
     }
   } catch {
     if (thisRequest !== requestId) return;
     setStatus("Analysis failed", "unknown");
     $("assessment").textContent = "Choose another sample or reload the page.";
+    $("assessment").classList.remove("mismatch");
   }
 }
 
@@ -223,6 +226,7 @@ async function loadSample(index) {
   $("scoreMeter").classList.remove("review");
   $("scoreMeter").setAttribute("aria-label", "Anomaly score and review threshold");
   $("assessment").textContent = "";
+  $("assessment").classList.remove("mismatch");
   setStatus("Analyzing");
   updateNavigation();
   try {

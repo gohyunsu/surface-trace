@@ -24,7 +24,7 @@ SOURCE = "T1_S174_I111_1"
 STREAMS = (
     ("T1_S148_I108_2", "Related run", ("hit", "clear", "false_alarm", "miss")),
     ("T1_S164_I36_1", "Changed run · normal", ("false_alarm", "clear")),
-    ("T1_S478_I118_2", "Shifted run", ("hero", "miss", "clear", "hit", "miss", "clear")),
+    ("T1_S478_I118_2", "Larger-shift run", ("hero", "miss", "clear", "hit", "miss", "clear")),
 )
 START = 832
 GAP = 64
