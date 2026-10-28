@@ -19,15 +19,14 @@ the source-derived methods keep their source calibration. The trial is shown
 alongside the others to explain why lower false alarms alone did not justify
 promoting it.
 
-`change-figure.svg` visualizes recorded MMD change scores. The source bar is
-the maximum of all 59 windows in the held-out source run (0.0323), below the
-source-calibrated limit (0.0639). The three target bars are the first windows
-ending at frames 128, 160, and 192 in the all-normal changed run (0.9297,
-0.9417, 0.9100). Three consecutive crossings confirm the first alert at frame
-192. `change-figure.json` preserves the full source-window trace and those
-target values. Regenerate it with `experiments/unsupervised/export_change_figure.py`
-on the experiment server; regenerate the SVG with
-`scripts/generate_change_figure.py` locally.
+`change-figure.svg` and `change-figure-mobile.svg` plot recorded MMD scores as
+two separate time-ordered traces on the same 0–1 scale. All 59 held-out source
+windows stay below the source-calibrated limit (0.0639; maximum 0.0323). The
+first changed-run windows end at frames 128, 160, and 192 (0.9297, 0.9417,
+0.9100); the third consecutive crossing confirms the alert at frame 192.
+`change-figure.json` preserves the source trace and target values. Regenerate
+it with `experiments/unsupervised/export_change_figure.py` on the experiment
+server, then regenerate both SVGs with `scripts/generate_change_figure.py`.
 
 The cases shown on the site are a changed normal frame cleared by the selected
 reference, a large-shift defect flagged only by the selected reference, and a

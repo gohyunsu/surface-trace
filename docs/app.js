@@ -157,7 +157,6 @@ async function infer(blob, model) {
 }
 
 const setStatus = (label, type = "") => { $("status").textContent = label; $("status").className = "status " + type; };
-const steps = list => { $("actions").replaceChildren(...list.map(value => { const li = document.createElement("li"); li.textContent = value; return li; })); };
 
 async function analyze(blob, sample, thisRequest) {
   try {
@@ -179,21 +178,16 @@ async function analyze(blob, sample, thisRequest) {
       $("assessment").textContent = sample.label === "Normal"
         ? "False alarm: this photo is labeled normal."
         : "";
-      steps(["Inspect the highlighted area", "Record the inspection result"]);
     } else {
       setStatus("Within range", "ok");
       $("assessment").textContent = sample.label === "Defect"
         ? "Missed defect: the score is below the review threshold."
         : "";
-      steps(sample.label === "Defect"
-        ? ["Inspect the labeled defect", "Record the missed detection"]
-        : ["Inspect the photo", "Record the inspection result"]);
     }
   } catch {
     if (thisRequest !== requestId) return;
     setStatus("Analysis failed", "unknown");
     $("assessment").textContent = "Choose another sample or reload the page.";
-    steps([]);
   }
 }
 
@@ -229,7 +223,6 @@ async function loadSample(index) {
   $("scoreMeter").classList.remove("review");
   $("scoreMeter").setAttribute("aria-label", "Anomaly score and review threshold");
   $("assessment").textContent = "";
-  steps([]);
   setStatus("Analyzing");
   updateNavigation();
   try {
