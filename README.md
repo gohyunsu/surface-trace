@@ -9,12 +9,14 @@ SurfaceTrace is an industrial image-review research project by ISM × RIKU. It p
 | Pipeline | Data and method | Site behavior |
 | --- | --- | --- |
 | Baseline | KolektorSDD; handcrafted patch features compared with a normal reference bank | Runs inference in the browser on 64 packaged, held-out photos |
-| Change-aware | TSFabrics; frozen DINOv2 patch features, label-free reference selection, visual-change alarms, and a shadow adaptation candidate | Replays saved results on 12 selected production frames; no browser inference |
+| Change-aware | TSFabrics; frozen DINOv2 patch features, label-free reference selection, visual-change alarms, and a shadow adaptation candidate | Shows same-stream method comparisons and paired heatmaps; replays saved results on 12 selected frames, with no browser inference |
 | Daily review summary | Proposed handoff of flagged frames, change alerts, and review notes | Planned, not implemented |
 
 Neither sample page accepts arbitrary uploads. The shadow candidate is displayed for comparison and is **never promoted automatically**: the measured reduction in false alarms can also reduce defect recall.
 
 The baseline's grouped test split produced image AUROC **0.879**, **5/8** defect photos flagged, and **7/56** normal false alarms. On one shifted TSFabrics test stream, the selected-reference DINOv2 method produced image AUROC **0.987**, **33/82** defects flagged, and **0/2,290** normal false alarms. These are different datasets and protocols, so the numbers are not a direct comparison. See the [baseline protocol](notes/experiment.md) and [research results](experiments/unsupervised/EXPERIMENT_RESULTS.md) for splits, other conditions, comparison methods, and limitations.
+
+The landing page's stepwise comparison instead re-runs the handcrafted method on the **same TSFabrics streams** as DINOv2. The paired heatmaps are recorded outputs for identical held-out frames; see [asset provenance](web/ablation/README.md) and the [export script](experiments/unsupervised/export_ablation_comparison.py).
 
 ## Repository map
 

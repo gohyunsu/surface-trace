@@ -1,0 +1,32 @@
+[
+  {
+    "id": 4,
+    "scenario": "T1_S148_I108_2",
+    "frame": 3010,
+    "dataset_label": "Defect",
+    "score": 5.45220947265625,
+    "threshold": 3.7415819525718748,
+    "alert": true,
+    "overlay": "sample-04-classic.png"
+  },
+  {
+    "id": 6,
+    "scenario": "T1_S164_I36_1",
+    "frame": 1263,
+    "dataset_label": "Normal",
+    "score": 4.580361366271973,
+    "threshold": 3.7415819525718748,
+    "alert": true,
+    "overlay": "sample-06-classic.png"
+  },
+  {
+    "id": 7,
+    "scenario": "T1_S478_I118_2",
+    "frame": 1508,
+    "dataset_label": "Defect",
+    "score": 3.2714452743530273,
+    "threshold": 3.7415819525718748,
+    "alert": false,
+    "overlay": "sample-07-classic.png"
+  }
+]

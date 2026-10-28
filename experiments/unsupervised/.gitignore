@@ -7,4 +7,5 @@ results/*
 .venv/
 animation_data/
 site_export/
+ablation_export/
 *.log

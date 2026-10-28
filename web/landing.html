@@ -8,6 +8,7 @@
   <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <link rel="stylesheet" href="./site.css">
   <link rel="stylesheet" href="./pipeline.css">
+  <script src="./ablation.js" defer></script>
 </head>
 <body class="landing-page pipeline-landing">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -64,6 +65,52 @@
 <article class="method-card"><div class="method-animation"><img src="./next-method/05.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>05</span><div><h3>Detect visual shifts</h3><p>Signal when image features change.</p></div></div></article>
 <article class="method-card"><div class="method-animation"><img src="./next-method/06.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>06</span><div><h3>Evaluate a candidate</h3><p>Keep the current reference during review.</p></div></div></article>
       </div>
+      <section class="ablation" aria-labelledby="ablation-title">
+        <div class="ablation-heading"><div><p class="section-kicker">SAME TSFABRICS STREAMS</p><h3 id="ablation-title">What each step changed.</h3></div><p>The handcrafted pipeline was re-run on the same held-out frames.</p></div>
+        <div class="ablation-chart">
+          <div class="ablation-chart-head"><span>CHANGED RUN · NORMAL FRAMES</span><span>FALSE ALARMS / 975</span></div>
+          <div class="ablation-steps">
+            <div class="ablation-step"><span>01 / HANDCRAFTED</span><strong>975</strong><div class="ablation-bar"><i style="width:100%"></i></div><small>Ported patch baseline</small></div>
+            <div class="ablation-step"><span>02 / DINOv2</span><strong>971</strong><div class="ablation-bar"><i style="width:99.6%"></i></div><small>All startup frames</small></div>
+            <div class="ablation-step selected"><span>03 / SELECTED REFERENCE</span><strong>11</strong><div class="ablation-bar"><i style="width:1.2%"></i></div><small>Common frames retained</small></div>
+          </div>
+          <p>Switching to DINOv2 with all startup frames changed little here. Reference selection reduced false alarms.</p>
+        </div>
+        <div class="ablation-effects">
+          <article><span>04 / CHANGE DETECTION</span><div><strong>Frame 192</strong><p>First sustained alert on the changed stream. None on the source holdout.</p></div></article>
+          <article><span>05 / SHADOW CANDIDATE</span><div><strong>Hold update</strong><p>False alarms fell 11 → 3 on the normal shift, while defect recall fell 40.2% → 6.1% on the larger shift.</p></div></article>
+        </div>
+        <div class="ablation-gallery">
+          <div class="ablation-gallery-head"><div><p class="section-kicker">PAIRED FRAMES</p><h4>Same photo. Two heatmaps.</h4></div><p>Recorded results from held-out frames.</p></div>
+          <div class="ablation-tabs" aria-label="Comparison example">
+            <button type="button" data-ablation-case="normal" aria-pressed="true">Shifted normal</button>
+            <button type="button" data-ablation-case="detected" aria-pressed="false">Detected defect</button>
+            <button type="button" data-ablation-case="missed" aria-pressed="false">Missed defect</button>
+          </div>
+          <div class="ablation-case" data-ablation-panel="normal">
+            <div class="ablation-case-label"><span>Normal · changed run</span><small>Frame 1263</small></div>
+            <div class="ablation-pair">
+              <figure><div class="ablation-heat"><img src="./next-samples/sample-06.jpg" alt="Normal textile frame with the handcrafted anomaly map" loading="lazy"><img src="./ablation/sample-06-classic.png" alt="" loading="lazy"></div><figcaption><span>Handcrafted</span><strong class="ablation-review">False alarm</strong></figcaption></figure>
+              <figure><div class="ablation-heat"><img src="./next-samples/sample-06.jpg" alt="Same normal textile frame with the selected-reference anomaly map" loading="lazy"><img src="./next-samples/sample-06-current.png" alt="" loading="lazy"></div><figcaption><span>DINOv2 + selection</span><strong class="ablation-clear">Correctly clear</strong></figcaption></figure>
+            </div>
+          </div>
+          <div class="ablation-case" data-ablation-panel="detected" hidden>
+            <div class="ablation-case-label"><span>Defect · larger shift</span><small>Frame 1508</small></div>
+            <div class="ablation-pair">
+              <figure><div class="ablation-heat"><img src="./next-samples/sample-07.jpg" alt="Defective textile frame with the handcrafted anomaly map" loading="lazy"><img src="./ablation/sample-07-classic.png" alt="" loading="lazy"></div><figcaption><span>Handcrafted</span><strong class="ablation-miss">Missed defect</strong></figcaption></figure>
+              <figure><div class="ablation-heat"><img src="./next-samples/sample-07.jpg" alt="Same defective textile frame with the selected-reference anomaly map" loading="lazy"><img src="./next-samples/sample-07-current.png" alt="" loading="lazy"></div><figcaption><span>DINOv2 + selection</span><strong class="ablation-clear">Flagged defect</strong></figcaption></figure>
+            </div>
+          </div>
+          <div class="ablation-case" data-ablation-panel="missed" hidden>
+            <div class="ablation-case-label"><span>Defect · related run</span><small>Frame 3010</small></div>
+            <div class="ablation-pair">
+              <figure><div class="ablation-heat"><img src="./next-samples/sample-04.jpg" alt="Defective textile frame with the handcrafted anomaly map" loading="lazy"><img src="./ablation/sample-04-classic.png" alt="" loading="lazy"></div><figcaption><span>Handcrafted</span><strong class="ablation-clear">Flagged defect</strong></figcaption></figure>
+              <figure><div class="ablation-heat"><img src="./next-samples/sample-04.jpg" alt="Same defective textile frame with the selected-reference anomaly map" loading="lazy"><img src="./next-samples/sample-04-current.png" alt="" loading="lazy"></div><figcaption><span>DINOv2 + selection</span><strong class="ablation-miss">Missed defect</strong></figcaption></figure>
+            </div>
+          </div>
+        </div>
+        <details class="ablation-details"><summary>Results across all three streams <span aria-hidden="true">⌄</span></summary><div class="ablation-table-wrap"><table><caption>False alarms · defect recall, at source-calibrated thresholds</caption><thead><tr><th scope="col">Test stream</th><th scope="col">Handcrafted</th><th scope="col">DINOv2 · all</th><th scope="col">DINOv2 · selected</th></tr></thead><tbody><tr><th scope="row">Related run</th><td>5 · 70.3%</td><td>28 · 10.1%</td><td>7 · 54.3%</td></tr><tr><th scope="row">Changed, normal</th><td>975 · —</td><td>971 · —</td><td>11 · —</td></tr><tr><th scope="row">Larger shift</th><td>14 · 42.7%</td><td>2,060 · 100%</td><td>0 · 40.2%</td></tr></tbody></table></div><p>Same time-ordered evaluation frames; labels are used only to measure outcomes. <a href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/EXPERIMENT_RESULTS.md" target="_blank" rel="noopener noreferrer">Experiment record ↗</a></p></details>
+      </section>
       <div class="evaluation-summary next-evaluation"><div><p class="section-kicker">SHIFTED STREAM · HELD-OUT</p><h3>TSFabrics</h3><p>Frozen DINOv2 · selected reference frames</p></div><div class="evaluation-metrics"><div><span>0.987</span><small>Image AUROC</small></div><div><span>33 / 82</span><small>Defects flagged</small></div><div><span>0 / 2,290</span><small>Normal false alarms</small></div></div></div>
       <div class="method-foot"><a class="button button-dark" href="./next-inspect.html" target="_blank" rel="noopener">Open change-aware samples <span aria-hidden="true">↗</span></a></div>
       <div class="summary-next"><div><span class="summary-icon" aria-hidden="true"><i></i><i></i><i></i></span><div><p class="section-kicker">PLANNED</p><h3>Daily review summary</h3><p>Flagged frames, visual shifts, and review notes in one handoff.</p></div></div></div>
