@@ -55,32 +55,34 @@
 .ablation-heading h3,.ablation-gallery-head h4{font-size:clamp(26px,2.7vw,37px);font-weight:500;line-height:1.15;letter-spacing:-.05em;margin:0}
 .ablation-heading>p,.ablation-gallery-head>p{max-width:270px;margin:0 0 3px;color:#697287;font-size:12px;line-height:1.5;text-align:right}
 .ablation-chart,.ablation-gallery{background:#fff;border:1px solid #dce2ee;border-radius:8px}
-.ablation-chart{padding:26px 28px 24px}
+.ablation-chart{padding:23px 28px 20px}
 .ablation-chart-head{display:flex;justify-content:space-between;gap:12px;color:#6979b1;font-size:10px;letter-spacing:.13em}
-.ablation-chart-labels,.ablation-step{display:grid;grid-template-columns:minmax(160px,.8fr) minmax(0,1.35fr) minmax(135px,170px);gap:22px;align-items:center}
-.ablation-chart-labels{margin-top:24px;padding:0 0 11px;color:#8791a9;font-size:10px;letter-spacing:.1em}
-.ablation-step{min-width:0;padding:15px 0;border-top:1px solid #e3e8f1}
+.ablation-chart-labels,.ablation-step{display:grid;grid-template-columns:minmax(150px,.75fr) minmax(0,1.45fr) minmax(105px,120px);gap:18px;align-items:center}
+.ablation-chart-labels{margin-top:19px;padding:0 0 10px;color:#8791a9;font-size:10px;letter-spacing:.1em}
+.ablation-step{min-width:0;padding:10px 0;border-top:1px solid #e3e8f1}
 .ablation-step-name span{display:block;color:#5669a8;font-size:11px;letter-spacing:.06em}
-.ablation-step-name p{margin:8px 0 0;color:#586684;font-size:13px;line-height:1.5}
-.ablation-step-result strong{display:block;margin:0 0 14px;color:#344169;font-size:34px;font-weight:500;letter-spacing:-.055em;line-height:1;font-variant-numeric:tabular-nums}
+.ablation-step-name p{margin:6px 0 0;color:#586684;font-size:12px;line-height:1.5}
+.ablation-step-result strong{display:block;margin:0 0 10px;color:#344169;font-size:30px;font-weight:500;letter-spacing:-.055em;line-height:1;font-variant-numeric:tabular-nums}
 .ablation-step-result strong small{color:#8b95a9;font-size:14px;font-weight:400;letter-spacing:0}
 .ablation-step.selected .ablation-step-result strong{color:#258f83}
-.ablation-bar{height:12px;background:#edf0f6;border-radius:7px;overflow:hidden}
+.ablation-step.trial .ablation-step-result strong{color:#a37958}
+.ablation-bar{height:10px;background:#edf0f6;border-radius:7px;overflow:hidden}
 .ablation-bar i{display:block;min-width:5px;height:100%;border-radius:7px;background:#d98387}
 .ablation-step.selected .ablation-bar i{background:#3ba99c}
+.ablation-step.trial .ablation-bar i{background:#ba916f}
 .ablation-step-image{min-width:0;margin:0}
 .ablation-step-image>div{position:relative;width:100%;aspect-ratio:5/4;background:#d9deea;border:1px solid #d8dfec;border-radius:5px;overflow:hidden}
 .ablation-step-image img{position:absolute;inset:0;display:block;width:100%;height:100%;max-width:none;object-fit:fill}
 .ablation-step-image figcaption{margin-top:6px;color:#bc6563;font-size:11px;text-align:right}
-.ablation-step.selected .ablation-step-image figcaption{color:#258f83}
-.ablation-chart>p{border-top:1px solid #e9ecf3;margin:0;padding-top:17px;color:#596684;font-size:12px;line-height:1.55}
+.ablation-step.selected .ablation-step-image figcaption,.ablation-step.trial .ablation-step-image figcaption{color:#258f83}
+.ablation-decision{display:flex;align-items:baseline;gap:22px;border-top:1px solid #e9ecf3;margin:0;padding-top:15px}
+.ablation-decision span{flex:0 0 190px;color:#9a7459;font-size:10px;letter-spacing:.1em}
+.ablation-decision p{margin:0;color:#596684;font-size:12px;line-height:1.55}
 .ablation-effects{display:grid;grid-template-columns:1fr;gap:10px;margin-top:14px}
 .ablation-effects article{display:flex;flex-direction:column;gap:18px;padding:22px 24px;background:#eef1f9;border:1px solid #dae0ee;border-radius:7px}
 .ablation-effects article>span{color:#6b79af;font-size:10px;letter-spacing:.13em}
 .change-effect-content{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(220px,.65fr);align-items:center;gap:34px}
 .change-effect img{display:block;width:100%;height:auto;max-width:600px}
-.ablation-effects .candidate-effect{display:grid;grid-template-columns:180px 1fr;align-items:center;gap:24px}
-.ablation-effects .candidate-effect strong{font-size:22px}
 .ablation-effects strong{display:block;margin:0 0 7px;color:#344169;font-size:27px;font-weight:500;letter-spacing:-.045em;line-height:1.1}
 .ablation-effects p{max-width:500px;margin:0;color:#67728b;font-size:12px;line-height:1.55}
 .ablation-gallery{margin-top:28px;padding:26px 28px 28px}
@@ -227,21 +229,22 @@
   .ablation-chart,.ablation-gallery{padding:21px 18px}
   .ablation-chart-head{font-size:9px}
   .ablation-chart-labels{display:none}
-  .ablation-step{grid-template-columns:minmax(0,1fr) 104px;gap:10px;padding:17px 0}
-  .ablation-step:first-child{margin-top:18px}
+  .ablation-step{grid-template-columns:minmax(0,1fr) 92px;gap:8px;padding:13px 0}
+  .ablation-step:first-child{margin-top:14px}
   .ablation-step-name{grid-column:1;grid-row:1}
   .ablation-step-name span{font-size:10px}
   .ablation-step-name p{margin-top:4px;font-size:11px}
   .ablation-step-result{grid-column:1;grid-row:2;align-self:end}
-  .ablation-step-result strong{margin-bottom:9px;font-size:28px}
+  .ablation-step-result strong{margin-bottom:8px;font-size:27px}
   .ablation-step-result strong small{font-size:12px}
   .ablation-step-image{grid-column:2;grid-row:1 / span 2}
   .ablation-step-image figcaption{font-size:9px}
-  .ablation-bar{height:10px}
+  .ablation-bar{height:9px}
+  .ablation-decision{display:block;padding-top:13px}
+  .ablation-decision span{display:block;margin-bottom:5px}
   .ablation-effects{grid-template-columns:1fr;gap:9px}
   .ablation-effects article{gap:15px;padding:19px}
   .change-effect-content{grid-template-columns:1fr;gap:9px}
-  .ablation-effects .candidate-effect{display:flex;align-items:stretch;gap:15px}
   .ablation-gallery{margin-top:20px}
   .ablation-tabs{gap:6px}
   .ablation-tabs button{font-size:10px;padding:8px 9px}

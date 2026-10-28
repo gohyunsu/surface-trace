@@ -10,8 +10,14 @@ threshold; their raw scores have different units.
 
 `sample-06-all.png` is the frozen DINOv2 pipeline using all startup frames at
 the same reference-bank capacity as the selected-reference method. It shows
-the same normal frame as the three-step false-alarm chart. Its score, threshold,
+the same normal frame as the four-row false-alarm chart. Its score, threshold,
 and result are recorded under `all_unlabeled` in `catalog.json`.
+The trial-update row uses the same frame's existing
+`web/next-samples/sample-06-candidate.png` overlay. It is evaluated on the same
+975 held-out normal frames, with a target-derived reference and calibration;
+the source-derived methods keep their source calibration. The trial is shown
+alongside the others to explain why lower false alarms alone did not justify
+promoting it.
 
 `change-figure.svg` visualizes recorded MMD change scores. The source bar is
 the maximum of all 59 windows in the held-out source run (0.0323), below the
