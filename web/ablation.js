@@ -80,12 +80,11 @@ if (gallery) {
     fetch("./ablation/catalog.json").then(response => { if (!response.ok) throw Error("Heatmap catalog unavailable"); return response.json(); }),
   ]).then(([sampleCatalog, classicCatalog]) => {
     const byId = new Map(classicCatalog.map(record => [record.id, record]));
-    const preferred = [6, 7, 4];
-    const rank = id => preferred.includes(id) ? preferred.indexOf(id) : preferred.length + id;
+    const featured = [6, 7, 4, 13, 17, 21, 18, 19, 20, 5, 3, 1, 10, 8, 2, 9];
     cases = sampleCatalog.samples
       .map(sample => ({ sample, classic: byId.get(sample.id), stream: sampleCatalog.streams[sample.scenario]?.title }))
-      .filter(({ sample, classic, stream }) => classic && stream && classic.scenario === sample.scenario && classic.frame === sample.frame && classic.dataset_label === sample.label)
-      .sort((a, b) => rank(a.sample.id) - rank(b.sample.id));
+      .filter(({ sample, classic, stream }) => featured.includes(sample.id) && classic && stream && classic.scenario === sample.scenario && classic.frame === sample.frame && classic.dataset_label === sample.label)
+      .sort((a, b) => featured.indexOf(a.sample.id) - featured.indexOf(b.sample.id));
     if (cases.length) {
       render(0);
       gallery.dataset.ready = "true";

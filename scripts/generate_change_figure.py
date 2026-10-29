@@ -24,7 +24,7 @@ def points(scores: list[float], xs: list[float], top: float, bottom: float) -> s
 def svg(width: int, height: int, content: str) -> str:
     return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
 <title id="title">Visual change across two production runs</title>
-<desc id="desc">All 59 consecutive reference windows and the first 16 windows of a separate changed normal run are plotted at equal intervals. The reference windows stay below the alert limit. The first three changed-run windows exceed it, confirming an alert at frame 192; the chart continues through frame 608.</desc>
+<desc id="desc">The last 16 consecutive reference windows and first 16 windows of a separate changed normal run are plotted at equal intervals. The reference run stays below the alert limit. The first three changed-run windows exceed it, confirming an alert at frame 192; the chart continues through frame 608.</desc>
 <style>
 text{{font-family:Segoe UI,Arial,sans-serif}}
 .heading{{fill:#59698f;font-size:11px;letter-spacing:1px}}
@@ -37,6 +37,8 @@ text{{font-family:Segoe UI,Arial,sans-serif}}
 
 
 def figure(source: list[float], target: list[float], limit: float, mobile: bool) -> str:
+    source = source[-16:]
+    target = target[:16]
     left, right = (35, 274) if mobile else (54, 548)
     top, bottom = (44, 163) if mobile else (57, 180)
     width, height = (300, 223) if mobile else (600, 238)

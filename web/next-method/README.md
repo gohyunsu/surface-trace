@@ -15,6 +15,11 @@ reference choices, anomaly maps, scores, and drift curve come from the recorded
 experiment. Animation timing, arrows, dots, and the pause symbol explain the
 process; they are not camera or model outputs. The example in `06.gif` is a real
 held-out defect flagged by the frozen model and missed by the shadow candidate.
+Step `05.gif` pairs photos from source run `T1_S174_I111_1` with photos from the
+separate all-normal changed run `T1_S164_I36_1`. Its plot uses the last 16
+source-holdout windows and the first 16 changed-run windows at equal spacing;
+the third changed-run window confirms the frame-192 alert. The run boundary is
+illustrative, not a continuous camera recording across both runs.
 The fabric dataset is a proxy for the intended rubber-belt application; these
 assets do not show performance on Dongil rubber-belt images.
 

@@ -9,14 +9,18 @@ SurfaceTrace is an industrial image-review research project by ISM × RIKU. It p
 | Pipeline | Data and method | Site behavior |
 | --- | --- | --- |
 | Baseline | KolektorSDD; handcrafted patch features compared with a normal reference bank | Runs inference in the browser on 64 packaged, held-out photos |
-| Change-aware | TSFabrics; frozen DINOv2 patch features, label-free reference selection, visual-change alarms, and a shadow adaptation candidate | Shows same-stream method comparisons and paired heatmaps; replays saved results on 12 selected frames, with no browser inference |
-| Daily review summary | Proposed handoff of flagged frames, change alerts, and review notes | Planned, not implemented |
+| Change-aware | TSFabrics; frozen DINOv2 patch features, label-free reference selection, visual-change alarms, and a shadow adaptation candidate | Shows same-stream method comparisons and paired heatmaps; replays saved results on 24 selected frames, with no browser inference |
+| Interval summary | Four recorded, time-ordered evaluation intervals with saved inspection-alert counts and visual-change alarms | Opens from the sample page; operators can mark flagged previews, review startup photos after a change alert, and export their decisions |
 
-Neither sample page accepts arbitrary uploads. The shadow candidate is displayed for comparison and is **never promoted automatically**: the measured reduction in false alarms can also reduce defect recall.
+The baseline sample page does not accept uploads. The change-aware summary can accept local photos for a human review draft; it does not score them or rebuild the reference in the browser. The shadow candidate is displayed for comparison and is **never promoted automatically**: the measured reduction in false alarms can also reduce defect recall.
+
+The interval summary follows an unlabeled operating view: it reports frames scored, frames flagged, and visual-change alarms. Reviewers can mark packaged flagged photos as issues or dismiss them. After a change alert, they can review startup photos for a future candidate reference and export the interval report as JSON. Ground-truth labels and false-alarm/miss metrics appear only in the separate research evaluation, not in this handoff.
 
 The baseline's grouped test split produced image AUROC **0.879**, **5/8** defect photos flagged, and **7/56** normal false alarms. On one shifted TSFabrics test stream, the selected-reference DINOv2 method produced image AUROC **0.987**, **33/82** defects flagged, and **0/2,290** normal false alarms. These are different datasets and protocols, so the numbers are not a direct comparison. See the [baseline protocol](notes/experiment.md) and [research results](experiments/unsupervised/EXPERIMENT_RESULTS.md) for splits, other conditions, comparison methods, and limitations.
 
 The landing page's method comparison re-runs the handcrafted method on the **same TSFabrics streams** as DINOv2. Its four-row chart uses one normal frame and actual heatmaps for each method, including the rejected trial update; the paired defect examples show both gains and misses. The scenario timeline uses real time-ordered frames from two separate production runs, with their experimental boundary marked explicitly. See [comparison provenance](web/ablation/README.md), [scenario provenance](web/scenario/README.md), and the [export script](experiments/unsupervised/export_ablation_comparison.py).
+
+The trial reference has its own retrospective evaluation on all three target runs: defect recall, false alarms, and image AUROC are reported beside the frozen reference. This trial changes both the reference bank and calibration threshold, so its score difference is not a selection-only ablation.
 
 ## Repository map
 

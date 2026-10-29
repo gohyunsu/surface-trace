@@ -26,6 +26,11 @@ STREAMS = (
     ("T1_S164_I36_1", "Changed run · normal", ("false_alarm", "clear")),
     ("T1_S478_I118_2", "Larger-shift run", ("hero", "miss", "clear", "hit", "miss", "clear")),
 )
+MORE_SAMPLES = (
+    ("T1_S148_I108_2", "Related run", ("hit", "miss", "clear", "hit")),
+    ("T1_S164_I36_1", "Changed run · normal", ("clear", "clear", "clear", "clear")),
+    ("T1_S478_I118_2", "Larger-shift run", ("hit", "clear", "clear", "clear")),
+)
 START = 832
 GAP = 64
 
@@ -78,15 +83,19 @@ def main() -> None:
     threshold = float(results["methods"]["mutual"]["threshold"])
     samples: list[dict] = []
     streams: dict[str, dict] = {}
+    used_by_scenario: dict[str, list[int]] = {}
 
-    for scenario, title, plan in STREAMS:
+    for scenario, title, plan in (*STREAMS, *MORE_SAMPLES):
         tokens, global_features = cached(scenario)
         rows = archive.scenarios[scenario]
         scores, maps = scorer.score(tokens[START:])
         labels = np.asarray([bool(row["label"]) for row in rows[START:]], dtype=bool)
+        used = used_by_scenario.setdefault(scenario, [])
         selected: list[int] = []
         for kind in plan:
-            selected.append(choose(kind, scores, labels, threshold, selected))
+            index = choose(kind, scores, labels, threshold, used)
+            used.append(index)
+            selected.append(index)
 
         target_startup = np.asarray(tokens[:512])
         target_chosen = select_reference_indices(mutual_image_scores(target_startup),

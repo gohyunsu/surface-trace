@@ -55,10 +55,40 @@ at target frame 192 on the two changed conditions and at frame 3744
 on the related condition. It detects a feature-distribution change; it does
 not identify a defect or authorize a new reference automatically.
 
-Shadow adaptation lowers false alarms from 11 to 3 on the all-normal changed
-stream. It also cuts recall from .543 to .283 on the related target and from
-.402 to .061 on the larger-shift target. **Automatic promotion of the adapted
-reference is therefore not supported by these results.**
+The shadow candidate applies the same label-free selection to the first 512
+frames of each target run, keeps 308 frames, and recalibrates its threshold on
+frames 512–767. The frozen and candidate models are evaluated on the same later
+frames. Labels below are used only for retrospective evaluation.
+
+| Target | Selected startup defects, checked afterward | Defect recall: frozen → candidate | False alarms: frozen → candidate | Image AUROC: frozen → candidate |
+| --- | ---: | ---: | ---: | ---: |
+| Related run | 1 / 308 | 54.3% → 28.3% | 7 → 1 | .9891 → .9890 |
+| Changed, normal | 0 / 308 | N/A | 11 → 3 | N/A |
+| Larger shift | 0 / 308 | 40.2% → 6.1% | 0 → 0 | .9873 → .9943 |
+
+The candidate reduces false alarms on two runs but loses defect recall on both
+runs with defects. On the larger shift, AUROC improves while thresholded recall
+falls, so the ranking and the decision threshold tell different stories.
+Selection removed all labeled defects from that candidate startup set, yet
+recall still fell. Because both the target reference and its calibration
+threshold changed, these results do not isolate the cause of that loss.
+**Automatic promotion of the candidate is not supported.**
+
+This is an offline trial: its first 512 target frames were chosen regardless of
+when the change detector fired. For the related run, the first change alarm was
+at frame 3744, long after those startup frames. It is therefore not yet an
+evaluation of a prospectively triggered, post-alert update.
+
+For a cleaner next comparison, freeze the alert rule and use only frames after
+the alert for the candidate's startup, a disjoint later block for calibration,
+and a further later block for evaluation. Compare equal-capacity target banks
+built from all startup frames versus label-free selected frames. For the selected
+bank, compare source-based versus target-based threshold calibration separately.
+Report defect recall at a fixed false-alarm budget, false alarms per 10,000
+normal frames, image AUROC/AP, change-alert latency, and the rate of false
+change alerts. Use run-level or temporal-block confidence intervals rather than
+independent-frame intervals. Operator-vetted normal frames can form a separate
+human-in-the-loop condition once actual review decisions exist.
 
 For a separate sensitivity analysis, `T1_S148_I108_2` is the source. Its
 first 512 frames contain 21 labeled defects; label-free selection retains

@@ -14,13 +14,14 @@ import numpy as np
 from PIL import Image
 
 from core import PatchScorer, build_reference_bank, mutual_image_scores, select_reference_indices
-from drift import DriftDetector, mmd2
+from drift import DriftDetector
 from tsfabrics import TSFabricsArchive
 
 
 ROOT = Path("experiments/unsupervised")
 SOURCE = "T1_S174_I111_1"
 TARGET = "T1_S478_I118_2"
+DRIFT_TARGET = "T1_S164_I36_1"
 OUT = ROOT / "animation_data"
 
 
@@ -41,6 +42,7 @@ def main() -> None:
     archive = TSFabricsArchive(ROOT / "data" / "TSfabrics.zip")
     source, source_global = cached(SOURCE)
     target, target_global = cached(TARGET)
+    _, drift_global = cached(DRIFT_TARGET)
 
     startup = np.asarray(source[:512])
     novelty = mutual_image_scores(startup)
@@ -82,8 +84,9 @@ def main() -> None:
     write_jpeg(archive, hero_row["image"], OUT / "hero.jpg")
     for slot, index in enumerate(range(hero_index - 2, hero_index + 3)):
         write_jpeg(archive, rows[index]["image"], OUT / f"stream_{slot:02d}.jpg")
-    for slot, (scenario, index) in enumerate(((SOURCE, 1100), (SOURCE, 1950),
-                                               (TARGET, 0), (TARGET, 96), (TARGET, 192))):
+    for slot, (scenario, index) in enumerate(((SOURCE, 3500), (SOURCE, 4000),
+                                               (DRIFT_TARGET, 0), (DRIFT_TARGET, 96),
+                                               (DRIFT_TARGET, 192))):
         write_jpeg(archive, archive.scenarios[scenario][index]["image"], OUT / f"drift_{slot:02d}.jpg")
 
     selected_set = set(map(int, chosen))
@@ -99,9 +102,8 @@ def main() -> None:
         examples.append({"file": f"reference_{slot:02d}.jpg", "index": index, "selected": index in selected_set})
 
     detector = DriftDetector(np.asarray(source_global[:2048]))
-    ends, drift_values = detector.sequence_scores(np.asarray(target_global))
-    source_drift_values = [mmd2(detector.reference, detector.blocks[i], detector.bandwidth)
-                           for i in (0, 4, 8, 12, 15)]
+    ends, drift_values = detector.sequence_scores(np.asarray(drift_global))
+    _, source_drift_values = detector.sequence_scores(np.asarray(source_global[2112:4096]))
     token = np.asarray(target[hero_index], dtype=np.float32)
     projection = token[:, 0].reshape(26, 32)
     metadata = {
@@ -110,6 +112,7 @@ def main() -> None:
         "license": "CC BY 4.0, as stated by the dataset paper",
         "source": SOURCE,
         "target": TARGET,
+        "drift_target": DRIFT_TARGET,
         "source_startup_frames": 512,
         "source_selected_frames": int(len(chosen)),
         "reference_examples": examples,
@@ -125,9 +128,9 @@ def main() -> None:
         "feature_projection": projection.tolist(),
         "drift_ends": ends.tolist(),
         "drift_values": drift_values.astype(float).tolist(),
-        "drift_source_values": source_drift_values,
+        "drift_source_values": source_drift_values.astype(float).tolist(),
         "drift_threshold": float(detector.threshold),
-        "drift_first_alarm": detector.first_alarm(np.asarray(target_global)),
+        "drift_first_alarm": detector.first_alarm(np.asarray(drift_global)),
     }
     (OUT / "metadata.json").write_text(json.dumps(metadata, indent=2))
     print(json.dumps({k: metadata[k] for k in ("hero_frame", "hero_score", "hero_threshold", "shadow_score", "shadow_threshold", "drift_first_alarm")}, indent=2))

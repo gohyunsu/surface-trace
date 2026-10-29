@@ -1,6 +1,7 @@
 "use strict";
 
 const assert = require("assert");
+const fs = require("fs");
 const { chromium } = require("playwright");
 
 (async () => {
@@ -27,18 +28,21 @@ const { chromium } = require("playwright");
     assert.strictEqual(await page.locator("#next .method-card").count(), 6);
     assert(await page.getByRole("heading", { name: "How each method handled the shift." }).isVisible());
     assert.strictEqual(await page.locator(".ablation-step").count(), 4);
+    assert.strictEqual(await page.locator(".trial-run-grid section").count(), 3);
+    assert((await page.locator(".trial-evaluation").textContent()).includes("40.2% → 6.1%"));
+    assert((await page.locator(".trial-evaluation").textContent()).includes(".9873 → .9943"));
     assert((await page.locator(".ablation-chart-labels").textContent()).includes("FRAME 1,264"));
     await page.locator(".ablation-gallery").scrollIntoViewIfNeeded();
     await page.waitForFunction(() => document.querySelector(".ablation-gallery").dataset.ready === "true");
-    assert.strictEqual(await page.locator("#pairedCounter").textContent(), "01 / 12");
+    assert.strictEqual(await page.locator("#pairedCounter").textContent(), "01 / 16");
     assert.strictEqual(await page.locator("#pairedClassicResult").textContent(), "False alarm");
     await page.getByRole("button", { name: "Next photo" }).click();
-    assert.strictEqual(await page.locator("#pairedCounter").textContent(), "02 / 12");
+    assert.strictEqual(await page.locator("#pairedCounter").textContent(), "02 / 16");
     assert.strictEqual(await page.locator("#pairedSelectedResult").textContent(), "Flagged defect");
-    await page.waitForFunction(() => document.querySelector("#pairedCounter").textContent === "03 / 12", null, { timeout: 6000 });
+    await page.waitForFunction(() => document.querySelector("#pairedCounter").textContent === "03 / 16", null, { timeout: 6000 });
     assert.strictEqual(await page.locator("#pairedClassicResult").textContent(), "Flagged defect");
     assert.strictEqual(await page.locator("#pairedSelectedResult").textContent(), "Missed defect");
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 16; i++) {
       const failures = await page.locator("#pairedCase img").evaluateAll(async images => {
         const failed = [];
         for (const image of images) {
@@ -52,9 +56,9 @@ const { chromium } = require("playwright");
     for (const [section, destination] of [["baseline", "inspect.html"], ["next", "next-inspect.html"]]) {
       const link = page.locator(`#${section} .method-foot a`);
       assert((await link.getAttribute("href")).endsWith(destination));
-      assert.strictEqual(await link.getAttribute("target"), "_blank");
+      assert.strictEqual(await link.getAttribute("target"), null);
     }
-    assert(await page.getByRole("heading", { name: "Daily review summary", exact: true }).isVisible());
+    assert(await page.locator(".summary-next .summary-title").getByText("Interval summary").isVisible());
 
     await page.goto(new URL("inspect.html?sample=1", base).href, { waitUntil: "networkidle" });
     await page.waitForFunction(() => document.querySelector("#score").textContent !== "—");
@@ -64,29 +68,62 @@ const { chromium } = require("playwright");
 
     await page.goto(new URL("next-inspect.html?sample=7", base).href, { waitUntil: "networkidle" });
     await page.waitForFunction(() => document.querySelector("#streamScore").textContent !== "—");
-    assert.strictEqual(await page.locator(".stream-sample").count(), 12);
+    assert.strictEqual(await page.locator(".stream-sample").count(), 24);
     assert.deepStrictEqual(await page.locator(".stream-sample-group h3").allTextContents(),
       ["Related run", "Changed run · normal", "Larger-shift run"]);
     assert.strictEqual(await page.locator("#streamStatus").textContent(), "Review needed");
     assert.strictEqual(await page.locator("#frameTruth").textContent(), "Dataset label: Defect");
     assert.strictEqual(await page.locator("#frameName").textContent(), "Frame 1,509");
     assert.strictEqual(await page.locator("#changeState").textContent(), "Change alert");
+    await page.getByRole("button", { name: "Summarize interval" }).click();
+    assert(await page.getByRole("dialog", { name: "Interval summary" }).isVisible());
+    assert((await page.locator("#intervalRange").textContent()).includes("2,372 scored"));
+    assert((await page.locator(".interval-signal").textContent()).includes("frame 192"));
+    assert((await page.locator(".interval-comparison").textContent()).includes("33 → 5"));
+    assert(!/false alarm|missed defect|dataset label/i.test(await page.locator("#intervalDialog").textContent()));
+    await page.locator("#intervalSelect").selectOption("reference");
+    assert.strictEqual(await page.locator(".interval-signal").textContent(), "No change alert");
+    assert((await page.locator("#intervalRange").textContent()).includes("1,984 scored"));
+    assert((await page.locator(".interval-metrics").textContent()).includes("20"));
+    assert(await page.locator("#candidateReview").isHidden());
+    await page.locator("#intervalSelect").selectOption("T1_S164_I36_1");
+    assert.strictEqual(await page.locator(".interval-case").count(), 1);
+    await page.locator(".interval-case").getByRole("button", { name: "Issue" }).click();
+    assert((await page.locator(".interval-examples>p").textContent()).includes("1 / 1"));
+    assert.strictEqual(await page.locator(".review-frame").count(), 4);
+    await page.locator(".review-frame").first().getByRole("button", { name: "Use as normal" }).click();
+    assert.strictEqual(await page.locator("#reviewCount").textContent(), "1 / 4 reviewed");
+    const reviewDownload = page.waitForEvent("download");
+    await page.getByRole("button", { name: "Export summary" }).click();
+    const download = await reviewDownload;
+    assert(download.suggestedFilename().includes("T1_S164_I36_1"));
+    const report = JSON.parse(fs.readFileSync(await download.path(), "utf8"));
+    assert.strictEqual(report.flagged_frames, 11);
+    assert.strictEqual(report.inspection_reviews[0].decision, "issue");
+    assert.strictEqual(report.startup_selection[0].decision, "normal");
+    assert(!Object.keys(report).some(key => /label|ground_truth|false_alarm|missed/i.test(key)));
+    await page.getByRole("button", { name: "Close summary" }).click();
+    assert.strictEqual(await page.locator("#handcraftedVerdict").textContent(), "Missed");
+    assert.strictEqual(await page.locator("#currentVerdict").textContent(), "Flagged");
+    await page.locator('[data-reference="handcrafted"]').click();
+    assert.strictEqual(await page.locator("#streamStatus").textContent(), "Below threshold");
+    await page.locator('[data-reference="current"]').click();
     const currentHeat = await page.locator("#frameHeat").getAttribute("src");
-    await page.getByRole("button", { name: "Candidate", exact: true }).click();
+    await page.locator('[data-reference="candidate"]').click();
     assert.strictEqual(await page.locator("#streamStatus").textContent(), "Below threshold");
     assert.strictEqual(await page.locator("#streamAssessment").textContent(), "Missed defect in this frame.");
     assert(await page.locator("#streamAssessment").evaluate(element => element.classList.contains("mismatch")));
     assert.notStrictEqual(await page.locator("#frameHeat").getAttribute("src"), currentHeat);
     await page.getByRole("button", { name: "Normal", exact: true }).click();
-    assert.strictEqual(await page.locator(".stream-sample").count(), 6);
-    assert.strictEqual(await page.locator("#framePosition").textContent(), "01 / 06");
+    assert.strictEqual(await page.locator(".stream-sample").count(), 14);
+    assert.strictEqual(await page.locator("#framePosition").textContent(), "01 / 14");
     assert((await page.locator("#frameTruth").textContent()).includes("Normal"));
     await page.goto(new URL("next-inspect.html?sample=1", base).href, { waitUntil: "networkidle" });
     assert.strictEqual(await page.locator("#changeState").textContent(), "No alert");
     const visiblePoints = (await page.locator("#changeChart polyline").getAttribute("points")).split(" ").length;
     assert(visiblePoints < 100, "Change plot should stop at the selected frame");
     assert.deepStrictEqual(errors, []);
-    console.log(JSON.stringify({ baselineSamples: 64, newSamples: 12, candidateMiss: true, pageErrors: errors }));
+    console.log(JSON.stringify({ baselineSamples: 64, newSamples: 24, pairedFrames: 16, candidateMiss: true, pageErrors: errors }));
   } finally {
     await browser.close();
   }

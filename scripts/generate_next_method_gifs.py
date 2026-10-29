@@ -12,7 +12,7 @@ import math
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageDraw, ImageOps
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -247,54 +247,66 @@ def animation_04(meta: dict) -> list[Image.Image]:
 
 
 def animation_05(meta: dict) -> list[Image.Image]:
+    if meta["drift_target"] != "T1_S164_I36_1" or meta["drift_first_alarm"] != 192:
+        raise ValueError("The shift animation must use the recorded changed-normal run")
     images = [picture(f"drift_{i:02d}.jpg") for i in range(5)]
-    ends = np.asarray(meta["drift_ends"])
-    scores = np.asarray(meta["drift_values"])
-    source_scores = np.asarray(meta["drift_source_values"])
-    keep = ends <= 640
-    ends, scores = ends[keep], scores[keep]
+    source_scores = np.asarray(meta["drift_source_values"][-16:], dtype=float)
+    target_scores = np.asarray(meta["drift_values"][:16], dtype=float)
+    ends = np.asarray(meta["drift_ends"][:16])
     limit = float(meta["drift_threshold"])
-    low = min(float(source_scores.min()), limit) - .025
-    high = max(float(scores.max()), limit) + .04
-    plot = (60, 190, 660, 355)
-    coordinate = lambda value: plot[3] - round((value - low) / (high - low) * (plot[3] - plot[1]))
-    source_points = [(60 + 52 * i, coordinate(float(score)))
+    if len(source_scores) != 16 or len(target_scores) != 16 or ends[-1] != 608:
+        raise ValueError("The shift animation needs 16 consecutive windows per run")
+    plot = (42, 235, 678, 365)
+    coordinate = lambda value: plot[3] - round(value * (plot[3] - plot[1]))
+    step = (plot[2] - plot[0]) / (len(source_scores) + len(target_scores) - 1)
+    source_points = [(round(plot[0] + step * i), coordinate(score))
                      for i, score in enumerate(source_scores)]
-    target_points = [(round(316 + (int(end) - 128) / (640 - 128) * (plot[2] - 316)),
-                      coordinate(float(score))) for end, score in zip(ends, scores)]
+    target_points = [(round(plot[0] + step * (len(source_scores) + i)), coordinate(score))
+                     for i, score in enumerate(target_scores)]
     points = source_points + target_points
-    alarm_index = len(source_points) + int(np.argmin(abs(ends - int(meta["drift_first_alarm"]))))
+    boundary = round((source_points[-1][0] + target_points[0][0]) / 2)
+    alarm_index = len(source_points) + 2
+    try:
+        font = ImageFont.truetype("DejaVuSans.ttf", 15)
+    except OSError:
+        font = ImageFont.load_default()
     output = []
     for tick in range(FRAMES):
         progress = ease(tick / (FRAMES - 1))
         base = new()
         draw = ImageDraw.Draw(base)
-        for slot, image in enumerate(images):
-            photo(base, image, (27 + 137 * slot, 40, 118, 94),
-                  outline=(INDIGO if slot < 2 else AMBER)
-                  if slot == min(4, int(progress * 5)) else LINE)
-        draw.line((292, 35, 292, 140), fill=PALE, width=2)
+        source_image = images[0 if tick < 5 else 1]
+        target_image = images[2 if tick < 12 else 3 if tick < 16 else 4]
+        photo(base, source_image, (42, 45, 294, 142),
+              outline=INDIGO if progress < .5 else LINE)
+        photo(base, target_image, (384, 45, 294, 142),
+              outline=RED if progress >= .5 else LINE,
+              opacity=.5 if progress < .5 else 1)
+        draw = ImageDraw.Draw(base)
+        draw.text((42, 17), "REFERENCE RUN", fill=INDIGO, font=font)
+        draw.text((384, 17), "CHANGED RUN · NORMAL", fill=RED, font=font)
+        draw.line((boundary, 213, boundary, 373), fill=PALE, width=2)
         draw.line((plot[0], plot[3], plot[2], plot[3]), fill=LINE, width=2)
-        draw.line((plot[0], plot[1], plot[0], plot[3]), fill=LINE, width=2)
-        draw.line((292, plot[1], 292, plot[3]), fill=PALE, width=2)
         threshold_y = coordinate(limit)
         for x in range(plot[0], plot[2], 16):
             draw.line((x, threshold_y, min(x + 9, plot[2]), threshold_y), fill=AMBER, width=2)
-        draw.line(points, fill=PALE, width=2, joint="curve")
-        count = max(1, int(len(points) * progress))
-        if count > 1:
-            draw.line(points[:min(count, len(source_points))], fill=INDIGO, width=4, joint="curve")
+        count = max(1, round(1 + (len(points) - 1) * progress))
+        source_count = min(count, len(source_points))
+        if source_count > 1:
+            draw.line(source_points[:source_count], fill=INDIGO, width=3, joint="curve")
         if count > len(source_points):
-            draw.line(points[len(source_points) - 1:count], fill=INDIGO, width=4, joint="curve")
-        x, y = points[count - 1]
-        draw.ellipse((x - 6, y - 6, x + 6, y + 6), fill=INDIGO)
+            draw.line([source_points[-1], *target_points[:count - len(source_points)]],
+                      fill=RED, width=3, joint="curve")
+        for x, y in source_points[:source_count]:
+            draw.ellipse((x - 2, y - 2, x + 2, y + 2), fill=INDIGO)
+        for x, y in target_points[:max(0, count - len(source_points))]:
+            draw.ellipse((x - 2, y - 2, x + 2, y + 2), fill=RED)
         alarm_x, alarm_y = points[alarm_index]
         if count > alarm_index:
-            draw.line((alarm_x, alarm_y + 12, alarm_x, threshold_y - 5), fill=AMBER, width=2)
             pulse = 10 + round(3 * math.sin(tick * math.pi / 3))
             draw.ellipse((alarm_x - pulse, alarm_y - pulse,
                           alarm_x + pulse, alarm_y + pulse),
-                         outline=AMBER, width=3)
+                         outline=RED, width=3)
         output.append(base.convert("RGB"))
     return output
 
