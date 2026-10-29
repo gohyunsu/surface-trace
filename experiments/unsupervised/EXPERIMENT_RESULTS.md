@@ -62,9 +62,9 @@ frames. Labels below are used only for retrospective evaluation.
 
 | Target | Selected startup defects, checked afterward | Defect recall: frozen → candidate | False alarms: frozen → candidate | Image AUROC: frozen → candidate |
 | --- | ---: | ---: | ---: | ---: |
-| Related run | 1 / 308 | 54.3% → 28.3% | 7 → 1 | .9891 → .9890 |
-| Changed, normal | 0 / 308 | N/A | 11 → 3 | N/A |
-| Larger shift | 0 / 308 | 40.2% → 6.1% | 0 → 0 | .9873 → .9943 |
+| Related run | 1 / 308 | 54.3% (75/138) → 28.3% (39/138) | 7/3,834 → 1/3,834 | .9891 → .9890 |
+| Changed, normal | 0 / 308 | N/A | 11/975 → 3/975 | N/A |
+| Larger shift | 0 / 308 | 40.2% (33/82) → 6.1% (5/82) | 0/2,290 → 0/2,290 | .9873 → .9943 |
 
 The candidate reduces false alarms on two runs but loses defect recall on both
 runs with defects. On the larger shift, AUROC improves while thresholded recall
@@ -78,6 +78,9 @@ This is an offline trial: its first 512 target frames were chosen regardless of
 when the change detector fired. For the related run, the first change alarm was
 at frame 3744, long after those startup frames. It is therefore not yet an
 evaluation of a prospectively triggered, post-alert update.
+With one source and three target runs, these figures describe the tested runs;
+they do not establish a population-wide advantage or a reliable confidence
+interval across production conditions.
 
 For a cleaner next comparison, freeze the alert rule and use only frames after
 the alert for the candidate's startup, a disjoint later block for calibration,
