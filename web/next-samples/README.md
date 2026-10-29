@@ -18,7 +18,7 @@ The catalog stores zero-based frame indices; visible frame numbers add one.
 recorded experiment results. It contains only the number of eligible frames,
 model-flagged frames, and visual-change alerts for the source holdout and each
 complete target evaluation interval. No ground-truth labels or confusion counts
-enter the operational summary. Its flagged-photo previews are a subset of the
+or saved shadow-candidate results enter the operational summary. Its flagged-photo previews are a subset of the
 curated 24-photo catalog, not the full review queue. The four startup review
 photos for the all-normal
 changed run come from `web/scenario/manifest.json` and precede its calibration

@@ -292,12 +292,7 @@ function renderSummary() {
   }
   $("candidateReview").hidden = !alerted;
   if (alerted) {
-    const candidate = interval.candidate;
-    const comparison = document.createElement("div");
-    comparison.className = "interval-comparison";
-    comparison.innerHTML = `<span>Trial candidate · recorded scores</span><div><strong>${format(interval.current.flagged)} → ${format(candidate.flagged)}</strong><small>Flagged frames</small></div>`;
-    summary.append(comparison);
-    $("candidateReviewNote").textContent = `Recorded trial: ${format(interval.startup_selected)} / ${format(interval.startup_total)} early-run frames selected. Review startup photos for a future update.`;
+    $("candidateReviewNote").textContent = "Review buffered startup photos. Exclude unsuitable frames before requesting a new reference.";
     renderReview(interval);
   }
 }
@@ -342,7 +337,6 @@ $("exportSummary").addEventListener("click", () => {
     inspected_frames: interval.current.count,
     flagged_frames: interval.current.flagged,
     visual_change_first_alarm: interval.first_alarm,
-    candidate_flagged_frames: interval.candidate?.flagged ?? null,
     generated_at: new Date().toISOString(),
     review_status: "draft",
     model_recomputed: false,

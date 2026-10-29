@@ -25,15 +25,12 @@ def main() -> None:
     source_end = protocol["source_test"][1]
     intervals = [{
         "id": "reference",
-        "title": "Reference holdout",
+        "title": "Reference run",
         "scenario": protocol["source"],
         "start": protocol["source_test"][0] + 1,
         "end": source_end,
         "first_alarm": results["drift"]["source_heldout_first_alarm"],
         "current": counts(method["source_heldout"]),
-        "candidate": None,
-        "startup_total": None,
-        "startup_selected": None,
         "review_frames": [],
     }]
     for scenario in protocol["targets"]:
@@ -51,18 +48,15 @@ def main() -> None:
         intervals.append({
             "id": scenario,
             "title": {
-                "T1_S148_I108_2": "Related run",
-                "T1_S164_I36_1": "Changed run · normal",
-                "T1_S478_I118_2": "Larger-shift run",
+                "T1_S148_I108_2": "Run 01",
+                "T1_S164_I36_1": "Run 02",
+                "T1_S478_I118_2": "Run 03",
             }[scenario],
             "scenario": scenario,
             "start": protocol["target_evaluation_start"] + 1,
             "end": end,
             "first_alarm": result["drift_first_alarm_frame"],
             "current": counts(current),
-            "candidate": counts(result["candidate_adaptation"]),
-            "startup_total": protocol["target_adapt"],
-            "startup_selected": result["candidate_adaptation"]["selected_frames"],
             "review_frames": review_frames,
         })
     OUTPUT.write_text(json.dumps({"dataset": "TSFabrics", "intervals": intervals},

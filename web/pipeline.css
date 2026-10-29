@@ -319,11 +319,6 @@
 .case-choices{display:flex;gap:5px}.case-choices button{padding:5px 9px;border:1px solid #dce2ee;border-radius:3px;background:#f7f9fd;color:#6c7896;font-size:10px;cursor:pointer}
 .case-choices button[aria-pressed="true"]{background:#e7f4ef;border-color:#81a99e;color:#2c7565}
 .case-choices button:last-child[aria-pressed="true"]{background:#fff0ed;border-color:#cd9b91;color:#a15d58}
-.interval-comparison{display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin-top:22px;padding:15px 17px;border:1px solid #dee4ef;border-radius:5px;background:#fff}
-.interval-comparison>span{margin-right:auto;color:#697690;font-size:11px}
-.interval-comparison>div{display:flex;align-items:baseline;gap:7px}
-.interval-comparison strong{font-size:16px;font-weight:500;color:#435488}
-.interval-comparison small{font-size:10px;color:#7b879c}
 .candidate-review{margin-top:25px;padding-top:23px;border-top:1px solid #dee4ef}
 .candidate-review[hidden]{display:none}
 .candidate-review-head{display:flex;justify-content:space-between;gap:15px;align-items:start}
@@ -354,5 +349,4 @@
   .interval-dialog-inner{padding:21px 16px 26px}.interval-controls>span{width:100%;margin-left:0}
   .interval-metrics{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.interval-metrics>div{display:block;padding:12px 9px}.interval-metrics strong,.interval-metrics span{display:block}.interval-metrics strong{font-size:24px}.interval-metrics span{font-size:10px;margin-top:3px}
   .interval-example-grid{grid-template-columns:1fr}.review-frame-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .interval-comparison{gap:10px}.interval-comparison>span{width:100%}
 }

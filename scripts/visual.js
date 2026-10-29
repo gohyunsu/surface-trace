@@ -51,6 +51,8 @@ const { chromium } = require("playwright");
           await page.locator(".stream-result-card").screenshot({ path: path.join(out, `stream-result-${viewport.label}.png`) });
           await page.getByRole("button", { name: "Summarize interval" }).click();
           await page.locator("#intervalSelect").selectOption("T1_S164_I36_1");
+          await page.locator("#reviewFrames img").evaluateAll(images =>
+            Promise.all(images.map(image => image.decode())));
           await page.screenshot({ path: path.join(out, `interval-summary-${viewport.label}.png`) });
           const summaryOverflow = await page.evaluate(() =>
             document.querySelector(".interval-dialog").scrollWidth > document.querySelector(".interval-dialog").clientWidth + 1);

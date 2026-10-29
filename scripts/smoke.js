@@ -79,8 +79,10 @@ const { chromium } = require("playwright");
     assert(await page.getByRole("dialog", { name: "Interval summary" }).isVisible());
     assert((await page.locator("#intervalRange").textContent()).includes("2,372 scored"));
     assert((await page.locator(".interval-signal").textContent()).includes("frame 192"));
-    assert((await page.locator(".interval-comparison").textContent()).includes("33 → 5"));
-    assert(!/false alarm|missed defect|dataset label/i.test(await page.locator("#intervalDialog").textContent()));
+    assert.strictEqual(await page.locator(".interval-comparison").count(), 0);
+    assert(!/trial candidate|33 → 5|false alarm|missed defect|dataset label/i.test(await page.locator("#intervalDialog").textContent()));
+    assert.deepStrictEqual(await page.locator("#intervalSelect option").allTextContents(),
+      ["Reference run", "Run 01", "Run 02", "Run 03"]);
     await page.locator("#intervalSelect").selectOption("reference");
     assert.strictEqual(await page.locator(".interval-signal").textContent(), "No change alert");
     assert((await page.locator("#intervalRange").textContent()).includes("1,984 scored"));
@@ -91,6 +93,13 @@ const { chromium } = require("playwright");
     await page.locator(".interval-case").getByRole("button", { name: "Issue" }).click();
     assert((await page.locator(".interval-examples>p").textContent()).includes("1 / 1"));
     assert.strictEqual(await page.locator(".review-frame").count(), 4);
+    assert.deepStrictEqual(await page.locator("#reviewFrames img").evaluateAll(async images => {
+      const failed = [];
+      for (const image of images) {
+        try { await image.decode(); } catch { failed.push(image.src); }
+      }
+      return failed;
+    }), []);
     await page.locator(".review-frame").first().getByRole("button", { name: "Use as normal" }).click();
     assert.strictEqual(await page.locator("#reviewCount").textContent(), "1 / 4 reviewed");
     const reviewDownload = page.waitForEvent("download");
@@ -101,6 +110,7 @@ const { chromium } = require("playwright");
     assert.strictEqual(report.flagged_frames, 11);
     assert.strictEqual(report.inspection_reviews[0].decision, "issue");
     assert.strictEqual(report.startup_selection[0].decision, "normal");
+    assert.strictEqual(Object.hasOwn(report, "candidate_flagged_frames"), false);
     assert(!Object.keys(report).some(key => /label|ground_truth|false_alarm|missed/i.test(key)));
     await page.getByRole("button", { name: "Close summary" }).click();
     assert.strictEqual(await page.locator("#handcraftedVerdict").textContent(), "Missed");

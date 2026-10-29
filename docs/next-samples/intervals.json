@@ -3,7 +3,7 @@
   "intervals": [
     {
       "id": "reference",
-      "title": "Reference holdout",
+      "title": "Reference run",
       "scenario": "T1_S174_I111_1",
       "start": 2113,
       "end": 4096,
@@ -12,14 +12,11 @@
         "count": 1984,
         "flagged": 20
       },
-      "candidate": null,
-      "startup_total": null,
-      "startup_selected": null,
       "review_frames": []
     },
     {
       "id": "T1_S148_I108_2",
-      "title": "Related run",
+      "title": "Run 01",
       "scenario": "T1_S148_I108_2",
       "start": 833,
       "end": 4804,
@@ -28,17 +25,11 @@
         "count": 3972,
         "flagged": 82
       },
-      "candidate": {
-        "count": 3972,
-        "flagged": 40
-      },
-      "startup_total": 512,
-      "startup_selected": 308,
       "review_frames": []
     },
     {
       "id": "T1_S164_I36_1",
-      "title": "Changed run \u00b7 normal",
+      "title": "Run 02",
       "scenario": "T1_S164_I36_1",
       "start": 833,
       "end": 1807,
@@ -47,12 +38,6 @@
         "count": 975,
         "flagged": 11
       },
-      "candidate": {
-        "count": 975,
-        "flagged": 3
-      },
-      "startup_total": 512,
-      "startup_selected": 308,
       "review_frames": [
         {
           "frame": 1,
@@ -74,7 +59,7 @@
     },
     {
       "id": "T1_S478_I118_2",
-      "title": "Larger-shift run",
+      "title": "Run 03",
       "scenario": "T1_S478_I118_2",
       "start": 833,
       "end": 3204,
@@ -83,12 +68,6 @@
         "count": 2372,
         "flagged": 33
       },
-      "candidate": {
-        "count": 2372,
-        "flagged": 5
-      },
-      "startup_total": 512,
-      "startup_selected": 308,
       "review_frames": []
     }
   ]
