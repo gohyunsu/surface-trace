@@ -1,19 +1,19 @@
 # New pipeline animation assets
 
 Six looping, 720 × 420 GIFs and matching poster frames. `hero.webp` combines
-the six loops into the text-free landing animation. The intended order is:
+the six loops into the landing animation. The intended order is:
 
 1. Continuous production frames
 2. Frozen visual features
 3. Unlabeled reference selection
 4. Patch anomaly localization and review decision
 5. Distribution change detection
-6. Frozen model versus shadow candidate, with a pause on unsafe adaptation
+6. Current reference versus trial candidate on the same photo
 
 The photographs are real TSFabrics production frames. The feature projection,
 reference choices, anomaly maps, scores, and drift curve come from the recorded
-experiment. Animation timing, arrows, dots, and the pause symbol explain the
-process; they are not camera or model outputs. The example in `06.gif` is a real
+experiment. Animation timing and arrows explain the process; they are not
+camera or model outputs. The example in `06.gif` is a real
 held-out defect flagged by the frozen model and missed by the shadow candidate.
 Step `05.gif` pairs photos from source run `T1_S174_I111_1` with photos from the
 separate all-normal changed run `T1_S164_I36_1`. Its plot uses the last 16
