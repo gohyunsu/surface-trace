@@ -256,7 +256,7 @@ def animation_05(meta: dict) -> list[Image.Image]:
     limit = float(meta["drift_threshold"])
     if len(source_scores) != 16 or len(target_scores) != 16 or ends[-1] != 608:
         raise ValueError("The shift animation needs 16 consecutive windows per run")
-    plot = (42, 235, 678, 365)
+    plot = (50, 247, 670, 365)
     coordinate = lambda value: plot[3] - round(value * (plot[3] - plot[1]))
     step = (plot[2] - plot[0]) / (len(source_scores) + len(target_scores) - 1)
     source_points = [(round(plot[0] + step * i), coordinate(score))
@@ -273,13 +273,13 @@ def animation_05(meta: dict) -> list[Image.Image]:
         draw = ImageDraw.Draw(base)
         source_image = images[0 if tick < 5 else 1]
         target_image = images[2 if tick < 12 else 3 if tick < 16 else 4]
-        photo(base, source_image, (42, 25, 294, 162),
+        photo(base, source_image, (50, 51, 280, 145),
               outline=INDIGO if progress < .5 else LINE)
-        photo(base, target_image, (384, 25, 294, 162),
+        photo(base, target_image, (390, 51, 280, 145),
               outline=RED if progress >= .5 else LINE,
               opacity=.5 if progress < .5 else 1)
         draw = ImageDraw.Draw(base)
-        draw.line((boundary, 213, boundary, 373), fill=PALE, width=2)
+        draw.line((boundary, 224, boundary, 373), fill=PALE, width=2)
         draw.line((plot[0], plot[3], plot[2], plot[3]), fill=LINE, width=2)
         threshold_y = coordinate(limit)
         for x in range(plot[0], plot[2], 16):
