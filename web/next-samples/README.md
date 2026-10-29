@@ -22,7 +22,7 @@ or saved shadow-candidate results enter the operational summary. Its flagged-pho
 curated 24-photo catalog, not the full review queue. The four startup review
 photos for the all-normal
 changed run come from `web/scenario/manifest.json` and precede its calibration
-and evaluation frames. Human choices and uploaded photos stay local until an
+and evaluation frames. Human choices stay in the current browser session until an
 interval report is exported; they do not change the saved model or scores.
 
 Source: Ni et al., *TSFabrics*, Scientific Data (2026),

@@ -78,6 +78,8 @@ const { chromium } = require("playwright");
     await page.getByRole("button", { name: "Summarize interval" }).click();
     assert(await page.getByRole("dialog", { name: "Interval summary" }).isVisible());
     assert((await page.locator("#intervalRange").textContent()).includes("2,372 scored"));
+    assert.strictEqual(await page.locator(".interval-metrics>div").count(), 2);
+    assert.strictEqual(await page.locator("#intervalDialog input[type=file]").count(), 0);
     assert((await page.locator(".interval-signal").textContent()).includes("frame 192"));
     assert.strictEqual(await page.locator(".interval-comparison").count(), 0);
     assert(!/trial candidate|33 → 5|false alarm|missed defect|dataset label/i.test(await page.locator("#intervalDialog").textContent()));
@@ -91,7 +93,7 @@ const { chromium } = require("playwright");
     await page.locator("#intervalSelect").selectOption("T1_S164_I36_1");
     assert.strictEqual(await page.locator(".interval-case").count(), 1);
     await page.locator(".interval-case").getByRole("button", { name: "Issue" }).click();
-    assert((await page.locator(".interval-examples>p").textContent()).includes("1 / 1"));
+    assert((await page.locator(".interval-examples>p").textContent()).includes("1 reviewed"));
     assert.strictEqual(await page.locator(".review-frame").count(), 4);
     assert.deepStrictEqual(await page.locator("#reviewFrames img").evaluateAll(async images => {
       const failed = [];

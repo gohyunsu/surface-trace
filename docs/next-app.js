@@ -3,7 +3,7 @@
 const $ = id => document.getElementById(id);
 const SVG_NS = "http://www.w3.org/2000/svg";
 const state = { catalog: null, intervals: null, sample: null, filter: "all", reference: "current",
-  reviewLists: new Map(), caseReviews: new Map(), uploadId: 0 };
+  reviewLists: new Map(), caseReviews: new Map() };
 const format = value => Number(value).toLocaleString("en-US");
 
 function visibleSamples() {
@@ -159,7 +159,7 @@ function reviewItems(interval) {
   if (!state.reviewLists.has(interval.id)) {
     state.reviewLists.set(interval.id, interval.review_frames.map(item => ({
       id: `frame-${item.frame}`, frame: item.frame, name: `Frame ${format(item.frame)}`,
-      image: item.image, decision: null, source: "recorded",
+      image: item.image, decision: null,
     })));
   }
   return state.reviewLists.get(interval.id);
@@ -200,10 +200,11 @@ function renderReview(interval) {
   if (!items.length) {
     const empty = document.createElement("p");
     empty.className = "review-empty";
-    empty.textContent = "Add startup photos to review this run.";
+    empty.textContent = "No buffered photos are available for this run.";
     grid.append(empty);
   }
-  $("reviewCount").textContent = `${items.filter(item => item.decision).length} / ${items.length} reviewed`;
+  $("reviewCount").textContent = items.length
+    ? `${items.filter(item => item.decision).length} / ${items.length} reviewed` : "";
 }
 
 function renderSummary() {
@@ -233,7 +234,6 @@ function renderSummary() {
   for (const [value, label] of [
     [format(interval.current.count), "Frames scored"],
     [format(interval.current.flagged), "Frames flagged"],
-    [`${(interval.current.flagged / interval.current.count * 100).toFixed(1)}%`, "Alert rate"],
   ]) {
     const cell = document.createElement("div");
     const number = document.createElement("strong");
@@ -251,12 +251,15 @@ function renderSummary() {
     const section = document.createElement("section");
     section.className = "interval-examples";
     const title = document.createElement("h3");
-    title.textContent = "Inspection queue";
+    title.textContent = "Flagged photos to review";
     const note = document.createElement("p");
     const decided = flagged.filter(sample => state.caseReviews.has(sample.id)).length;
+    const confirmed = flagged.filter(sample => state.caseReviews.get(sample.id) === "issue").length;
+    const dismissed = flagged.filter(sample => state.caseReviews.get(sample.id) === "dismiss").length;
+    const outcomes = decided ? ` · ${decided} reviewed (${confirmed} issue, ${dismissed} dismissed)` : " · 0 reviewed";
     note.textContent = flagged.length
-      ? `${decided} / ${flagged.length} preview frames reviewed · packaged subset`
-      : "Flagged frames recorded; photo previews are unavailable for this interval.";
+      ? `${flagged.length} of ${format(interval.current.flagged)} flagged photos available${outcomes}`
+      : `${format(interval.current.flagged)} flagged photos need review; previews are unavailable for this run.`;
     const grid = document.createElement("div");
     grid.className = "interval-example-grid";
     for (const sample of flagged) {
@@ -292,7 +295,9 @@ function renderSummary() {
   }
   $("candidateReview").hidden = !alerted;
   if (alerted) {
-    $("candidateReviewNote").textContent = "Review buffered startup photos. Exclude unsuitable frames before requesting a new reference.";
+    $("candidateReviewNote").textContent = interval.review_frames.length
+      ? `${interval.review_frames.length} buffered photos available. Mark suitable examples or exclude them.`
+      : "Collect and review new-run photos before building a candidate reference.";
     renderReview(interval);
   }
 }
@@ -317,16 +322,6 @@ $("intervalSelect").addEventListener("change", renderSummary);
 $("intervalDialog").addEventListener("click", event => {
   if (event.target === $("intervalDialog")) $("intervalDialog").close();
 });
-$("reviewUpload").addEventListener("change", event => {
-  const interval = selectedInterval();
-  for (const file of event.target.files) {
-    if (!file.type.startsWith("image/")) continue;
-    reviewItems(interval).push({ id: `upload-${++state.uploadId}`, name: file.name,
-      image: URL.createObjectURL(file), decision: null, source: "local" });
-  }
-  event.target.value = "";
-  renderReview(interval);
-});
 $("exportSummary").addEventListener("click", () => {
   const interval = selectedInterval();
   const payload = {
@@ -344,10 +339,7 @@ $("exportSummary").addEventListener("click", () => {
       .filter(sample => sample.scenario === interval.scenario && state.caseReviews.has(sample.id))
       .map(sample => ({ frame: sample.frame + 1, decision: state.caseReviews.get(sample.id) })),
     startup_selection: interval.first_alarm === null ? null : reviewItems(interval)
-      .map(({ name, frame, source, decision }) => ({
-        file: source === "local" ? name : null, frame: frame ?? null,
-        source, decision: decision ?? "pending",
-      })),
+      .map(({ frame, decision }) => ({ frame, decision: decision ?? "pending" })),
   };
   const url = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2) + "\n"],
     { type: "application/json" }));
