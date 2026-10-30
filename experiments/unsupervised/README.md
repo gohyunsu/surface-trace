@@ -1,5 +1,8 @@
 # Unlabeled line-inspection experiment
 
+The reviewed, run-scoped reference experiment and its safety limits are
+documented in [CONDITION_REFERENCE.md](CONDITION_REFERENCE.md).
+
 This directory is independent of the KolektorSDD browser prototype. Curated
 TSFabrics outputs from this experiment appear on the published site; the site
 does not run this model or accept new images. The target-domain method sees no

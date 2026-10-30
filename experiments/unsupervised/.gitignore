@@ -2,6 +2,7 @@ data/
 features/
 results/*
 !results/*.json
+!results/condition_reference_distributions.png
 .cache/
 .tmp/
 .venv/
