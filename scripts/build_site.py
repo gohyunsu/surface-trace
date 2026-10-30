@@ -53,7 +53,7 @@ def build(out: Path) -> tuple[int, int]:
     for asset in (WEB / "scenario").iterdir():
         if asset.suffix in {".jpg", ".json"}:
             shutil.copyfile(asset, out / "scenario" / asset.name)
-    shutil.copyfile(WEB / "feedback" / "meeting-watercolor.png", out / "feedback" / "meeting-watercolor.png")
+    shutil.copyfile(WEB / "feedback" / "meeting-illustration.png", out / "feedback" / "meeting-illustration.png")
 
     saved = np.load(MODEL)
     calibration_file = ROOT / "model" / "browser_calibration.json"
