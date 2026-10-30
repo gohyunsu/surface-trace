@@ -117,6 +117,8 @@ function renderSamples() {
     const image = document.createElement("img");
     image.src = sample.image;
     image.alt = "";
+    image.loading = "lazy";
+    image.decoding = "async";
     const info = document.createElement("span");
     info.innerHTML = `<span>SAMPLE ${String(sample.id).padStart(2, "0")}</span><small></small>`;
     info.querySelector("small").textContent = sample.label;

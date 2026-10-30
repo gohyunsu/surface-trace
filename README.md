@@ -1,6 +1,6 @@
 # SurfaceTrace
 
-[Live site](https://gohyunsu.github.io/surface-trace/) · [Baseline samples](https://gohyunsu.github.io/surface-trace/inspect.html) · [Change-aware samples](https://gohyunsu.github.io/surface-trace/next-inspect.html)
+[Live site](https://gohyunsu.github.io/surface-trace/) · [Baseline samples](https://gohyunsu.github.io/surface-trace/inspect.html) · [Change-aware samples](https://gohyunsu.github.io/surface-trace/next-inspect.html) · [Review & update](https://gohyunsu.github.io/surface-trace/review.html)
 
 SurfaceTrace is an industrial image-review research project by ISM × RIKU. It presents a working browser baseline and a separate, change-aware experiment. KolektorSDD depicts cracks in the plastic embedding of electrical commutators; TSFabrics depicts textile production. Anomaly scores are not calibrated defect probabilities.
 
@@ -11,10 +11,13 @@ SurfaceTrace is an industrial image-review research project by ISM × RIKU. It p
 | Baseline | KolektorSDD; handcrafted patch features compared with a normal reference bank | Runs inference in the browser on 64 packaged, held-out photos |
 | Change-aware | TSFabrics; frozen DINOv2 patch features, label-free reference selection, visual-change alarms, and a shadow adaptation candidate | Shows same-stream method comparisons and paired heatmaps; replays saved results on 24 selected frames, with no browser inference |
 | Interval summary | Four recorded, time-ordered evaluation intervals with saved inspection-alert counts and visual-change alarms | Opens from the sample page; operators can mark flagged previews, review startup photos after a change alert, and export their decisions |
+| Reviewed update | TSFabrics post-alert cases selected without labels; published labels revealed after selection; verified-normal false alerts correct a shadow memory bank | Replays the recorded review and shows later-frame score distributions and a separate defect-sensitivity check |
 
 The sample pages replay packaged images. The shadow candidate is displayed for research comparison and is **never promoted automatically**: the measured reduction in false alarms can also reduce defect recall.
 
 The interval summary follows an unlabeled operating view: it reports frames scored, frames flagged, and visual-change alarms. Reviewers can mark available flagged photos as issues or dismiss them. After a change alert, they can review available buffered photos for a future candidate reference and export the interval report as JSON. Ground-truth labels, false-alarm/miss metrics, and offline candidate scores appear only in the separate research evaluation, not in this handoff.
+
+The [review page](https://gohyunsu.github.io/surface-trace/review.html) uses preselected post-alert frames and reveals their published TSFabrics labels. The candidate scores were computed on later, disjoint frames before packaging the site. On the normal-shift run, 24 reviewed cases yielded two false-alert corrections and reduced later normal alerts from **11/975 to 0/975**. Applying that same candidate to a separate defect-bearing run reduced flagged defects from **33/82 to 0/82**, so it is **held back**. This is an offline dataset-label replay, not a field review or a live model update. See the [reviewed-update protocol](experiments/unsupervised/REVIEWED_UPDATE.md).
 
 The baseline's grouped test split produced image AUROC **0.879**, **5/8** defect photos flagged, and **7/56** normal false alarms. On one shifted TSFabrics test stream, the selected-reference DINOv2 method produced image AUROC **0.987**, **33/82** defects flagged, and **0/2,290** normal false alarms. These are different datasets and protocols, so the numbers are not a direct comparison. See the [baseline protocol](notes/experiment.md) and [research results](experiments/unsupervised/EXPERIMENT_RESULTS.md) for splits, other conditions, comparison methods, and limitations.
 

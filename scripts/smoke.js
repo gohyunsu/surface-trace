@@ -58,7 +58,7 @@ const { chromium } = require("playwright");
       assert((await link.getAttribute("href")).endsWith(destination));
       assert.strictEqual(await link.getAttribute("target"), null);
     }
-    assert(await page.locator(".summary-next .summary-title").getByText("Interval summary").isVisible());
+    assert(await page.locator(".summary-next .summary-title").getByText("Review & update").isVisible());
 
     await page.goto(new URL("inspect.html?sample=1", base).href, { waitUntil: "networkidle" });
     await page.waitForFunction(() => document.querySelector("#score").textContent !== "—");
@@ -134,6 +134,25 @@ const { chromium } = require("playwright");
     assert.strictEqual(await page.locator("#changeState").textContent(), "No alert");
     const visiblePoints = (await page.locator("#changeChart polyline").getAttribute("points")).split(" ").length;
     assert(visiblePoints < 100, "Change plot should stop at the selected frame");
+    await page.goto(new URL("review.html", base).href, { waitUntil: "networkidle" });
+    await page.getByRole("button", { name: "Review selected frames" }).click();
+    assert.strictEqual(await page.locator("#reviewTrack button").count(), 24);
+    assert(await page.locator("#reviewPhoto").evaluate(image => image.complete && image.naturalWidth > 0));
+    await page.getByRole("button", { name: "Check frame", exact: true }).click();
+    assert.strictEqual(await page.locator("#reviewLabel").textContent(), "Normal");
+    await page.getByRole("button", { name: "Check remaining" }).click();
+    assert.strictEqual(await page.locator(".review-batch-card").count(), 24);
+    assert((await page.locator("#reviewBatchCount").textContent()).includes("2 corrections"));
+    await page.getByRole("button", { name: "Compare results" }).click();
+    assert((await page.locator("#reviewMetrics").textContent()).includes("11 → 0"));
+    assert((await page.locator("#guardMetric").textContent()).includes("33 → 0 / 82"));
+    assert.strictEqual(await page.locator("#guardChart .review-distribution").count(), 4);
+    assert((await page.locator("#reviewConclusion").textContent()).includes("Hold the candidate"));
+    await page.locator("#reviewRun").selectOption("T1_S478_I118_2");
+    await page.getByRole("button", { name: "Review selected frames" }).click();
+    await page.getByRole("button", { name: "Check remaining" }).click();
+    await page.getByRole("button", { name: "Compare results" }).click();
+    assert((await page.locator("#reviewConclusion").textContent()).includes("No confirmed false alerts"));
     assert.deepStrictEqual(errors, []);
     console.log(JSON.stringify({ baselineSamples: 64, newSamples: 24, pairedFrames: 16, candidateMiss: true, pageErrors: errors }));
   } finally {

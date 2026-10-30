@@ -23,16 +23,19 @@ OUT = ROOT / "docs"
 def build(out: Path) -> tuple[int, int]:
     if not MODEL.exists():
         raise SystemExit("Train the reference model with model.py first")
-    for directory in ("samples", "landscape", "method", "next-method", "next-samples", "feedback", "ablation", "scenario"):
+    for directory in ("samples", "landscape", "method", "next-method", "next-samples", "feedback", "ablation", "scenario", "review-frames"):
         (out / directory).mkdir(parents=True, exist_ok=True)
     for source, target in [
         ("landing.html", "index.html"),
         ("inspector.html", "inspect.html"),
         ("next-inspector.html", "next-inspect.html"),
+        ("review.html", "review.html"),
         ("site.css", "site.css"),
         ("pipeline.css", "pipeline.css"),
         ("ablation.js", "ablation.js"),
         ("next-app.js", "next-app.js"),
+        ("review.js", "review.js"),
+        ("review.css", "review.css"),
         ("favicon.svg", "favicon.svg"),
     ]:
         shutil.copyfile(WEB / source, out / target)
@@ -53,6 +56,9 @@ def build(out: Path) -> tuple[int, int]:
     for asset in (WEB / "scenario").iterdir():
         if asset.suffix in {".jpg", ".json"}:
             shutil.copyfile(asset, out / "scenario" / asset.name)
+    for asset in (WEB / "review-frames").iterdir():
+        if asset.suffix in {".jpg", ".json"}:
+            shutil.copyfile(asset, out / "review-frames" / asset.name)
     shutil.copyfile(WEB / "feedback" / "meeting-illustration.png", out / "feedback" / "meeting-illustration.png")
 
     saved = np.load(MODEL)

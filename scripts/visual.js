@@ -19,34 +19,51 @@ const { chromium } = require("playwright");
       const page = await browser.newPage({ viewport });
       const pages = process.env.VISUAL_SCOPE === "summary"
         ? [["next-inspector", "next-inspect.html?sample=7"]]
+        : process.env.VISUAL_SCOPE === "review"
+          ? [["review", "review.html"]]
         : process.env.VISUAL_SCOPE === "landing"
           ? [["landing", ""]]
-          : [["landing", ""], ["inspector", "inspect.html?sample=1"], ["next-inspector", "next-inspect.html?sample=7"]];
+          : [["landing", ""], ...(viewport.label === "desktop" ? [["inspector", "inspect.html?sample=1"]] : []), ["next-inspector", "next-inspect.html?sample=7"], ["review", "review.html"]];
       for (const [name, suffix] of pages) {
         await page.goto(new URL(suffix, base).href, { waitUntil: "networkidle" });
-        if (name === "inspector") await page.waitForFunction(() => document.querySelector("#score").textContent !== "—");
+        if (name === "inspector" && viewport.label === "desktop") await page.waitForFunction(() => document.querySelector("#score").textContent !== "—", null, { timeout: 60000 });
+        if (name === "inspector") await page.waitForFunction(() => document.querySelector("#sourceImage").naturalWidth > 0, null, { timeout: 60000 });
         if (name === "next-inspector") await page.waitForFunction(() => document.querySelector("#streamScore").textContent !== "—");
         const imageSelector = name === "landing"
           ? ".pipeline-hero-motion img, .method-animation img, .feedback-photo img, .scenario-timeline img, .ablation-step-image img, .change-effect img"
-          : name === "inspector" ? "#sourceImage, #heatmap" : "#frameImage, #frameHeat";
-        const decodeFailures = await page.locator(imageSelector).evaluateAll(async imgs => {
+          : name === "inspector" ? viewport.label === "desktop" ? "#sourceImage, #heatmap" : "#sourceImage" : name === "review" ? "" : "#frameImage, #frameHeat";
+        const decodeFailures = imageSelector ? await page.locator(imageSelector).evaluateAll(async imgs => {
           const failures = [];
           for (const img of imgs) {
             img.loading = "eager";
             try { await img.decode(); } catch { failures.push(img.src); }
           }
           return failures;
-        });
+        }) : [];
         if (decodeFailures.length) throw new Error(`${name} ${viewport.label}: image decode failed: ${decodeFailures.join(", ")}`);
         const audit = await page.evaluate(() => ({
           overflow: document.documentElement.scrollWidth > innerWidth + 1,
-          brokenImages: [...document.images].filter(img => img.loading !== "lazy" && img.complete && !img.naturalWidth).map(img => img.src),
+          brokenImages: [...document.images].filter(img => img.currentSrc && img.loading !== "lazy" && img.complete && !img.naturalWidth).map(img => img.src),
         }));
         await page.screenshot({ path: path.join(out, `${name}-${viewport.label}.png`), fullPage: true });
         if (name === "landing") {
           for (const section of ["scenario", "ablation-chart", "ablation-effects", "ablation-gallery"]) {
             await page.locator(`.${section}`).screenshot({ path: path.join(out, `${section}-${viewport.label}.png`) });
           }
+        } else if (name === "review") {
+          await page.getByRole("button", { name: "Review selected frames" }).click();
+          await page.locator("#reviewPhoto").evaluate(image => image.decode());
+          await page.screenshot({ path: path.join(out, `review-frame-${viewport.label}.png`), fullPage: true });
+          await page.getByRole("button", { name: "Check remaining" }).click();
+          await page.locator(".review-batch-card img").evaluateAll(images =>
+            images.forEach(image => { image.loading = "eager"; }));
+          await page.waitForFunction(() => [...document.querySelectorAll(".review-batch-card img")]
+            .every(image => image.complete && image.naturalWidth > 0), null, { timeout: 30000 });
+          await page.screenshot({ path: path.join(out, `review-batch-${viewport.label}.png`), fullPage: true });
+          await page.getByRole("button", { name: "Compare results" }).click();
+          await page.screenshot({ path: path.join(out, `review-result-${viewport.label}.png`), fullPage: true });
+          const reviewOverflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1);
+          if (reviewOverflow) throw new Error(`review ${viewport.label}: horizontal overflow`);
         } else if (name === "next-inspector") {
           await page.locator(".stream-result-card").screenshot({ path: path.join(out, `stream-result-${viewport.label}.png`) });
           await page.getByRole("button", { name: "Summarize interval" }).click();
