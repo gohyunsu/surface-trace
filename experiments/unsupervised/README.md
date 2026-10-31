@@ -19,6 +19,10 @@ and [results](FUSION_REVIEW_RESULTS.md) test whether the older handcrafted
 score complements frozen DINOv2 in the same eight-review queue. A 75/25 rank
 mix gained on development runs but lost AP and two discovered episodes on the
 sixteen final runs, so the frozen DINOv2 queue also remains active.
+The [source-reference selection audit](REFERENCE_SELECTION_AUDIT.md) extends the
+equal-capacity all-startup-versus-selected comparison to every recorded run.
+It is a retrospective validation of the existing reference choice, with no
+change to the active scorer or site until the full results are checked.
 
 This directory is independent of the KolektorSDD browser prototype. Curated
 TSFabrics outputs from this experiment appear on the published site; the site
