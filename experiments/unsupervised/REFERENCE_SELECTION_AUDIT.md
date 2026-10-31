@@ -57,8 +57,16 @@ python experiments/unsupervised/reference_selection_audit.py \
   --baseline experiments/unsupervised/results/unlabeled_review_final.json \
   --phase final \
   --out experiments/unsupervised/results/reference_selection_final.json
+
+python experiments/unsupervised/summarize_reference_selection.py \
+  --development experiments/unsupervised/results/reference_selection_development.json \
+  --final experiments/unsupervised/results/reference_selection_final.json \
+  --out experiments/unsupervised/REFERENCE_SELECTION_RESULTS.md
 ```
 
 The script checks that its selected-reference AP, eight-review episode yield,
 thresholded flag count, and score quantiles agree with the previously recorded
-benchmark before accepting a newly scored run.
+benchmark before accepting a newly scored run. The report command rejects
+incomplete checkpoints and lists every run, both source-continuation flag counts,
+macro frame AP, eight-review episode coverage, and per-run false alerts. It
+does not promote a reference or select a threshold from final labels.
