@@ -173,8 +173,30 @@ const { chromium } = require("playwright");
     await page.locator(".request-card").first().getByRole("button", { name: "Check result" }).click();
     await page.locator(".request-card").first().locator(".request-result").waitFor();
     assert((await page.locator(".request-card").first().textContent()).includes("Recorded result · Defect"));
-    assert.strictEqual(await page.locator("#reviewProgress").textContent(), "1 / 8 checked");
+    assert.strictEqual(await page.locator("#reviewProgress").textContent(), "1 / 2 checked");
+    assert.strictEqual(await page.locator(".request-card:visible").count(), 2);
+    await page.locator(".request-card").nth(1).getByRole("button", { name: "Check result" }).click();
+    await page.locator(".request-card").nth(1).locator(".request-result").waitFor();
+    assert.strictEqual(await page.locator("#reviewProgress").textContent(), "2 / 8 checked");
     assert.strictEqual(await page.locator(".request-card:visible").count(), 8);
+    assert((await page.locator("#reviewGate").textContent()).includes("opened six more checks"));
+
+    // Exercise the other recorded-decision branch without using test labels in the site.
+    await page.route("**/unlabeled-demo/evaluation.json", async route => {
+      const response = await route.fetch();
+      const replay = await response.json();
+      replay.review.slice(0, 2).forEach(result => { result.dataset_label = "Normal"; result.ambiguous = false; });
+      await route.fulfill({ response, json: replay });
+    });
+    await page.reload({ waitUntil: "networkidle" });
+    for (let i = 0; i < 2; i++) {
+      await page.locator(".request-card").nth(i).getByRole("button", { name: "Check result" }).click();
+      await page.locator(".request-card").nth(i).locator(".request-result").waitFor();
+    }
+    assert.strictEqual(await page.locator("#reviewProgress").textContent(), "2 / 2 checked");
+    assert.strictEqual(await page.locator(".request-card:visible").count(), 2);
+    assert((await page.locator("#reviewGate").textContent()).includes("Both initial photos were confirmed normal"));
+    await page.unroute("**/unlabeled-demo/evaluation.json");
 
     await page.goto(new URL("inspect.html?sample=1", base).href, { waitUntil: "networkidle" });
     await page.waitForFunction(() => document.querySelector("#score").textContent !== "—");
