@@ -48,6 +48,21 @@
 .improvement .ablation-pair{gap:10px}
 .improvement .ablation-heat{aspect-ratio:5/3.4}
 .improvement .ablation-pair figcaption{min-height:40px;padding:8px 11px}
+.run-ap-panel{margin-top:12px;padding:17px 22px;background:#fff;border:1px solid #dce2ee;border-radius:8px;box-shadow:0 12px 35px #2b3b5c0b}
+.run-ap-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px;color:#7786a6;font-size:9px;letter-spacing:.1em}
+.run-ap-head>div{display:flex;align-items:center;gap:13px;letter-spacing:0;font-size:10px}
+.run-ap-head>div span{display:inline-flex;align-items:center;gap:5px}
+.run-ap-head i{display:block;width:9px;height:9px;border-radius:2px}
+.run-ap-head .is-classic,.run-ap-track .is-classic{background:#ce8b84}
+.run-ap-head .is-dino,.run-ap-track .is-dino{background:#657fb6}
+.run-ap-row{display:grid;grid-template-columns:52px minmax(0,1fr) 90px;align-items:center;gap:12px;padding:6px 0;border-top:1px solid #edf0f6;color:#65728b;font-size:10px;font-variant-numeric:tabular-nums}
+.run-ap-row>div{display:grid;gap:3px}
+.run-ap-track{height:5px;background:#eff2f7;border-radius:5px;overflow:hidden}
+.run-ap-track i{display:block;height:100%;border-radius:5px}
+.run-ap-track .is-classic{width:var(--classic)}
+.run-ap-track .is-dino{width:var(--dino)}
+.run-ap-row strong{color:#405173;font-size:11px;font-weight:500;text-align:right;white-space:nowrap}
+.run-ap-row strong small{color:#a4aec2;font-size:9px;font-weight:400}
 .reference-display{padding:22px;background:#fff;border:1px solid #dce2ee;border-radius:8px;box-shadow:0 12px 35px #2b3b5c0b}
 .reference-maps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .reference-maps figure{min-width:0;margin:0}
@@ -138,6 +153,7 @@
   .improvement-copy>p:not(.improvement-kicker,.improvement-input){font-size:13px}
   .improvement-measure{margin-top:23px}
   .improvement .ablation-gallery,.reference-display,.change-display,.review-display{padding:16px}
+  .run-ap-panel{padding:15px 16px}
   .ablation-gallery-head{display:block}
   .ablation-gallery-controls{margin-top:13px}
   .ablation-pair{grid-template-columns:1fr;gap:12px}

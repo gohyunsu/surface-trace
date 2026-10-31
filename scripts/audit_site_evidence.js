@@ -35,6 +35,19 @@ const wins = defectRuns.filter(run => run.methods.source_knn.average_precision >
 assert(site.includes(percent(handcraftedAP)) && site.includes(percent(frozenAP)));
 assert(site.includes(`leads in ${wins} of ${defectRuns.length} runs`));
 assert(site.includes("4 FINAL DEFECT RUNS") && demo.includes("four final defect runs"));
+const apRows = [...site.matchAll(/class="run-ap-row" data-run="([^"]+)" style="--classic:([\d.]+)%;--dino:([\d.]+)%"/g)];
+assert.equal(apRows.length, defectRuns.length);
+for (const [, name, classic, dino] of apRows) {
+  const run = final.runs[name];
+  assert(run && run.new_defect_episodes > 0, `Unexpected AP chart run: ${name}`);
+  assert.equal(classic, (run.methods.handcrafted_source.average_precision * 100).toFixed(1));
+  assert.equal(dino, (run.methods.source_knn.average_precision * 100).toFixed(1));
+  const rowStart = site.indexOf(`data-run="${name}"`);
+  const rowEnd = site.indexOf('class="run-ap-row"', rowStart + 1);
+  const row = site.slice(rowStart, rowEnd < 0 ? undefined : rowEnd);
+  assert(row.includes(`<strong>${classic} <small>/</small> ${dino}</strong>`));
+}
+assert.equal(new Set(apRows.map(row => row[1])).size, defectRuns.length);
 assert.equal(siteCatalog.source, final.protocol.source);
 assert.equal(siteCatalog.source, earlier.protocol.source);
 const illustrated = [6, 7, 4].map(id => {

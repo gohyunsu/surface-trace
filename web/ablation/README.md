@@ -33,6 +33,13 @@ large-shift defect flagged only by the selected reference, and a related-run
 defect flagged only by the handcrafted method, then continues through gains,
 shared outcomes, and errors. These are curated examples, not a random test sample.
 
+The four paired bars below the gallery show each defect-bearing final run's
+frame average precision for the handcrafted source and frozen DINOv2 source.
+They are rounded to one decimal place from
+`experiments/unsupervised/results/unlabeled_review_final.json`. The site audit
+checks that every run and bar width matches the saved result. Two runs favor
+each method, so the macro AP difference should be read alongside these rows.
+
 `review-routing.json` exports request counts from the final sequential-review
 result. Each of its 16 rows is one recorded run: 12 stopped after the first two
 checks and four requested six more. Regenerate with
