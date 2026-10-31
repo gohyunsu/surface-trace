@@ -11,6 +11,7 @@ const readEarlier = name => JSON.parse(fs.readFileSync(path.join(root, name), "u
 const site = fs.readFileSync(path.join(root, "web", "landing.html"), "utf8");
 const demo = fs.readFileSync(path.join(root, "web", "demo.html"), "utf8");
 const demoScript = fs.readFileSync(path.join(root, "web", "demo.js"), "utf8");
+const galleryScript = fs.readFileSync(path.join(root, "web", "ablation.js"), "utf8");
 const inspector = fs.readFileSync(path.join(root, "web", "next-inspector.html"), "utf8");
 const final = read("experiments/unsupervised/results/unlabeled_review_final.json");
 const earlier = readEarlier("experiments/unsupervised/results/tsfabrics.json");
@@ -50,16 +51,37 @@ for (const [, name, classic, dino] of apRows) {
 assert.equal(new Set(apRows.map(row => row[1])).size, defectRuns.length);
 assert.equal(siteCatalog.source, final.protocol.source);
 assert.equal(siteCatalog.source, earlier.protocol.source);
-const illustrated = [6, 7, 4].map(id => {
+const featuredMatch = galleryScript.match(/const featured = \[([^\]]+)\]/);
+assert(featuredMatch, "Paired gallery has no featured-frame list");
+const featured = featuredMatch[1].split(",").map(value => Number(value.trim()));
+assert.equal(featured.length, 16);
+assert.equal(new Set(featured).size, featured.length);
+assert.equal(new Set(siteCatalog.samples.map(item => item.id)).size, siteCatalog.samples.length);
+assert.equal(new Set(classicCatalog.map(item => item.id)).size, classicCatalog.length);
+assert.equal(siteCatalog.samples.length, classicCatalog.length);
+const illustrated = featured.map(id => {
   const sample = siteCatalog.samples.find(item => item.id === id);
   const classic = classicCatalog.find(item => item.id === id);
-  assert(sample && classic && sample.scenario === classic.scenario && sample.frame === classic.frame);
+  assert(sample && classic, `Missing paired gallery case ${id}`);
+  assert.equal(sample.scenario, classic.scenario);
+  assert.equal(sample.frame, classic.frame);
+  assert.equal(sample.label, classic.dataset_label);
+  assert(siteCatalog.streams[sample.scenario]?.title, `Missing stream title for case ${id}`);
   assert.equal(sample.current.threshold, earlier.methods.mutual.threshold);
   assert.equal(classic.threshold, earlier.methods.classic_8_feature.threshold);
   assert.equal(classic.alert, classic.score >= classic.threshold);
+  for (const asset of [sample.image, sample.current.heatmap, `./ablation/${classic.overlay}`]) {
+    assert(asset.startsWith("./"), `Unexpected asset path for case ${id}: ${asset}`);
+    assert(fs.existsSync(path.join(root, "web", asset.slice(2))), `Missing gallery asset: ${asset}`);
+  }
   return sample;
 });
-assert.deepEqual(illustrated.map(sample => final.protocol.targets.includes(sample.scenario)), [false, true, false]);
+assert.deepEqual(illustrated.slice(0, 3).map(sample => final.protocol.targets.includes(sample.scenario)), [false, true, false]);
+const verdicts = new Set(illustrated.map(sample => {
+  const classic = classicCatalog.find(item => item.id === sample.id);
+  return `${sample.label}:${classic.alert}:${sample.current.score >= sample.current.threshold}`;
+}));
+assert.equal(verdicts.size, 8, "Gallery no longer shows every normal/defect outcome pair");
 assert(demo.includes("Feature examples span runs"));
 const normalShift = "T1_S164_I36_1";
 const selectedSource = earlier.methods.mutual.targets[normalShift].frozen;
@@ -133,6 +155,24 @@ for (const [before, after] of [[counts.frozenFP, counts.candidateFP], [counts.fr
 
 assert.equal(manifest.run, "T1_S478_I118_2");
 assert.equal(manifest.frame_count, manifest.scores.length);
+assert.deepEqual(manifest.evaluation_frames,
+  [final.protocol.target_evaluation_start + 1, Math.min(final.protocol.target_cap, final.runs[manifest.run].frames)]);
+assert.equal(manifest.evaluation_frames[1] - manifest.evaluation_frames[0] + 1, manifest.frame_count);
+const orderedScores = [...manifest.scores].sort((a, b) => a - b);
+const quantile = q => {
+  const position = (orderedScores.length - 1) * q;
+  const low = Math.floor(position), high = Math.ceil(position);
+  return orderedScores[low] + (orderedScores[high] - orderedScores[low]) * (position - low);
+};
+const expectedQuantiles = final.runs[manifest.run].methods.source_knn.score_quantiles;
+for (const [index, key] of ["p50", "p90", "p99"].entries()) {
+  assert(Math.abs(quantile([0.5, 0.9, 0.99][index]) - expectedQuantiles[index]) < 2e-6,
+    `Replay ${key} differs from the saved evaluation`);
+  assert(Math.abs(manifest.score_quantiles[key] - expectedQuantiles[index]) < 2e-6,
+    `Displayed replay ${key} differs from the saved evaluation`);
+}
+assert.equal(manifest.scores.filter(score => score >= earlier.methods.mutual.threshold).length,
+  final.runs[manifest.run].methods.source_knn.source_threshold_exceedances);
 assert.deepEqual(manifest.review.map(item => item.frame), final.runs[manifest.run].methods.source_knn.queues.spaced8.frames);
 assert.deepEqual(evaluation.review.map(item => item.frame), manifest.review.map(item => item.frame));
 assert(manifest.review.slice(0, 2).every(item => {
