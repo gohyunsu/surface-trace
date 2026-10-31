@@ -41,4 +41,5 @@ jobs:
       - name: Serve generated site
         run: python -m http.server 8766 --bind 127.0.0.1 --directory docs > /tmp/surface-trace-http.log 2>&1 &
       - run: pnpm run smoke
+      - run: pnpm run audit:evidence
       - run: pnpm run visual

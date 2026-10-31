@@ -1,6 +1,6 @@
 # SurfaceTrace
 
-[Live site](https://gohyunsu.github.io/surface-trace/) · [Baseline samples](https://gohyunsu.github.io/surface-trace/inspect.html) · [Change-aware samples](https://gohyunsu.github.io/surface-trace/next-inspect.html) · [Interval summary](https://gohyunsu.github.io/surface-trace/interval.html) · [Earlier review study](https://gohyunsu.github.io/surface-trace/review.html)
+[Live site](https://gohyunsu.github.io/surface-trace/) · [Recorded-run replay](https://gohyunsu.github.io/surface-trace/demo.html) · [Baseline samples](https://gohyunsu.github.io/surface-trace/inspect.html) · [Change-aware samples](https://gohyunsu.github.io/surface-trace/next-inspect.html) · [Interval summary](https://gohyunsu.github.io/surface-trace/interval.html) · [Earlier review study](https://gohyunsu.github.io/surface-trace/review.html)
 
 SurfaceTrace is an industrial image-review research project by ISM × RIKU. It presents a working browser baseline and a separate, change-aware experiment. KolektorSDD depicts cracks in the plastic embedding of electrical commutators; TSFabrics depicts textile production. Anomaly scores are not calibrated defect probabilities.
 
@@ -16,6 +16,7 @@ SurfaceTrace is an industrial image-review research project by ISM × RIKU. It p
 | Interval feedback (research) | Normal-only threshold calibration, threshold-boundary/disagreement/audit reviews, and a PCA refit from confirmed normal false alerts | Offline shadow comparison on later frames; not yet part of the site summary |
 | Unlabeled limited review | TSFabrics; DINOv2 source and local patch references, separate MMD visual-change score, eight temporally spaced review requests | Compares all 16 remaining runs offline; replays one recorded run in a separate interval-summary page |
 | Eight-review update validation | TSFabrics; fixed source threshold, eight reviewed frames per run, run-local normal-patch candidates and controls | Tests later disjoint frames across 15 eligible final runs; candidate updates suppressed defect alerts, so the frozen source remains active |
+| Recorded-run replay | Saved TSFabrics photos, change scores, anomaly scores, eight review requests, and a separately labeled 15-run update validation | Four-chapter presentation with automatic playback and manual navigation; [storyboard](notes/demo_storyboard.md) |
 
 The sample pages replay packaged images. The shadow candidate is displayed for research comparison and is **never promoted automatically**: the measured reduction in false alarms can also reduce defect recall.
 

@@ -31,6 +31,7 @@ def build(out: Path) -> tuple[int, int]:
         ("next-inspector.html", "next-inspect.html"),
         ("review.html", "review.html"),
         ("interval.html", "interval.html"),
+        ("demo.html", "demo.html"),
         ("site.css", "site.css"),
         ("pipeline.css", "pipeline.css"),
         ("improvements.css", "improvements.css"),
@@ -40,6 +41,8 @@ def build(out: Path) -> tuple[int, int]:
         ("review.css", "review.css"),
         ("interval.js", "interval.js"),
         ("interval.css", "interval.css"),
+        ("demo.css", "demo.css"),
+        ("demo.js", "demo.js"),
         ("favicon.svg", "favicon.svg"),
     ]:
         shutil.copyfile(WEB / source, out / target)

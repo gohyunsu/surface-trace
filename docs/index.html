@@ -62,7 +62,7 @@
           <p class="improvement-input">Few labeled defects</p>
           <h3 id="foundation-title">Use frozen DINOv2 features.</h3>
           <p>A pretrained DINOv2-S/14 model describes each image patch. Distance from reference patches produces a localized anomaly map.</p>
-          <div class="improvement-measure"><span>FRAME-SCORE RANKING · 4 DEFECT RUNS</span><div><small>Handcrafted</small><strong>66.4%</strong><i aria-hidden="true">→</i><small>DINOv2</small><strong>85.4%</strong></div><p>Macro average precision</p></div>
+          <div class="improvement-measure"><span>FRAME-SCORE RANKING · 4 DEFECT RUNS</span><div><small>Handcrafted</small><strong>66.4%</strong><i aria-hidden="true">→</i><small>DINOv2</small><strong>85.4%</strong></div><p>Macro average precision · DINOv2 leads in 2 of 4 runs</p></div>
         </div>
         <div class="improvement-display">
           <div class="ablation-gallery" aria-label="Handcrafted and DINOv2 heatmaps on the same recorded frames">
@@ -121,7 +121,7 @@
           <p class="improvement-input">Every-frame handoff is impractical</p>
           <h3 id="review-title">Request eight spaced checks.</h3>
           <p>Rank unusual frames and keep requests at least 16 frames apart. An interval summary gathers the scores, change signal, and review decisions.</p>
-          <div class="improvement-measure"><span>NEW DEFECT EPISODES FOUND @8 · 4 DEFECT RUNS</span><div><small>Random</small><strong>9.4%</strong><i aria-hidden="true">→</i><small>Spaced</small><strong>71.1%</strong></div><p>Macro episode coverage</p></div>
+          <div class="improvement-measure"><span>NEW DEFECT EPISODES FOUND @8 · 4 DEFECT RUNS</span><div><small>Top 8</small><strong>41.8%</strong><i aria-hidden="true">→</i><small>Spaced 8</small><strong>71.1%</strong></div><p>Frozen DINOv2 · same scorer and review budget</p></div>
           <a class="button button-dark improvement-action" href="./interval.html">Open interval summary <span aria-hidden="true">→</span></a>
         </div>
         <div class="improvement-display review-display"><div class="review-frame-grid" aria-label="Eight recorded photos selected for review">
@@ -152,7 +152,7 @@
         </div><p class="decision-denominators">20,273 normal frames · 642 defect frames · 65 new defect episodes</p></div>
       </article>
 
-      <div class="improvement-links"><a class="button button-dark" href="./next-inspect.html">Explore recorded samples <span aria-hidden="true">→</span></a><a href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/UNLABELED_REVIEW_RESULTS.md">Detection and review results ↗</a></div>
+      <div class="improvement-links"><a class="button button-dark" href="./demo.html">Watch the recorded run <span aria-hidden="true">→</span></a><a href="./next-inspect.html">Explore recorded samples →</a><a href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/UNLABELED_REVIEW_RESULTS.md">Experiment results ↗</a></div>
     </div></section>
   </main>
   <footer class="site-footer"><div class="footer-top"><a class="footer-brand" href="./index.html">SurfaceTrace</a><span>ISM × RIKU</span></div><div class="footer-bottom"><p>© 2026 Hyunsu Go · <a href="https://github.com/gohyunsu/surface-trace" target="_blank" rel="noopener noreferrer">GitHub</a></p><p>Images: <a href="https://www.vicos.si/resources/kolektorsdd/" target="_blank" rel="noopener noreferrer">KolektorSDD</a> · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a> / <a href="https://doi.org/10.6084/m9.figshare.29573381" target="_blank" rel="noopener noreferrer">TSFabrics</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a></p></div></footer>

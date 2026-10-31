@@ -21,6 +21,14 @@ the retrospective metrics. All remaining scenarios form the final evaluation.
 
 ### Fixed review budget, different queue rules
 
+For the **frozen source reference used in the interval replay**, keeping its
+scorer and eight-review budget fixed, allowing adjacent high scores found
+**41.8%** of new episodes on average across the four defect-bearing runs;
+requiring at least 16 frames between requests found **71.1%**. These percentages
+are calculated from `source_knn.queues` in `results/unlabeled_review_final.json`.
+The table below reports the same queue-rule comparison for the selected local
+scorer, which has a different adjacent top-eight result.
+
 | Queue on selected scorer | Macro episode coverage @8 | Defect reviews | Normal reviews |
 | --- | ---: | ---: | ---: |
 | Top 8 adjacent allowed | 25.8% | 24 | 16 |

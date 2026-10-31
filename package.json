@@ -7,6 +7,7 @@
   "description": "Browser-based industrial surface anomaly review demo",
   "scripts": {
     "smoke": "node scripts/smoke.js",
+    "audit:evidence": "node scripts/audit_site_evidence.js",
     "visual": "node scripts/visual.js",
     "calibrate": "node scripts/calibrate.js",
     "heatmaps": "node scripts/generate_demo_assets.js"

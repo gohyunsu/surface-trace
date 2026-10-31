@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Follow one recorded TSFabrics run from a visual-change alert to selected review frames and an update decision.">
+  <title>Recorded run | SurfaceTrace</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="stylesheet" href="./site.css">
+  <link rel="stylesheet" href="./demo.css">
+  <script src="./demo.js" defer></script>
+</head>
+<body class="demo-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header inspect-header"><a class="logo" href="./index.html" aria-label="SurfaceTrace home"><span class="logo-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>SurfaceTrace<small>VISUAL INSPECTION</small></span></a><nav class="main-nav" aria-label="Main navigation"><a href="./index.html#next">← Overview</a><a href="./interval.html">Interval summary</a><a href="./next-inspect.html">Recorded samples</a></nav></header>
+  <main id="main" class="demo-main">
+    <div class="demo-intro"><div><p class="section-kicker">TSFABRICS · RECORDED RUN</p><h1>From shift to decision.</h1></div><span class="demo-run">T1_S478_I118_2</span></div>
+    <nav class="demo-steps" aria-label="Replay chapters"><button type="button" data-step="0" aria-current="step"><span>01</span>Visual shift</button><button type="button" data-step="1"><span>02</span>Interval scores</button><button type="button" data-step="2"><span>03</span>Eight checks</button><button type="button" data-step="3"><span>04</span>Update decision</button></nav>
+    <p id="demoError" class="demo-error" role="alert" hidden></p>
+    <div class="demo-stage-wrap">
+      <section class="demo-stage" data-scene="0" aria-labelledby="shiftTitle">
+        <div class="demo-copy"><p class="demo-kicker">VISUAL SHIFT</p><h2 id="shiftTitle">The appearance changes.</h2><p>A separate production run begins. Global image features cross the alert limit; the alert is confirmed 96 frames later.</p><div class="demo-callout"><strong>Frame 96</strong><span>First sustained change alert</span></div></div>
+        <div class="demo-visual shift-visual"><div class="shift-photos"><figure><img src="./scenario/source-512.jpg" alt="Reference run recorded frame 512"><figcaption>Reference run · frame 512</figcaption></figure><span aria-hidden="true">→</span><figure><img src="./unlabeled-demo/review-07.jpg" alt="Later normal photo from the changed run at frame 405"><figcaption>Changed run · later frame 405</figcaption></figure></div><svg id="demoChangeChart" viewBox="0 0 640 180" role="img" aria-label="Recorded global-feature change scores around the boundary between two runs"></svg><p class="demo-visual-note">Two recorded runs joined at a known boundary.</p></div>
+      </section>
+      <section class="demo-stage" data-scene="1" aria-labelledby="scoreTitle" hidden>
+        <div class="demo-copy"><p class="demo-kicker">INTERVAL SCORES</p><h2 id="scoreTitle">Inspect the unusual frames.</h2><p>The frozen DINOv2 reference scores 2,884 later frames. Eight high-scoring photos, spaced at least 16 frames apart, enter the review queue.</p><div class="demo-callout"><strong>2,884 → 8</strong><span>Scored frames → review requests</span></div></div>
+        <div class="demo-visual score-visual"><div class="demo-chart-heading"><span>ANOMALY SCORE</span><span>FRAME INDEX →</span></div><svg id="demoScoreChart" viewBox="0 0 640 200" role="img" aria-label="Recorded frame-score trace with eight requested frames marked"></svg><div id="demoQueue" class="demo-queue" aria-label="Eight selected recorded frames"></div></div>
+      </section>
+      <section class="demo-stage" data-scene="2" aria-labelledby="checkTitle" hidden>
+        <div class="demo-copy"><p class="demo-kicker">LIMITED REVIEW</p><h2 id="checkTitle">Check the selected photos.</h2><p>Each recorded result appears only when its photo is checked. Confirmed defects stay out of the normal reference.</p><div class="demo-callout"><strong id="demoCheckCount">0 / 8</strong><span>Photos checked</span></div><div id="demoCheckDots" class="demo-check-dots" aria-label="Review progress"></div></div>
+        <div class="demo-visual check-visual"><div class="demo-check-photo"><img id="demoReviewPhoto" alt="Recorded textile frame selected for review"><img id="demoReviewHeat" alt="" hidden></div><div class="demo-check-foot"><div><span id="demoReviewRank">—</span><strong id="demoReviewFrame">—</strong></div><span id="demoReviewScore">—</span></div><div id="demoOutcome" class="demo-outcome" aria-live="polite">Result hidden until checked</div><button id="demoReveal" class="demo-reveal" type="button">Check this photo →</button></div>
+      </section>
+      <section class="demo-stage" data-scene="3" aria-labelledby="decisionTitle" hidden>
+        <div class="demo-copy"><p class="demo-kicker">SEPARATE 15-RUN VALIDATION</p><h2 id="decisionTitle">Hold the candidate.</h2><p>Reviewed normal photos can form a trial reference. On later frames, it removes normal alerts but also misses more defects, so the frozen reference remains active.</p><div class="demo-callout demo-hold"><strong>Keep frozen</strong><span>No automatic reference update</span></div></div>
+        <div class="demo-visual decision-visual"><p class="decision-visual-head">FROZEN REFERENCE <span>→</span> REVIEWED CANDIDATE</p><div class="decision-row"><span>Normal frames flagged</span><strong>1,050 <em>→</em> 0</strong><div class="decision-track"><i style="width:100%"></i><b style="width:0%"></b></div></div><div class="decision-row"><span>Defect frames flagged</span><strong>202 <em>→</em> 153</strong><div class="decision-track"><i style="width:100%"></i><b style="width:75.7%"></b></div></div><div class="decision-row"><span>New defect episodes found</span><strong>48 <em>→</em> 40</strong><div class="decision-track"><i style="width:100%"></i><b style="width:83.3%"></b></div></div><p class="demo-visual-note">15 eligible runs · 20,273 normal frames · 642 defect frames</p><a href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/FEEDBACK_VALIDATION_RESULTS.md">Read the validation ↗</a></div>
+      </section>
+    </div>
+    <div class="demo-controls"><button id="demoBack" type="button" aria-label="Previous chapter">←</button><button id="demoPlay" class="demo-play" type="button">Play recorded run</button><button id="demoNext" type="button" aria-label="Next chapter">→</button><span id="demoStatus" aria-live="polite">Ready</span></div>
+    <p class="demo-source">Recorded TSFabrics photos and saved model scores. The update decision is from a separate, later-frame validation across 15 runs. <a href="https://doi.org/10.6084/m9.figshare.29573381">Dataset ↗</a></p>
+  </main>
+  <footer class="site-footer"><div class="footer-top"><a class="footer-brand" href="./index.html">SurfaceTrace</a><span>ISM × RIKU</span></div><div class="footer-bottom"><p>© 2026 Hyunsu Go · <a href="https://github.com/gohyunsu/surface-trace">GitHub</a></p><p>Images: <a href="https://doi.org/10.6084/m9.figshare.29573381">TSFabrics</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></p></div></footer>
+</body>
+</html>

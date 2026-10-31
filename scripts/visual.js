@@ -19,21 +19,25 @@ const { chromium } = require("playwright");
       const page = await browser.newPage({ viewport });
       const pages = process.env.VISUAL_SCOPE === "summary"
         ? [["next-inspector", "next-inspect.html?sample=7"]]
+        : process.env.VISUAL_SCOPE === "demo"
+          ? [["demo", "demo.html"]]
         : process.env.VISUAL_SCOPE === "interval"
           ? [["interval", "interval.html"]]
         : process.env.VISUAL_SCOPE === "review"
           ? [["review", "review.html"]]
         : process.env.VISUAL_SCOPE === "landing"
           ? [["landing", ""]]
-          : [["landing", ""], ...(viewport.label === "desktop" ? [["inspector", "inspect.html?sample=1"]] : []), ["next-inspector", "next-inspect.html?sample=7"], ["interval", "interval.html"], ["review", "review.html"]];
+          : [["landing", ""], ...(viewport.label === "desktop" ? [["inspector", "inspect.html?sample=1"]] : []), ["demo", "demo.html"], ["next-inspector", "next-inspect.html?sample=7"], ["interval", "interval.html"], ["review", "review.html"]];
       for (const [name, suffix] of pages) {
         await page.goto(new URL(suffix, base).href, { waitUntil: "networkidle" });
         if (name === "inspector" && viewport.label === "desktop") await page.waitForFunction(() => document.querySelector("#score").textContent !== "—", null, { timeout: 60000 });
         if (name === "inspector") await page.waitForFunction(() => document.querySelector("#sourceImage").naturalWidth > 0, null, { timeout: 60000 });
         if (name === "next-inspector") await page.waitForFunction(() => document.querySelector("#streamScore").textContent !== "—");
         if (name === "interval") await page.waitForFunction(() => document.querySelector(".request-card") !== null);
+        if (name === "demo") await page.waitForFunction(() => document.querySelector("#demoChangeChart polyline") !== null);
         const imageSelector = name === "landing"
           ? ".pipeline-hero-motion img, .method-animation img, .feedback-photo img, .ablation-gallery img, .reference-maps img, .change-frames img, .change-graph img, .review-frame-grid img"
+          : name === "demo" ? ".shift-photos img"
           : name === "inspector" ? viewport.label === "desktop" ? "#sourceImage, #heatmap" : "#sourceImage" : name === "review" ? "" : name === "interval" ? ".request-card img:not([hidden])" : "#frameImage, #frameHeat";
         const decodeFailures = imageSelector ? await page.locator(imageSelector).evaluateAll(async imgs => {
           const failures = [];
@@ -56,6 +60,17 @@ const { chromium } = require("playwright");
         } else if (name === "interval") {
           await page.locator(".request-card").first().getByRole("button", { name: "Show heatmap" }).click();
           await page.locator(".request-card").first().screenshot({ path: path.join(out, `interval-heat-${viewport.label}.png`) });
+        } else if (name === "demo") {
+          for (let step = 1; step < 4; step++) {
+            await page.locator(`.demo-steps button[data-step="${step}"]`).click();
+            await page.waitForTimeout(1550);
+            if (step === 1) await page.locator("#demoQueue img").evaluateAll(async images => {
+              for (const image of images) await image.decode();
+            });
+            if (step === 2) await page.locator("#demoReviewPhoto").evaluate(image => image.decode());
+            await page.screenshot({ path: path.join(out, `demo-${step}-${viewport.label}.png`), fullPage: true });
+            if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)) throw new Error(`demo ${step} ${viewport.label}: horizontal overflow`);
+          }
         } else if (name === "review") {
           await page.getByRole("button", { name: "Review selected frames" }).click();
           await page.locator("#reviewPhoto").evaluate(image => image.decode());

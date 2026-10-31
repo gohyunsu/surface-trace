@@ -39,6 +39,7 @@ const { chromium } = require("playwright");
     assert((await page.locator("#change .improvement-measure").textContent()).includes("15 / 16"));
     assert.strictEqual(await page.locator("#change .change-frames figure").count(), 6);
     assert((await page.locator("#change .change-frames figure").last().textContent()).includes("192 ALERT"));
+    assert((await page.locator("#review .improvement-measure").textContent()).includes("41.8%"));
     assert((await page.locator("#review .improvement-measure").textContent()).includes("71.1%"));
     assert.strictEqual(await page.locator(".review-frame-grid img").count(), 8);
     assert((await page.locator("#decision").textContent()).includes("202 → 153"));
@@ -65,11 +66,51 @@ const { chromium } = require("playwright");
       assert.deepStrictEqual(failures, [], "Each paired photo and heatmap should load");
       await page.getByRole("button", { name: "Next photo" }).click();
     }
-    for (const [selector, destination] of [["#baseline .method-foot a", "inspect.html"], ["#next .improvement-links .button", "next-inspect.html"], ["#review .improvement-action", "interval.html"]]) {
+    for (const [selector, destination] of [["#baseline .method-foot a", "inspect.html"], ["#next .improvement-links .button", "demo.html"], ["#review .improvement-action", "interval.html"]]) {
       const link = page.locator(selector);
       assert((await link.getAttribute("href")).endsWith(destination));
       assert.strictEqual(await link.getAttribute("target"), null);
     }
+
+    await page.goto(new URL("demo.html", base).href, { waitUntil: "networkidle" });
+    const evaluationRequests = [];
+    page.on("request", request => { if (request.url().endsWith("/unlabeled-demo/evaluation.json")) evaluationRequests.push(request.url()); });
+    assert.strictEqual(await page.locator(".demo-steps button").count(), 4);
+    assert.strictEqual(await page.locator("#demoChangeChart .demo-chart-alert").count(), 1);
+    await page.getByRole("button", { name: "Next chapter" }).click();
+    assert(await page.getByRole("heading", { name: "Inspect the unusual frames." }).isVisible());
+    assert.strictEqual(await page.locator("#demoQueue img").count(), 8);
+    assert.strictEqual(await page.locator("#demoScoreChart .demo-score-marker").count(), 8);
+    await page.getByRole("button", { name: "Next chapter" }).click();
+    assert.strictEqual(await page.locator("#demoCheckCount").textContent(), "0 / 8");
+    assert.strictEqual(evaluationRequests.length, 0);
+    await page.getByRole("button", { name: "Check this photo" }).click();
+    await page.waitForFunction(() => document.querySelector("#demoOutcome").textContent.includes("confirmed"));
+    assert((await page.locator("#demoOutcome").textContent()).includes("Defect confirmed"));
+    assert.strictEqual(await page.locator("#demoCheckCount").textContent(), "1 / 8");
+    assert.strictEqual(evaluationRequests.length, 1);
+    for (let i = 1; i < 8; i++) {
+      await page.getByRole("button", { name: "Next photo" }).click();
+      assert.strictEqual(await page.locator("#demoCheckCount").textContent(), `${i} / 8`);
+      await page.getByRole("button", { name: "Check this photo" }).click();
+      await page.waitForFunction(() => document.querySelector("#demoOutcome").textContent.includes("confirmed"));
+    }
+    assert.strictEqual(await page.locator("#demoCheckCount").textContent(), "8 / 8");
+    await page.getByRole("button", { name: "View update decision" }).click();
+    assert((await page.locator(".decision-visual").textContent()).includes("202 → 153"));
+    assert((await page.locator(".demo-source").textContent()).includes("separate"));
+    await page.clock.install();
+    await page.getByRole("button", { name: "Replay recorded run" }).click();
+    await page.clock.runFor(6600);
+    assert(await page.getByRole("heading", { name: "Inspect the unusual frames." }).isVisible());
+    await page.clock.runFor(7100);
+    assert(await page.getByRole("heading", { name: "Check the selected photos." }).isVisible());
+    for (let i = 0; i < 8; i++) {
+      await page.clock.runFor(1500);
+      await page.waitForFunction(() => document.querySelector("#demoOutcome").textContent.includes("confirmed"));
+      await page.clock.runFor(1200);
+    }
+    assert(await page.getByRole("heading", { name: "Hold the candidate." }).isVisible());
 
     await page.goto(new URL("interval.html", base).href, { waitUntil: "networkidle" });
     assert.strictEqual(await page.locator(".request-card").count(), 8);
