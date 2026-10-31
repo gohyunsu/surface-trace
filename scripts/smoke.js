@@ -19,23 +19,31 @@ const { chromium } = require("playwright");
     assert(await page.getByRole("heading", { name: "Find unusual areas. Track change." }).isVisible());
     assert.strictEqual(await page.locator(".hero .hero-visual-grid").count(), 0);
     assert.strictEqual(await page.locator(".pipeline-hero-motion img").evaluate(image => image.complete && image.naturalWidth > 0), true);
-    assert.strictEqual(await page.locator(".feedback-photo img").evaluate(image => image.complete && image.naturalWidth > 0), true);
+    assert.strictEqual(await page.locator(".feedback-photo img").evaluate(async image => {
+      image.loading = "eager";
+      await image.decode();
+      return image.naturalWidth > 0;
+    }), true);
     const heroImage = page.locator(".pipeline-hero-motion img");
     const firstFrame = await heroImage.screenshot();
     await page.waitForTimeout(3100);
     assert.notDeepStrictEqual(await heroImage.screenshot(), firstFrame, "Hero animation should advance automatically");
     assert.strictEqual(await page.locator("#baseline .method-card").count(), 6);
-    assert.strictEqual(await page.locator("#next .method-card").count(), 6);
-    assert(await page.getByRole("heading", { name: "How each method handled the shift." }).isVisible());
-    assert.strictEqual(await page.locator(".ablation-step").count(), 4);
-    assert.strictEqual(await page.locator(".trial-run-grid section").count(), 3);
-    assert((await page.locator(".trial-evaluation").textContent()).includes("40.2% → 6.1%"));
-    assert((await page.locator(".trial-evaluation").textContent()).includes(".9873 → .9943"));
-    const feedbackValidation = page.locator(".limited-review-note", { hasText: "eight-review update test" });
-    assert((await feedbackValidation.textContent()).includes("202 to 153"));
-    assert((await feedbackValidation.textContent()).includes("The update was withheld."));
-    assert((await feedbackValidation.locator("a").getAttribute("href")).endsWith("FEEDBACK_VALIDATION_RESULTS.md"));
-    assert((await page.locator(".ablation-chart-labels").textContent()).includes("FRAME 1,264"));
+    assert.strictEqual(await page.locator("#next .method-card").count(), 0);
+    assert.strictEqual(await page.locator("#next .improvement").count(), 5);
+    assert.strictEqual(await page.locator(".feedback-grid, .scenario, .ablation-chart, .trial-evaluation, .limited-review").count(), 0);
+    assert((await page.locator("#foundation .improvement-measure").textContent()).includes("66.4%"));
+    assert((await page.locator("#foundation .improvement-measure").textContent()).includes("85.4%"));
+    assert((await page.locator("#reference .improvement-measure").textContent()).includes("971"));
+    assert((await page.locator("#reference .improvement-measure").textContent()).includes("11"));
+    assert((await page.locator("#change .improvement-measure").textContent()).includes("15 / 16"));
+    assert.strictEqual(await page.locator("#change .change-frames figure").count(), 6);
+    assert((await page.locator("#change .change-frames figure").last().textContent()).includes("192 ALERT"));
+    assert((await page.locator("#review .improvement-measure").textContent()).includes("71.1%"));
+    assert.strictEqual(await page.locator(".review-frame-grid img").count(), 8);
+    assert((await page.locator("#decision").textContent()).includes("202 → 153"));
+    assert((await page.locator("#decision").textContent()).includes("Candidate withheld"));
+    assert((await page.locator("#decision .evidence-link").getAttribute("href")).endsWith("FEEDBACK_VALIDATION_RESULTS.md"));
     await page.locator(".ablation-gallery").scrollIntoViewIfNeeded();
     await page.waitForFunction(() => document.querySelector(".ablation-gallery").dataset.ready === "true");
     assert.strictEqual(await page.locator("#pairedCounter").textContent(), "01 / 16");
@@ -57,13 +65,11 @@ const { chromium } = require("playwright");
       assert.deepStrictEqual(failures, [], "Each paired photo and heatmap should load");
       await page.getByRole("button", { name: "Next photo" }).click();
     }
-    for (const [section, destination] of [["baseline", "inspect.html"], ["next", "next-inspect.html"]]) {
-      const link = page.locator(`#${section} .method-foot a`);
+    for (const [selector, destination] of [["#baseline .method-foot a", "inspect.html"], ["#next .improvement-links .button", "next-inspect.html"], ["#review .improvement-action", "interval.html"]]) {
+      const link = page.locator(selector);
       assert((await link.getAttribute("href")).endsWith(destination));
       assert.strictEqual(await link.getAttribute("target"), null);
     }
-    assert(await page.locator(".summary-next .summary-title").getByText("Scores, change, and eight review requests").isVisible());
-    assert.strictEqual(await page.locator(".limited-review-grid>div").count(), 4);
 
     await page.goto(new URL("interval.html", base).href, { waitUntil: "networkidle" });
     assert.strictEqual(await page.locator(".request-card").count(), 8);

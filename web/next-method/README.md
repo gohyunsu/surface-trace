@@ -1,7 +1,10 @@
 # New pipeline animation assets
 
-Six looping, 720 × 420 GIFs and matching poster frames. `hero.webp` combines
-the six loops into the landing animation. The intended order is:
+Six looping, 720 × 420 GIFs and matching poster frames remain as source assets.
+The landing page presents improvements rather than the six-step sequence.
+`hero.webp` combines four visual themes: DINOv2 features (`02`), unlabeled
+reference selection (`03`), visual change (`05`), and candidate comparison
+(`06`). The complete asset set depicts:
 
 1. Continuous production frames
 2. Frozen visual features

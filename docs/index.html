@@ -3,11 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Explore a browser-based surface inspection baseline and a change-aware experiment on production images.">
+  <meta name="description" content="Explore a surface inspection baseline and a change-aware experiment on recorded production runs.">
   <title>SurfaceTrace | Visual inspection across changing conditions</title>
   <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <link rel="stylesheet" href="./site.css">
   <link rel="stylesheet" href="./pipeline.css">
+  <link rel="stylesheet" href="./improvements.css">
   <script src="./ablation.js" defer></script>
 </head>
 <body class="landing-page pipeline-landing">
@@ -19,14 +20,14 @@
   <main id="main">
     <section class="hero"><div class="hero-inner">
       <div class="hero-copy">
-        <p class="eyebrow"><span class="eyebrow-line"></span> TWO INSPECTION PIPELINES</p>
+        <p class="eyebrow"><span class="eyebrow-line"></span> TWO INSPECTION APPROACHES</p>
         <h1>Find unusual areas.<br><em>Track change.</em></h1>
-        <p class="hero-description">A baseline for single photos and a change-aware experiment on production streams.</p>
-        <a class="text-link hero-scroll" href="#baseline">Explore the pipelines ↓</a>
+        <p class="hero-description">A single-photo baseline and a change-aware experiment on production streams.</p>
+        <a class="text-link hero-scroll" href="#baseline">Explore the project ↓</a>
       </div>
       <picture class="pipeline-hero-motion">
-        <source media="(prefers-reduced-motion: reduce)" srcset="./next-method/04-poster.png">
-        <img src="./next-method/hero.webp" alt="Production frames become visual features and an unlabeled reference, then unusual regions and process changes are identified and a candidate reference is evaluated." width="720" height="420" fetchpriority="high">
+        <source media="(prefers-reduced-motion: reduce)" srcset="./next-method/02-poster.png">
+        <img src="./next-method/hero.webp" alt="Recorded frames are compared with an unlabeled visual reference, checked for unusual regions and visual change, and sent for limited review." width="720" height="420" fetchpriority="high">
       </picture>
     </div></section>
 
@@ -34,90 +35,124 @@
       <div class="method-heading"><div><p class="section-kicker">01 / WORKING MVP</p><h2>Compare with normal.</h2></div></div>
       <div class="dataset-note"><span>KolektorSDD</span><p>Labeled photos of cracks in the plastic embedding of electrical commutators.</p></div>
       <div class="method-animation-grid">
-<article class="method-card"><div class="method-animation"><img src="./method/01.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>01</span><div><h3>Build the reference</h3><p>Collect normal patches.</p></div></div></article>
-<article class="method-card"><div class="method-animation"><img src="./method/02.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>02</span><div><h3>Prepare the photo</h3><p>Align size and brightness.</p></div></div></article>
-<article class="method-card"><div class="method-animation"><img src="./method/03.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>03</span><div><h3>Split into patches</h3><p>Inspect the surface area by area.</p></div></div></article>
-<article class="method-card"><div class="method-animation"><img src="./method/04.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>04</span><div><h3>Measure features</h3><p>Capture local texture and edges.</p></div></div></article>
-<article class="method-card"><div class="method-animation"><img src="./method/05.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>05</span><div><h3>Compare patches</h3><p>Find the closest normal match.</p></div></div></article>
-<article class="method-card"><div class="method-animation"><img src="./method/06.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>06</span><div><h3>Map unusual areas</h3><p>Highlight regions for review.</p></div></div></article>
+        <article class="method-card"><div class="method-animation"><img src="./method/01.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>01</span><div><h3>Build the reference</h3><p>Collect normal patches.</p></div></div></article>
+        <article class="method-card"><div class="method-animation"><img src="./method/02.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>02</span><div><h3>Prepare the photo</h3><p>Align size and brightness.</p></div></div></article>
+        <article class="method-card"><div class="method-animation"><img src="./method/03.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>03</span><div><h3>Split into patches</h3><p>Inspect the surface area by area.</p></div></div></article>
+        <article class="method-card"><div class="method-animation"><img src="./method/04.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>04</span><div><h3>Measure features</h3><p>Capture local texture and edges.</p></div></div></article>
+        <article class="method-card"><div class="method-animation"><img src="./method/05.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>05</span><div><h3>Compare patches</h3><p>Find the closest normal match.</p></div></div></article>
+        <article class="method-card"><div class="method-animation"><img src="./method/06.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>06</span><div><h3>Map unusual areas</h3><p>Highlight regions for review.</p></div></div></article>
       </div>
       <div class="evaluation-summary"><div><p class="section-kicker">HELD-OUT TEST</p><h3>KolektorSDD</h3><p>64 photos · custom item-group split</p></div><div class="evaluation-metrics"><div><span>0.879</span><small>Image AUROC</small></div><div><span>5 / 8</span><small>Defect photos flagged</small></div><div><span>7 / 56</span><small>Normal photos flagged</small></div></div></div>
       <div class="method-foot"><a class="button button-dark" href="./inspect.html">Open baseline samples <span aria-hidden="true">→</span></a></div>
     </div></section>
 
     <section class="feedback-section" id="feedback"><div class="section feedback-inner">
-      <div class="feedback-heading"><p class="section-kicker">FIELD FEEDBACK</p><h2>Feedback shaped the next pipeline.</h2></div>
-      <figure class="feedback-photo"><img src="./feedback/meeting-illustration.png" alt="Illustration of the ISM and Dongil Rubber Belt teams discussing SurfaceTrace in a meeting room" width="1672" height="941" fetchpriority="low"><figcaption>ISM met with Dongil Rubber Belt for a project advisory session.</figcaption></figure>
-      <div class="feedback-grid">
-        <article class="feedback-card"><span class="feedback-index">01 / DATA</span><h3>Few defects, uncertain labels</h3><p>Defects are scarce, and inspection judgments can differ.</p><div class="feedback-response"><span>RESPONSE</span><p>Select startup reference frames without defect labels.</p></div></article>
-        <article class="feedback-card"><span class="feedback-index">02 / CHANGE</span><h3>Process changes reach AI teams late</h3><p>Production changes may be documented without being shared with the AI team.</p><div class="feedback-response"><span>RESPONSE</span><p>Flag shifts in image appearance separately from defect scores.</p></div></article>
-        <article class="feedback-card"><span class="feedback-index">03 / DECISION</span><h3>False alarms and misses matter</h3><p>Both affect whether an updated reference can be used.</p><div class="feedback-response"><span>RESPONSE</span><p>Measure both before considering an update.</p></div></article>
-        <article class="feedback-card"><span class="feedback-index">04 / HANDOFF</span><h3>Individual alerts add work</h3><p>Managers need a useful summary rather than a message for every frame.</p><div class="feedback-response"><span>RESPONSE</span><p>Summarize recorded intervals and request a few spaced frames for review.</p></div></article>
-      </div>
+      <div class="feedback-heading"><p class="section-kicker">FIELD FEEDBACK</p><h2>The discussion changed the design.</h2></div>
+      <figure class="feedback-photo"><img src="./feedback/meeting-illustration.png" alt="Illustration of the ISM and Dongil Rubber Belt teams discussing SurfaceTrace in a meeting room" width="1672" height="941" loading="lazy"><figcaption>ISM met with Dongil Rubber Belt for a project advisory session.</figcaption></figure>
+      <p class="feedback-signal">Few confirmed defects <span>·</span> Changes reach the AI team late <span>·</span> Review time is limited</p>
     </div></section>
 
     <section class="method-section next-section" id="next"><div class="section method-inner">
-      <div class="method-heading"><div><p class="section-kicker">02 / RESEARCH PIPELINE</p><h2>Inspect the stream. Notice change.</h2></div></div>
+      <div class="method-heading improvement-heading"><div><p class="section-kicker">02 / CHANGE-AWARE EXPERIMENT</p><h2>What changed after feedback.</h2></div></div>
       <div class="dataset-note"><span>TSFabrics</span><p>93,196 time-ordered knitting-line frames across 22 production scenarios.</p></div>
-      <section class="scenario" aria-labelledby="scenario-title">
-        <div class="scenario-intro"><p class="section-kicker">FEEDBACK → TEST SETUP</p><h3 id="scenario-title">When a new run looks different.</h3><p>Same fabric texture. Separate runs with different lighting.</p></div>
-        <div class="scenario-timeline" aria-label="Real frames from separate TSFabrics production runs">
-          <div class="scenario-run"><div class="scenario-run-head"><span>REFERENCE RUN</span><small>Model ignores labels</small></div><div class="scenario-frames">
-            <figure><img src="./scenario/source-509.jpg" alt="Light gray fabric, reference frame 509" width="400" height="320" loading="lazy"><figcaption>509</figcaption></figure>
-            <figure><img src="./scenario/source-510.jpg" alt="Light gray fabric, reference frame 510" width="400" height="320" loading="lazy"><figcaption>510</figcaption></figure>
-            <figure><img src="./scenario/source-511.jpg" alt="Light gray fabric, reference frame 511" width="400" height="320" loading="lazy"><figcaption>511</figcaption></figure>
-            <figure><img src="./scenario/source-512.jpg" alt="Light gray fabric, reference frame 512" width="400" height="320" loading="lazy"><figcaption>512</figcaption></figure>
-          </div></div>
-          <div class="scenario-switch"><span>NEW TEST RUN</span><i aria-hidden="true">→</i></div>
-          <div class="scenario-run"><div class="scenario-run-head"><span>CHANGED RUN</span><small>Normal frames</small></div><div class="scenario-frames">
-            <figure><img src="./scenario/target-001.jpg" alt="Dark fabric, test frame 1" width="400" height="320" loading="lazy"><figcaption>1</figcaption></figure>
-            <figure><img src="./scenario/target-064.jpg" alt="Dark fabric, test frame 64" width="400" height="320" loading="lazy"><figcaption>64</figcaption></figure>
-            <figure><img src="./scenario/target-128.jpg" alt="Dark fabric, test frame 128" width="400" height="320" loading="lazy"><figcaption>128</figcaption></figure>
-            <figure class="scenario-alert-frame"><img src="./scenario/target-192.jpg" alt="Dark fabric, test frame 192 when the first change alert is confirmed" width="400" height="320" loading="lazy"><figcaption>192 <span>ALERT</span></figcaption></figure>
-          </div></div>
+
+      <article class="improvement" id="foundation" aria-labelledby="foundation-title">
+        <div class="improvement-copy">
+          <p class="improvement-kicker">FOUNDATION FEATURES</p>
+          <p class="improvement-input">Few labeled defects</p>
+          <h3 id="foundation-title">Use frozen DINOv2 features.</h3>
+          <p>A pretrained DINOv2-S/14 model describes each image patch. Distance from reference patches produces a localized anomaly map.</p>
+          <div class="improvement-measure"><span>FRAME-SCORE RANKING · 4 DEFECT RUNS</span><div><small>Handcrafted</small><strong>66.4%</strong><i aria-hidden="true">→</i><small>DINOv2</small><strong>85.4%</strong></div><p>Macro average precision</p></div>
         </div>
-        <p class="scenario-outcome"><span>THE BOUNDARY</span> Separate recordings; the first sustained change alert comes after 192 test frames.</p>
-      </section>
-      <div class="method-animation-grid">
-<article class="method-card"><div class="method-animation"><img src="./next-method/01.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>01</span><div><h3>Follow the stream</h3><p>Read consecutive production frames.</p></div></div></article>
-<article class="method-card"><div class="method-animation"><img src="./next-method/02.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>02</span><div><h3>Extract visual features</h3><p>A frozen DINOv2 model maps image patches.</p></div></div></article>
-<article class="method-card"><div class="method-animation"><img src="./next-method/03.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>03</span><div><h3>Select reference frames</h3><p>Keep typical frames in each appearance group.</p></div></div></article>
-<article class="method-card"><div class="method-animation"><img src="./next-method/04.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>04</span><div><h3>Localize unusual regions</h3><p>Compare patches and flag high scores.</p></div></div></article>
-<article class="method-card"><div class="method-animation"><img src="./next-method/05.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>05</span><div><h3>Detect visual shifts</h3><p>Signal when image features change.</p></div></div></article>
-<article class="method-card"><div class="method-animation"><img src="./next-method/06.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>06</span><div><h3>Evaluate a candidate</h3><p>Compare both references on the same photo.</p></div></div></article>
-      </div>
-      <section class="ablation" aria-labelledby="ablation-title">
-        <div class="ablation-heading"><div><p class="section-kicker">ONE TEXTURE · THREE HELD-OUT RUNS</p><h3 id="ablation-title">How each method handled the shift.</h3></div></div>
-        <div class="ablation-chart">
-          <div class="ablation-chart-head"><span>NORMAL-ONLY CHANGED RUN</span><span>975 HELD-OUT FRAMES</span></div>
-          <div class="ablation-chart-labels"><span>METHOD</span><span>FALSE ALARMS</span><span>FRAME 1,264</span></div>
-          <div class="ablation-steps">
-            <div class="ablation-step"><div class="ablation-step-name"><span>HANDCRAFTED</span><p>Eight patch features</p></div><div class="ablation-step-result"><strong>975 <small>/ 975</small></strong><div class="ablation-bar"><i style="width:100%"></i></div></div><figure class="ablation-step-image"><div><img src="./next-samples/sample-06.jpg" alt="Normal fabric frame" loading="lazy"><img src="./ablation/sample-06-classic.png" alt="Handcrafted anomaly heatmap" loading="lazy"></div><figcaption>False alarm</figcaption></figure></div>
-            <div class="ablation-step"><div class="ablation-step-name"><span>DINOv2</span><p>All startup frames</p></div><div class="ablation-step-result"><strong>971 <small>/ 975</small></strong><div class="ablation-bar"><i style="width:99.6%"></i></div></div><figure class="ablation-step-image"><div><img src="./next-samples/sample-06.jpg" alt="Same normal fabric frame" loading="lazy"><img src="./ablation/sample-06-all.png" alt="DINOv2 all-frame anomaly heatmap" loading="lazy"></div><figcaption>False alarm</figcaption></figure></div>
-            <div class="ablation-step selected"><div class="ablation-step-name"><span>DINOv2 + SELECTION</span><p>Selected startup frames</p></div><div class="ablation-step-result"><strong>11 <small>/ 975</small></strong><div class="ablation-bar"><i style="width:1.2%"></i></div></div><figure class="ablation-step-image"><div><img src="./next-samples/sample-06.jpg" alt="Same normal fabric frame" loading="lazy"><img src="./next-samples/sample-06-current.png" alt="Selected-reference anomaly heatmap" loading="lazy"></div><figcaption>No false alarm</figcaption></figure></div>
-            <div class="ablation-step trial"><div class="ablation-step-name"><span>CANDIDATE · TRIAL</span><p>Selected new-run frames + threshold</p></div><div class="ablation-step-result"><strong>3 <small>/ 975</small></strong><div class="ablation-bar"><i style="width:.31%"></i></div></div><figure class="ablation-step-image"><div><img src="./next-samples/sample-06.jpg" alt="Same normal fabric frame" loading="lazy"><img src="./next-samples/sample-06-candidate.png" alt="Trial reference anomaly heatmap" loading="lazy"></div><figcaption>No false alarm</figcaption></figure></div>
-          </div>
-        </div>
-        <div class="ablation-effects">
-          <article class="change-effect"><span>VISUAL CHANGE</span><div class="change-effect-content"><picture><source media="(max-width: 700px)" srcset="./ablation/change-figure-mobile.svg"><img src="./ablation/change-figure.svg" alt="The reference run's change scores stay below the alert limit. Three consecutive score windows in the changed normal run exceed it, confirming an alert at frame 192." width="600" height="238" loading="lazy"></picture><div><strong>Alert at frame 192</strong><p>Three consecutive windows crossed the limit. The reference run stayed below it.</p></div></div></article>
-          <article class="trial-evaluation"><span>TRIAL REFERENCE · OFFLINE EVALUATION</span><div class="trial-evaluation-head"><h4>What happened in the candidate trial?</h4><p>Fixed reference → candidate · same later test frames</p></div><div class="trial-run-grid"><section><h5>Related run</h5><p class="trial-run-size">138 defect · 3,834 normal frames</p><dl><div><dt>Defect recall</dt><dd>54.3% → 28.3%</dd></div><div><dt>False alarms</dt><dd>7 → 1</dd></div><div><dt>Image AUROC</dt><dd>.9891 → .9890</dd></div></dl></section><section><h5>Changed, normal</h5><p class="trial-run-size">975 normal frames</p><dl><div><dt>Defect recall</dt><dd>—</dd></div><div><dt>False alarms</dt><dd>11 → 3</dd></div><div><dt>Image AUROC</dt><dd>—</dd></div></dl></section><section><h5>Larger shift</h5><p class="trial-run-size">82 defect · 2,290 normal frames</p><dl><div><dt>Defect recall</dt><dd>40.2% → 6.1%</dd></div><div><dt>False alarms</dt><dd>0 → 0</dd></div><div><dt>Image AUROC</dt><dd>.9873 → .9943</dd></div></dl></section></div><p class="trial-verdict">The candidate selected 308/512 early frames and recalibrated its threshold, regardless of alert timing. Recall fell on both defect runs; the candidate was not adopted.</p></article>
-        </div>
-        <div class="ablation-gallery">
-          <div class="ablation-gallery-head"><div><p class="section-kicker">PAIRED FRAMES</p><h4>Same photo. Two heatmaps.</h4></div><div class="ablation-gallery-controls"><span id="pairedCounter">01 / 16</span><button type="button" id="pairedPrev" aria-label="Previous photo">←</button><button type="button" id="pairedNext" aria-label="Next photo">→</button></div></div>
-          <div class="ablation-case" id="pairedCase">
-            <div class="ablation-case-label"><span id="pairedLabel">Normal · changed run</span><small id="pairedFrame">Frame 1,264</small></div>
-            <div class="ablation-pair">
-              <figure><div class="ablation-heat"><img id="pairedClassicPhoto" src="./next-samples/sample-06.jpg" alt="Normal textile frame with the handcrafted anomaly map" loading="lazy"><img id="pairedClassicMap" src="./ablation/sample-06-classic.png" alt="" loading="lazy"></div><figcaption><span>Handcrafted</span><strong id="pairedClassicResult" class="ablation-review">False alarm</strong></figcaption></figure>
-              <figure><div class="ablation-heat"><img id="pairedSelectedPhoto" src="./next-samples/sample-06.jpg" alt="Same normal textile frame with the selected-reference anomaly map" loading="lazy"><img id="pairedSelectedMap" src="./next-samples/sample-06-current.png" alt="" loading="lazy"></div><figcaption><span>DINOv2 + selection</span><strong id="pairedSelectedResult" class="ablation-clear">No false alarm</strong></figcaption></figure>
+        <div class="improvement-display">
+          <div class="ablation-gallery" aria-label="Handcrafted and DINOv2 heatmaps on the same recorded frames">
+            <div class="ablation-gallery-head"><div><p class="section-kicker">REAL FRAMES</p><h4>Same photo, two heatmaps.</h4></div><div class="ablation-gallery-controls"><span id="pairedCounter">01 / 16</span><button type="button" id="pairedPrev" aria-label="Previous photo">←</button><button type="button" id="pairedNext" aria-label="Next photo">→</button></div></div>
+            <div class="ablation-case" id="pairedCase">
+              <div class="ablation-case-label"><span id="pairedLabel">Normal · changed run</span><small id="pairedFrame">Frame 1,264</small></div>
+              <div class="ablation-pair">
+                <figure><div class="ablation-heat"><img id="pairedClassicPhoto" src="./next-samples/sample-06.jpg" alt="Normal textile frame with the handcrafted anomaly map" loading="lazy"><img id="pairedClassicMap" src="./ablation/sample-06-classic.png" alt="" loading="lazy"></div><figcaption><span>Handcrafted</span><strong id="pairedClassicResult" class="ablation-review">False alarm</strong></figcaption></figure>
+                <figure><div class="ablation-heat"><img id="pairedSelectedPhoto" src="./next-samples/sample-06.jpg" alt="Same normal textile frame with the DINOv2 anomaly map" loading="lazy"><img id="pairedSelectedMap" src="./next-samples/sample-06-current.png" alt="" loading="lazy"></div><figcaption><span>DINOv2</span><strong id="pairedSelectedResult" class="ablation-clear">No false alarm</strong></figcaption></figure>
+              </div>
             </div>
           </div>
         </div>
-        <details class="ablation-details"><summary>Results across all three runs <span aria-hidden="true">⌄</span></summary><div class="ablation-table-wrap"><table><caption>False alarms · defect-frame recall, using source-run thresholds</caption><thead><tr><th scope="col">Test run</th><th scope="col">Handcrafted</th><th scope="col">DINOv2 · all</th><th scope="col">DINOv2 · selected</th></tr></thead><tbody><tr><th scope="row">Related run</th><td>5 · 70.3%</td><td>28 · 10.1%</td><td>7 · 54.3%</td></tr><tr><th scope="row">Changed, normal</th><td>975 · —</td><td>971 · —</td><td>11 · —</td></tr><tr><th scope="row">Larger shift</th><td>14 · 42.7%</td><td>2,060 · 100%</td><td>0 · 40.2%</td></tr></tbody></table></div><p>These methods share held-out frames and separate source-run calibration; the two DINOv2 banks have equal capacity. Handcrafted leads on the related run, while selected DINOv2 cuts false alarms on larger shifts. <a href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/EXPERIMENT_RESULTS.md" target="_blank" rel="noopener noreferrer">Experiment record ↗</a></p></details>
-      </section>
-      <div class="evaluation-summary next-evaluation"><div><p class="section-kicker">LARGER SHIFT · HELD-OUT RUN</p><h3>TSFabrics</h3><p>Frozen DINOv2 · selected source reference</p></div><div class="evaluation-metrics"><div><span>0.987</span><small>Image AUROC</small></div><div><span>33 / 82</span><small>Defect frames flagged</small></div><div><span>0 / 2,290</span><small>Normal frames flagged</small></div></div></div>
-      <section class="limited-review" aria-labelledby="limitedReviewTitle"><div class="limited-review-head"><div><p class="section-kicker">16 RUNS · FIXED EVALUATION</p><h3 id="limitedReviewTitle">Eight reviews per run.</h3></div><p>New defect episodes found · macro average across four defect runs</p></div><div class="limited-review-grid"><div><span>HANDCRAFTED</span><strong>48.2%</strong></div><div><span>FROZEN DINOv2</span><strong>71.1%</strong></div><div><span>LOCAL · ALL FRAMES</span><strong>45.7%</strong></div><div class="is-selected"><span>LOCAL · SELECTED FRAMES</span><strong>71.1%</strong></div></div><p class="limited-review-note">Local selection matched the frozen reference's episode coverage, so the frozen reference remains active. Spacing the local candidate's eight reviews raised coverage from 37.3% to 71.1%. A visual-change alert followed the splice between recorded runs in 15 of 16 cases.</p><p class="limited-review-note">In a separate eight-review update test on 15 eligible runs, adding confirmed-normal patches cut normal-frame alerts from 1,050 to 0, but defect frames flagged fell from 202 to 153. The update was withheld. <a href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/FEEDBACK_VALIDATION_RESULTS.md">Full validation ↗</a></p></section>
-      <div class="method-foot"><a class="button button-dark" href="./next-inspect.html">Open change-aware samples <span aria-hidden="true">→</span></a></div>
-      <a class="summary-next" href="./interval.html"><span class="summary-next-body"><span class="summary-icon" aria-hidden="true"><i></i><i></i><i></i></span><span><span class="section-kicker">INTERVAL SUMMARY</span><span class="summary-title">Scores, change, and eight review requests</span><span class="summary-description">Explore one recorded run and check the selected frames.</span></span></span><span class="summary-next-arrow" aria-hidden="true">→</span></a>
+      </article>
+
+      <article class="improvement" id="reference" aria-labelledby="reference-title">
+        <div class="improvement-copy">
+          <p class="improvement-kicker">UNLABELED REFERENCE</p>
+          <p class="improvement-input">Normal examples are not guaranteed</p>
+          <h3 id="reference-title">Select typical startup frames.</h3>
+          <p>Group frames by appearance, then keep representative images as the reference without using defect labels.</p>
+          <div class="improvement-measure"><span>CHANGED NORMAL RUN · FALSE ALERTS / 975 FRAMES</span><div><small>All frames</small><strong>971</strong><i aria-hidden="true">→</i><small>Selected</small><strong>11</strong></div></div>
+        </div>
+        <div class="improvement-display reference-display">
+          <div class="reference-maps">
+            <figure><div class="reference-map"><img src="./next-samples/sample-06.jpg" alt="Normal textile frame from a changed run" loading="lazy"></div><figcaption>Recorded photo</figcaption></figure>
+            <figure><div class="reference-map"><img src="./next-samples/sample-06.jpg" alt="" loading="lazy"><img src="./ablation/sample-06-all.png" alt="False alert heatmap with an all-frame DINOv2 reference" loading="lazy"></div><figcaption>All startup frames <span>Flagged</span></figcaption></figure>
+            <figure><div class="reference-map"><img src="./next-samples/sample-06.jpg" alt="" loading="lazy"><img src="./next-samples/sample-06-current.png" alt="Heatmap with a selected DINOv2 reference" loading="lazy"></div><figcaption>Selected frames <span>Clear</span></figcaption></figure>
+          </div>
+          <div class="reference-bars" aria-label="False alerts on the same 975 normal frames"><div><span>All frames</span><div class="bar-track"><i style="width:99.6%"></i></div><strong>971</strong></div><div><span>Selected</span><div class="bar-track"><i style="width:1.2%"></i></div><strong>11</strong></div></div>
+          <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/EXPERIMENT_RESULTS.md">Three-run comparison ↗</a>
+        </div>
+      </article>
+
+      <article class="improvement" id="change" aria-labelledby="change-title">
+        <div class="improvement-copy">
+          <p class="improvement-kicker">VISUAL CHANGE</p>
+          <p class="improvement-input">Process changes may not be shared</p>
+          <h3 id="change-title">Detect the shift separately.</h3>
+          <p>Compare global image features across time, independently of the patch anomaly score.</p>
+          <div class="improvement-measure"><span>SEPARATE RECORDED RUNS · SYNTHETIC SWITCH</span><div><strong>15 / 16</strong><small>runs alerted</small></div></div>
+        </div>
+        <div class="improvement-display change-display">
+          <div class="change-frames" aria-label="Reference frames followed by a separate changed run">
+            <div><span>REFERENCE RUN</span><figure><img src="./scenario/source-511.jpg" alt="Reference run frame 511" loading="lazy"><figcaption>511</figcaption></figure><figure><img src="./scenario/source-512.jpg" alt="Reference run frame 512" loading="lazy"><figcaption>512</figcaption></figure></div>
+            <b aria-hidden="true">→</b>
+            <div><span>CHANGED RUN</span><figure><img src="./scenario/target-001.jpg" alt="Changed run frame 1" loading="lazy"><figcaption>1</figcaption></figure><figure><img src="./scenario/target-064.jpg" alt="Changed run frame 64" loading="lazy"><figcaption>64</figcaption></figure><figure><img src="./scenario/target-128.jpg" alt="Changed run frame 128" loading="lazy"><figcaption>128</figcaption></figure><figure><img src="./scenario/target-192.jpg" alt="Changed run frame 192, first sustained alert" loading="lazy"><figcaption>192 <em>ALERT</em></figcaption></figure></div>
+          </div>
+          <figure class="change-graph"><picture><source media="(max-width:700px)" srcset="./ablation/change-figure-mobile.svg"><img src="./ablation/change-figure.svg" alt="Global-feature change scores stay low on the reference run and cross the alert limit after the switch, with a sustained alert at target frame 192" width="600" height="238" loading="lazy"></picture><figcaption>Example alert: frame 192 of the changed run.</figcaption></figure>
+        </div>
+      </article>
+
+      <article class="improvement" id="review" aria-labelledby="review-title">
+        <div class="improvement-copy">
+          <p class="improvement-kicker">LIMITED REVIEW</p>
+          <p class="improvement-input">Every-frame handoff is impractical</p>
+          <h3 id="review-title">Request eight spaced checks.</h3>
+          <p>Rank unusual frames and keep requests at least 16 frames apart. An interval summary gathers the scores, change signal, and review decisions.</p>
+          <div class="improvement-measure"><span>NEW DEFECT EPISODES FOUND @8 · 4 DEFECT RUNS</span><div><small>Random</small><strong>9.4%</strong><i aria-hidden="true">→</i><small>Spaced</small><strong>71.1%</strong></div><p>Macro episode coverage</p></div>
+          <a class="button button-dark improvement-action" href="./interval.html">Open interval summary <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="improvement-display review-display"><div class="review-frame-grid" aria-label="Eight recorded photos selected for review">
+          <img src="./unlabeled-demo/review-01.jpg" alt="Review request 1, recorded textile frame 1506" loading="lazy">
+          <img src="./unlabeled-demo/review-02.jpg" alt="Review request 2, recorded textile frame 2473" loading="lazy">
+          <img src="./unlabeled-demo/review-03.jpg" alt="Review request 3, recorded textile frame 538" loading="lazy">
+          <img src="./unlabeled-demo/review-04.jpg" alt="Review request 4, recorded textile frame 1984" loading="lazy">
+          <img src="./unlabeled-demo/review-05.jpg" alt="Review request 5, recorded textile frame 1026" loading="lazy">
+          <img src="./unlabeled-demo/review-06.jpg" alt="Review request 6, recorded textile frame 2967" loading="lazy">
+          <img src="./unlabeled-demo/review-07.jpg" alt="Review request 7, recorded textile frame 405" loading="lazy">
+          <img src="./unlabeled-demo/review-08.jpg" alt="Review request 8, recorded textile frame 1380" loading="lazy">
+        </div><p>One recorded interval · eight score-ranked requests</p></div>
+      </article>
+
+      <article class="improvement improvement-decision" id="decision" aria-labelledby="decision-title">
+        <div class="improvement-copy">
+          <p class="improvement-kicker">UPDATE DECISION</p>
+          <p class="improvement-input">False alerts and missed defects both matter</p>
+          <h3 id="decision-title">Keep the reference when recall falls.</h3>
+          <p>Only reviewed normal frames enter a trial reference. We compare it on later frames before any update.</p>
+          <p class="decision-state"><span aria-hidden="true"></span> Candidate withheld · frozen reference active</p>
+          <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/FEEDBACK_VALIDATION_RESULTS.md">Full 15-run validation ↗</a>
+        </div>
+        <div class="improvement-display decision-display"><p>FROZEN → REVIEWED CANDIDATE <span>15 eligible runs</span></p><div class="decision-metrics">
+          <div><span>Normal-frame alerts</span><strong>1,050 <i>→</i> 0</strong></div>
+          <div><span>Defect frames flagged</span><strong>202 <i>→</i> 153</strong></div>
+          <div><span>New defect episodes found</span><strong>48 <i>→</i> 40</strong></div>
+        </div><p class="decision-denominators">20,273 normal frames · 642 defect frames · 65 new defect episodes</p></div>
+      </article>
+
+      <div class="improvement-links"><a class="button button-dark" href="./next-inspect.html">Explore recorded samples <span aria-hidden="true">→</span></a><a href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/UNLABELED_REVIEW_RESULTS.md">Detection and review results ↗</a></div>
     </div></section>
   </main>
   <footer class="site-footer"><div class="footer-top"><a class="footer-brand" href="./index.html">SurfaceTrace</a><span>ISM × RIKU</span></div><div class="footer-bottom"><p>© 2026 Hyunsu Go · <a href="https://github.com/gohyunsu/surface-trace" target="_blank" rel="noopener noreferrer">GitHub</a></p><p>Images: <a href="https://www.vicos.si/resources/kolektorsdd/" target="_blank" rel="noopener noreferrer">KolektorSDD</a> · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a> / <a href="https://doi.org/10.6084/m9.figshare.29573381" target="_blank" rel="noopener noreferrer">TSFabrics</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a></p></div></footer>

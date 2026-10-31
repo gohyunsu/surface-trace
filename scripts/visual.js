@@ -33,7 +33,7 @@ const { chromium } = require("playwright");
         if (name === "next-inspector") await page.waitForFunction(() => document.querySelector("#streamScore").textContent !== "—");
         if (name === "interval") await page.waitForFunction(() => document.querySelector(".request-card") !== null);
         const imageSelector = name === "landing"
-          ? ".pipeline-hero-motion img, .method-animation img, .feedback-photo img, .scenario-timeline img, .ablation-step-image img, .change-effect img"
+          ? ".pipeline-hero-motion img, .method-animation img, .feedback-photo img, .ablation-gallery img, .reference-maps img, .change-frames img, .change-graph img, .review-frame-grid img"
           : name === "inspector" ? viewport.label === "desktop" ? "#sourceImage, #heatmap" : "#sourceImage" : name === "review" ? "" : name === "interval" ? ".request-card img:not([hidden])" : "#frameImage, #frameHeat";
         const decodeFailures = imageSelector ? await page.locator(imageSelector).evaluateAll(async imgs => {
           const failures = [];
@@ -50,8 +50,8 @@ const { chromium } = require("playwright");
         }));
         await page.screenshot({ path: path.join(out, `${name}-${viewport.label}.png`), fullPage: true });
         if (name === "landing") {
-          for (const section of ["scenario", "ablation-chart", "ablation-effects", "ablation-gallery", "limited-review"]) {
-            await page.locator(`.${section}`).screenshot({ path: path.join(out, `${section}-${viewport.label}.png`) });
+          for (const section of ["foundation", "reference", "change", "review", "decision"]) {
+            await page.locator(`#${section}`).screenshot({ path: path.join(out, `${section}-${viewport.label}.png`) });
           }
         } else if (name === "interval") {
           await page.locator(".request-card").first().getByRole("button", { name: "Show heatmap" }).click();
@@ -61,10 +61,20 @@ const { chromium } = require("playwright");
           await page.locator("#reviewPhoto").evaluate(image => image.decode());
           await page.screenshot({ path: path.join(out, `review-frame-${viewport.label}.png`), fullPage: true });
           await page.getByRole("button", { name: "Check remaining" }).click();
-          await page.locator(".review-batch-card img").evaluateAll(images =>
-            images.forEach(image => { image.loading = "eager"; }));
-          await page.waitForFunction(() => [...document.querySelectorAll(".review-batch-card img")]
-            .every(image => image.complete && image.naturalWidth > 0), null, { timeout: 30000 });
+          const reviewImages = await page.locator(".review-batch-card img").evaluateAll(async images => {
+            const failed = [];
+            for (const image of images) {
+              image.loading = "eager";
+              try { await image.decode(); }
+              catch {
+                image.src = image.src;
+                try { await image.decode(); } catch { failed.push(image.src); }
+              }
+              if (!image.naturalWidth && !failed.includes(image.src)) failed.push(image.src);
+            }
+            return failed;
+          });
+          if (reviewImages.length) throw new Error(`Review image decode failed: ${reviewImages.join(", ")}`);
           await page.screenshot({ path: path.join(out, `review-batch-${viewport.label}.png`), fullPage: true });
           await page.getByRole("button", { name: "Compare results" }).click();
           await page.screenshot({ path: path.join(out, `review-result-${viewport.label}.png`), fullPage: true });
