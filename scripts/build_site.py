@@ -23,7 +23,7 @@ OUT = ROOT / "docs"
 def build(out: Path) -> tuple[int, int]:
     if not MODEL.exists():
         raise SystemExit("Train the reference model with model.py first")
-    for directory in ("samples", "landscape", "method", "next-method", "next-samples", "feedback", "ablation", "scenario", "review-frames", "unlabeled-demo"):
+    for directory in ("samples", "landscape", "method", "next-method", "next-samples", "feedback", "ablation", "scenario", "review-frames", "unlabeled-demo", "media"):
         (out / directory).mkdir(parents=True, exist_ok=True)
     for source, target in [
         ("landing.html", "index.html"),
@@ -70,6 +70,7 @@ def build(out: Path) -> tuple[int, int]:
         if asset.suffix in {".jpg", ".png", ".json"}:
             shutil.copyfile(asset, out / "unlabeled-demo" / asset.name)
     shutil.copyfile(WEB / "feedback" / "meeting-illustration.png", out / "feedback" / "meeting-illustration.png")
+    shutil.copyfile(WEB / "media" / "recorded-run-1080p.gif", out / "media" / "recorded-run-1080p.gif")
 
     saved = np.load(MODEL)
     calibration_file = ROOT / "model" / "browser_calibration.json"

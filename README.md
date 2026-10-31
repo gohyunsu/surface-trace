@@ -1,6 +1,6 @@
 # SurfaceTrace
 
-[Live site](https://gohyunsu.github.io/surface-trace/) · [Recorded-run replay](https://gohyunsu.github.io/surface-trace/demo.html) · [Baseline samples](https://gohyunsu.github.io/surface-trace/inspect.html) · [Change-aware samples](https://gohyunsu.github.io/surface-trace/next-inspect.html) · [Interval summary](https://gohyunsu.github.io/surface-trace/interval.html) · [Earlier review study](https://gohyunsu.github.io/surface-trace/review.html)
+[Live site](https://gohyunsu.github.io/surface-trace/) · [Recorded-run replay](https://gohyunsu.github.io/surface-trace/demo.html) · [1080p demo GIF](https://gohyunsu.github.io/surface-trace/media/recorded-run-1080p.gif) · [Notion-ready pipeline brief](notes/NOTION_FINAL_PIPELINE.md) · [Baseline samples](https://gohyunsu.github.io/surface-trace/inspect.html) · [Change-aware samples](https://gohyunsu.github.io/surface-trace/next-inspect.html) · [Interval summary](https://gohyunsu.github.io/surface-trace/interval.html) · [Earlier review study](https://gohyunsu.github.io/surface-trace/review.html)
 
 SurfaceTrace is an industrial image-review research project by ISM × RIKU. It presents a working browser baseline and a separate, change-aware experiment. KolektorSDD depicts cracks in the plastic embedding of electrical commutators; TSFabrics depicts textile production. Anomaly scores are not calibrated defect probabilities.
 
