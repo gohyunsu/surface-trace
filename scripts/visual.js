@@ -30,6 +30,7 @@ const { chromium } = require("playwright");
           : [["landing", ""], ...(viewport.label === "desktop" ? [["inspector", "inspect.html?sample=1"]] : []), ["demo", "demo.html"], ["next-inspector", "next-inspect.html?sample=7"], ["interval", "interval.html"], ["review", "review.html"]];
       for (const [name, suffix] of pages) {
         await page.goto(new URL(suffix, base).href, { waitUntil: "networkidle" });
+        if (name === "landing") await page.waitForFunction(() => document.querySelector("#reviewRouting").dataset.ready === "true");
         if (name === "inspector" && viewport.label === "desktop") await page.waitForFunction(() => document.querySelector("#score").textContent !== "—", null, { timeout: 60000 });
         if (name === "inspector") await page.waitForFunction(() => document.querySelector("#sourceImage").naturalWidth > 0, null, { timeout: 60000 });
         if (name === "next-inspector") await page.waitForFunction(() => document.querySelector("#streamScore").textContent !== "—");

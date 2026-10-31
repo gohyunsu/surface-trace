@@ -33,6 +33,12 @@ large-shift defect flagged only by the selected reference, and a related-run
 defect flagged only by the handcrafted method, then continues through gains,
 shared outcomes, and errors. These are curated examples, not a random test sample.
 
+`review-routing.json` exports request counts from the final sequential-review
+result. Each of its 16 rows is one recorded run: 12 stopped after the first two
+checks and four requested six more. Regenerate with
+`scripts/export_review_routing.py`; `scripts/audit_site_evidence.js` checks the
+export against the saved experiment result.
+
 Regenerate the handcrafted overlays with
 `experiments/unsupervised/export_ablation_comparison.py` on the experiment
 machine, after the TSFabrics feature cache and site sample export are present.

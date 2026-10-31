@@ -36,6 +36,7 @@ def build(out: Path) -> tuple[int, int]:
         ("pipeline.css", "pipeline.css"),
         ("improvements.css", "improvements.css"),
         ("ablation.js", "ablation.js"),
+        ("review-routing.js", "review-routing.js"),
         ("next-app.js", "next-app.js"),
         ("review.js", "review.js"),
         ("review.css", "review.css"),

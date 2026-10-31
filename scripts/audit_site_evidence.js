@@ -19,6 +19,7 @@ const manifest = read("web/unlabeled-demo/manifest.json");
 const evaluation = read("web/unlabeled-demo/evaluation.json");
 const sequentialDevelopment = read("experiments/unsupervised/results/sequential_review_development.json");
 const sequentialFinal = read("experiments/unsupervised/results/sequential_review_final.json");
+const routing = read("web/ablation/review-routing.json");
 const average = values => values.reduce((sum, value) => sum + value, 0) / values.length;
 const percent = value => `${(value * 100).toFixed(1)}%`;
 
@@ -98,7 +99,12 @@ for (const phase of [sequentialDevelopment, sequentialFinal]) {
 }
 assert.equal(sequentialFinal.summary.methods.fixed8.requests, 128);
 assert.equal(sequentialFinal.summary.methods.pilot2.requests, 56);
+assert.deepEqual(routing.runs, Object.entries(sequentialFinal.runs)
+  .map(([run, result]) => ({ run, requests: result.pilot2.requests })));
+assert.equal(routing.runs.filter(run => run.requests === 2).length, 12);
+assert.equal(routing.runs.filter(run => run.requests === 8).length, 4);
 assert(site.includes("<strong>128</strong>") && site.includes("<strong>56</strong>"));
+assert(site.includes("12 stopped at 2") && site.includes("4 continued to 8"));
 assert(site.includes("26 / 90 in both"));
 
 console.log(JSON.stringify({ handcraftedAP: percent(handcraftedAP), frozenAP: percent(frozenAP), wins,

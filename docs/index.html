@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="./pipeline.css">
   <link rel="stylesheet" href="./improvements.css">
   <script src="./ablation.js" defer></script>
+  <script src="./review-routing.js" defer></script>
 </head>
 <body class="landing-page pipeline-landing">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -125,7 +126,7 @@
           <div class="improvement-measure"><span>FINAL 16 RUNS · REVIEW REQUESTS</span><div><small>Fixed eight</small><strong>128</strong><i aria-hidden="true">→</i><small>Two first</small><strong>56</strong></div><p>New defect episodes: 26 / 90 in both.</p></div>
           <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/SEQUENTIAL_REVIEW_RESULTS.md">Review-budget results ↗</a>
         </div>
-        <div class="improvement-display handoff-display" aria-label="Sequential review decision"><div class="handoff-start"><span>FIRST REQUEST</span><strong>2 spaced photos</strong></div><div class="handoff-branches"><div><span>Both confirmed normal</span><strong>Finish this interval</strong></div><div><span>Defect or uncertain</span><strong>Check six more</strong></div></div><p>Review outcomes decide the next request. They do not change the detector.</p></div>
+        <div class="improvement-display handoff-display"><div class="handoff-head"><span>16 RECORDED RUNS</span><strong>12 stopped at 2 <i>·</i> 4 continued to 8</strong></div><div id="reviewRouting" class="handoff-bars" role="group" aria-label="Requests by recorded run"></div><div class="handoff-key"><span><i class="is-first"></i>First two checks</span><span><i class="is-extra"></i>Additional checks</span><span><i class="is-idle"></i>Not requested</span></div><p>Review outcomes control requests; the detector stays fixed.</p></div>
       </article>
 
       <article class="improvement improvement-adaptation" id="reference" aria-labelledby="reference-title">
