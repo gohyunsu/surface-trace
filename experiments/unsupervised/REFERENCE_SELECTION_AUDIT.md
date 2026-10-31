@@ -59,5 +59,6 @@ python experiments/unsupervised/reference_selection_audit.py \
   --out experiments/unsupervised/results/reference_selection_final.json
 ```
 
-The script checks that its selected-reference AP and eight-review episode
-yield agree with the previously recorded benchmark before accepting a run.
+The script checks that its selected-reference AP, eight-review episode yield,
+thresholded flag count, and score quantiles agree with the previously recorded
+benchmark before accepting a newly scored run.

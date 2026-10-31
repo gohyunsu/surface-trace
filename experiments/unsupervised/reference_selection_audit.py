@@ -86,6 +86,12 @@ def score_run(archive: TSFabricsArchive, cache: Path, name: str,
         raise ValueError(f"selected-reference AP does not reproduce: {name}")
     if selected["review_episodes"] != prior["queues"]["spaced8"]["new_episodes"]:
         raise ValueError(f"selected-reference review yield does not reproduce: {name}")
+    selected_flags = int(np.sum(scores["selected"] >= thresholds["selected"]))
+    if selected_flags != prior["source_threshold_exceedances"]:
+        raise ValueError(f"selected-reference thresholded flags do not reproduce: {name}")
+    selected_quantiles = np.quantile(scores["selected"], [.5, .9, .99])
+    if not np.allclose(selected_quantiles, prior["score_quantiles"], rtol=0, atol=5e-4):
+        raise ValueError(f"selected-reference score distribution does not reproduce: {name}")
     if selected["defect_frames"] != recorded["defect_frames"]:
         raise ValueError(f"defect-frame population changed: {name}")
     if selected["new_episodes"] != recorded["new_defect_episodes"]:
