@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Inspect real production frames with recorded anomaly maps, condition-change signals, and a candidate reference comparison.">
+  <meta name="description" content="Inspect real production frames with recorded anomaly maps, condition-change signals, and a run-local reference trial.">
   <title>Change-aware samples | SurfaceTrace</title>
   <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <link rel="stylesheet" href="./site.css">
@@ -17,7 +17,7 @@
     <nav class="main-nav" aria-label="Main navigation"><a href="./index.html">← Overview</a><a href="./inspect.html">Baseline samples</a><span class="nav-current" aria-current="page">Change-aware samples</span><a href="./review.html">Review & update</a></nav>
   </header>
   <main id="main" class="inspect-main stream-main">
-    <div class="inspect-intro stream-intro"><div><p class="section-kicker">TSFABRICS · RECORDED RESULTS</p><h1>Inspect production frames.</h1></div><div class="stream-intro-actions"><p class="inspect-prompt">Compare the two methods and a trial update on the same photo.</p><button id="openSummary" class="button button-dark" type="button">Summarize interval <span aria-hidden="true">→</span></button></div></div>
+    <div class="inspect-intro stream-intro"><div><p class="section-kicker">TSFABRICS · RECORDED RESULTS</p><h1>Inspect production frames.</h1></div><div class="stream-intro-actions"><p class="inspect-prompt">Compare handcrafted and DINOv2 results with a run-local trial.</p><button id="openSummary" class="button button-dark" type="button">Summarize interval <span aria-hidden="true">→</span></button></div></div>
     <div class="stream-layout">
       <section class="inspect-card stream-image-card" aria-labelledby="stream-photo-heading">
         <div class="inspect-card-head"><h2 id="stream-photo-heading">Photo</h2><div class="sample-switcher"><button id="prevFrame" type="button" aria-label="Previous frame">←</button><span id="framePosition" aria-live="polite">—</span><button id="nextFrame" type="button" aria-label="Next frame">→</button></div></div>
@@ -28,7 +28,7 @@
       <div class="stream-results">
         <section class="inspect-card stream-result-card" aria-labelledby="stream-result-heading">
           <div class="inspect-card-head"><h2 id="stream-result-heading">Anomaly review</h2><span class="file-name" id="frameId">—</span></div>
-          <div class="reference-switch" role="group" aria-label="Inspection method"><button type="button" data-reference="handcrafted" aria-pressed="false"><span>Handcrafted</span><small id="handcraftedVerdict">—</small></button><button type="button" data-reference="current" aria-pressed="true"><span>DINOv2 + selection</span><small id="currentVerdict">—</small></button><button type="button" data-reference="candidate" aria-pressed="false"><span>Candidate · trial</span><small id="candidateVerdict">—</small></button></div>
+          <div class="reference-switch" role="group" aria-label="Inspection method"><button type="button" data-reference="handcrafted" aria-pressed="false"><span>Handcrafted</span><small id="handcraftedVerdict">—</small></button><button type="button" data-reference="current" aria-pressed="true"><span>Frozen DINOv2</span><small id="currentVerdict">—</small></button><button type="button" data-reference="candidate" aria-pressed="false"><span>Run-local trial</span><small id="candidateVerdict">—</small></button></div>
           <div class="stream-result-body"><div class="stream-status-line"><span class="status" id="streamStatus" role="status">Loading</span><span class="stream-model-state" id="modelState">Selected source reference</span></div><span class="dataset-label" id="frameTruth">—</span><div class="scoreline"><span class="score" id="streamScore">—</span><span class="scorecaption">Model score</span></div><div class="score-meter" id="streamMeter" role="img" aria-label="Model score and review threshold"><div class="meter"><span id="streamMeterFill"></span></div><div class="threshold-marker" id="streamThresholdMarker" aria-hidden="true"></div></div><p class="assessment" id="streamAssessment"></p></div>
         </section>
         <section class="inspect-card stream-change-card" aria-labelledby="change-heading"><div class="inspect-card-head"><h2 id="change-heading">Visual change</h2><span id="changeState" class="change-state">—</span></div><div class="change-body"><svg id="changeChart" viewBox="0 0 420 100" role="img" aria-label="Visual change score through the selected frame"></svg><div class="change-legend"><span><i></i> Change score</span><span><i></i> Alert limit</span></div><p id="changeNote"></p></div></section>

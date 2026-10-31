@@ -67,7 +67,7 @@ function renderResult() {
   $("streamStatus").className = "status " + (flagged ? "review" : "ok");
   $("modelState").textContent = {
     handcrafted: "Eight-feature baseline",
-    current: "Selected source reference",
+    current: "Selected source reference · active",
     candidate: "Selected new-run reference · trial",
   }[state.reference];
   for (const method of ["handcrafted", "current", "candidate"]) {

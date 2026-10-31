@@ -10,6 +10,7 @@ const read = name => JSON.parse(fs.readFileSync(path.join(root, name), "utf8"));
 const readEarlier = name => JSON.parse(fs.readFileSync(path.join(root, name), "utf8").replace(/\bNaN\b|-?\bInfinity\b/g, "null"));
 const site = fs.readFileSync(path.join(root, "web", "landing.html"), "utf8");
 const demo = fs.readFileSync(path.join(root, "web", "demo.html"), "utf8");
+const inspector = fs.readFileSync(path.join(root, "web", "next-inspector.html"), "utf8");
 const final = read("experiments/unsupervised/results/unlabeled_review_final.json");
 const earlier = readEarlier("experiments/unsupervised/results/tsfabrics.json");
 const feedback = read("experiments/unsupervised/results/feedback_validation_final.json");
@@ -46,6 +47,20 @@ const illustrated = [6, 7, 4].map(id => {
 });
 assert.deepEqual(illustrated.map(sample => final.protocol.targets.includes(sample.scenario)), [false, true, false]);
 assert(demo.includes("development and final runs"));
+const normalShift = "T1_S164_I36_1";
+const selectedSource = earlier.methods.mutual.targets[normalShift].frozen;
+const allSource = earlier.methods.all_unlabeled.targets[normalShift].frozen;
+assert.equal(selectedSource.fp + selectedSource.tn, 975);
+assert.equal(allSource.fp + allSource.tn, 975);
+assert.equal(selectedSource.fp, 11);
+assert.equal(allSource.fp, 971);
+const referencePanel = site.match(/<article class="improvement improvement-adaptation"[\s\S]*?<\/article>/)?.[0];
+assert(referencePanel?.includes("SOURCE REFERENCE SELECTION"));
+assert(referencePanel.includes("sample-06-all.png"));
+assert(referencePanel.includes("sample-06-current.png"));
+assert(!referencePanel.includes("sample-06-candidate.png"));
+assert(inspector.includes("Frozen DINOv2") && inspector.includes("Run-local trial"));
+assert(!inspector.includes("trial update on the same photo"));
 
 const coverage = queue => average(defectRuns.map(run => run.methods.source_knn.queues[queue].new_episodes / run.new_defect_episodes));
 const adjacent = coverage("top8"), spaced = coverage("spaced8");

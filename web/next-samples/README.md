@@ -7,10 +7,11 @@ candidate reference were built without defect labels. The page replays saved
 DINOv2 model outputs; it does not run that model in the browser.
 
 The page groups examples by production run and orders frames within each run.
-“Handcrafted” is the eight-feature baseline. “DINOv2 + selection” uses the
-fixed source-run reference and threshold; “Candidate” uses a new reference
-and threshold from earlier frames of the selected test run. The candidate is
-shown for comparison and is not adopted automatically. The first 12 sample IDs
+“Handcrafted” is the eight-feature baseline. “Frozen DINOv2” uses the
+selected source-run reference and source threshold. “Run-local trial” uses a
+new reference and threshold from earlier unlabeled frames of the selected test
+run. It is separate from the reviewed-normal candidate shown on the Review &
+update page, and neither trial is adopted automatically. The first 12 sample IDs
 retain their original frame identities; the additional examples have IDs 13–24.
 The catalog stores zero-based frame indices; visible frame numbers add one.
 
