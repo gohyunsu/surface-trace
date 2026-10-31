@@ -25,7 +25,7 @@ const { chromium } = require("playwright");
           ? [["review", "review.html"]]
         : process.env.VISUAL_SCOPE === "landing"
           ? [["landing", ""]]
-          : [["landing", ""], ...(viewport.label === "desktop" ? [["inspector", "inspect.html?sample=1"]] : []), ["next-inspector", "next-inspect.html?sample=7"], ["review", "review.html"]];
+          : [["landing", ""], ...(viewport.label === "desktop" ? [["inspector", "inspect.html?sample=1"]] : []), ["next-inspector", "next-inspect.html?sample=7"], ["interval", "interval.html"], ["review", "review.html"]];
       for (const [name, suffix] of pages) {
         await page.goto(new URL(suffix, base).href, { waitUntil: "networkidle" });
         if (name === "inspector" && viewport.label === "desktop") await page.waitForFunction(() => document.querySelector("#score").textContent !== "—", null, { timeout: 60000 });

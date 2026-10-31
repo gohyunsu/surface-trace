@@ -157,7 +157,7 @@ const { chromium } = require("playwright");
     await page.goto(new URL("review.html", base).href, { waitUntil: "networkidle" });
     await page.getByRole("button", { name: "Review selected frames" }).click();
     assert.strictEqual(await page.locator("#reviewTrack button").count(), 24);
-    assert(await page.locator("#reviewPhoto").evaluate(image => image.complete && image.naturalWidth > 0));
+    await page.locator("#reviewPhoto").evaluate(image => image.decode());
     await page.getByRole("button", { name: "Check frame", exact: true }).click();
     assert.strictEqual(await page.locator("#reviewLabel").textContent(), "Normal");
     await page.getByRole("button", { name: "Check remaining" }).click();
