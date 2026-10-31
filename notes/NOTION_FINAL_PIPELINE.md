@@ -51,6 +51,7 @@ SurfaceTrace는 생산 이미지에서 눈에 띄는 영역을 찾고, **외관 
 
 - 구간이 끝나면 처리 장수, 이상 점수 분포·추이, 임계값 초과 건수, 외관 변화 신호와 확인할 사진을 함께 보여준다. 이 화면은 실제 운영에서 알 수 있는 모델 출력만 사용한다. 공개 데이터의 정답 라벨은 검수 전 화면에 노출하지 않는다.
 - 사진은 **점수 순위**로 고르되 서로 최소 16프레임 떨어지게 한다. 가까운 프레임에 반복된 한 사건이 검수 요청을 독점하지 않도록 하기 위한 규칙이다.
+- 임계값에 가까운 사진을 같은 검수 예산에 섞는 대안도 시험했다. 개발 5개 구간에서 발견한 신규 결함 사건은 기존 규칙 **20/43건**, 근접 사진을 2건 섞은 규칙 **17/43건**이었다. 결함 발견을 위한 검수 순위에는 적용하지 않는다.
 - 검수 요청은 처음 **2건**이다. 둘 다 정상으로 확인되면 해당 구간의 요청을 마치고, 결함 또는 판단 보류가 있으면 같은 순위 목록에서 최대 **8건**까지 확인한다. 확인 결과는 그 사진의 검수·기록에만 사용하며, 탐지 모델이 즉시 바뀌지는 않는다.
 
 ### 기준 갱신 후보와 적용 판단
@@ -87,7 +88,7 @@ GIF는 실제 TSFabrics 사진과 저장된 모델 결과를 1920×1080으로 �
 
 **② 현장에 요청할 확인 건수와 시점은 어느 정도가 적절한가요?**
 
-현재 안은 **상위 2건 먼저 확인 → 결함·판단 보류가 있으면 최대 8건**입니다. 이 방식, **매 구간 고정 건수**, **변화 신호가 있을 때만 요청**, **경계 점수·무작위 점검을 일부 섞는 방식** 중 선호하는 방식을 알려 주세요. 특히 한 교대조나 배치에서 담당자가 현실적으로 처리할 수 있는 상한을 알고 싶습니다. 실제 결함 유형이나 내부 사진을 공유받지 않아도 답할 수 있는 운영 질문입니다.
+현재 안은 **상위 2건 먼저 확인 → 결함·판단 보류가 있으면 최대 8건**입니다. 이 방식, **매 구간 고정 건수**, **변화 신호가 있을 때만 요청** 중 실제 업무에 맞는 방식을 알려 주세요. 특히 한 교대조나 배치에서 담당자가 현실적으로 처리할 수 있는 상한을 알고 싶습니다. 실제 결함 유형이나 내부 사진을 공유받지 않아도 답할 수 있는 운영 질문입니다.
 
 **③ 새 기준을 적용할 때 어떤 확인 절차가 필요할까요?**
 
@@ -100,5 +101,6 @@ GIF는 실제 TSFabrics 사진과 저장된 모델 결과를 1920×1080으로 �
 - [시간 순서·검수 실험 결과](https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/UNLABELED_REVIEW_RESULTS.md)
 - [2건 우선 검수 결과](https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/SEQUENTIAL_REVIEW_RESULTS.md)
 - [기준 갱신 후보 검증 결과](https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/FEEDBACK_VALIDATION_RESULTS.md)
+- [임계값 근처 검수 대안의 동일 예산 평가](https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/UNCERTAINTY_REVIEW_RESULTS.md)
 - [초기 MVP 평가](https://github.com/gohyunsu/surface-trace/blob/main/notes/experiment.md)
 - 시연 영상과 예시 사진: [TSFabrics, Ni et al. (2026)](https://doi.org/10.6084/m9.figshare.29573381), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)

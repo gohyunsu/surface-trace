@@ -19,7 +19,7 @@ STD = np.asarray([0.229, 0.224, 0.225], dtype=np.float32)
 
 
 def preprocess(image: Image.Image) -> np.ndarray:
-    rgb = image.convert("RGB").resize(IMAGE_SIZE, Image.Resampling.BILINEAR)
+    rgb = image.convert("RGB").resize(IMAGE_SIZE, getattr(Image, "Resampling", Image).BILINEAR)
     array = np.asarray(rgb, dtype=np.float32) / 255.0
     return np.transpose((array - MEAN) / STD, (2, 0, 1))
 
