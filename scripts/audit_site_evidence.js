@@ -20,6 +20,8 @@ const evaluation = read("web/unlabeled-demo/evaluation.json");
 const sequentialDevelopment = read("experiments/unsupervised/results/sequential_review_development.json");
 const sequentialFinal = read("experiments/unsupervised/results/sequential_review_final.json");
 const routing = read("web/ablation/review-routing.json");
+const scenarioFrames = read("web/scenario/manifest.json");
+const changeFigure = read("web/ablation/change-figure.json");
 const average = values => values.reduce((sum, value) => sum + value, 0) / values.length;
 const percent = value => `${(value * 100).toFixed(1)}%`;
 
@@ -83,6 +85,26 @@ const expectedPositions = manifest.review.map(item => item.frame).sort((a, b) =>
   .map(frame => Math.round((frame - firstFrame) / (lastFrame - firstFrame) * 1000) / 10);
 assert.deepEqual(timelinePositions, expectedPositions);
 assert.equal(manifest.change.alert - manifest.change.splice_boundary, 96);
+const sceneFrame = (file, run, frame) => {
+  const entry = scenarioFrames.find(item => item.file === file);
+  assert(entry, `Missing scenario provenance: ${file}`);
+  assert.equal(entry.scenario, run);
+  assert.equal(entry.display_frame, frame);
+  assert.equal(entry.dataset_label, "Normal");
+  assert(fs.existsSync(path.join(root, "web", "scenario", file)));
+};
+const chartEnd = changeFigure.source_holdout_start + changeFigure.source_holdout.ends.at(-1);
+sceneFrame(`source-${chartEnd - 1}.jpg`, changeFigure.source, chartEnd - 1);
+sceneFrame(`source-${chartEnd}.jpg`, changeFigure.source, chartEnd);
+assert(site.includes(`scenario/source-${chartEnd - 1}.jpg`));
+assert(site.includes(`scenario/source-${chartEnd}.jpg`));
+const spliceSourceEnd = final.protocol.source_continuation[0] + manifest.change.splice_boundary;
+sceneFrame(`source-${spliceSourceEnd}.jpg`, manifest.source, spliceSourceEnd);
+sceneFrame("demo-001.jpg", manifest.run, 1);
+assert(demo.includes(`scenario/source-${spliceSourceEnd}.jpg`));
+assert(demo.includes("scenario/demo-001.jpg"));
+assert.equal(changeFigure.target_start.first_alarm, 192);
+sceneFrame("target-192.jpg", changeFigure.target, changeFigure.target_start.first_alarm);
 assert.notDeepEqual(manifest.review.map(item => item.frame), feedback.runs[manifest.run].strategies.spaced8.review_frames,
   "The demonstration and the separate update validation use different review queues");
 

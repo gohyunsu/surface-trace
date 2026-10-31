@@ -13,8 +13,11 @@ from tsfabrics import TSFabricsArchive
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "scenario_export"
 RUNS = {
-    "source": ("T1_S174_I111_1", (508, 509, 510, 511)),
+    # The landing chart ends at source frame 4096; the recorded replay splices
+    # source frames 2113–3136 before the separate target run begins.
+    "source": ("T1_S174_I111_1", (3135, 4094, 4095)),
     "target": ("T1_S164_I36_1", (0, 63, 127, 191)),
+    "demo": ("T1_S478_I118_2", (0,)),
 }
 
 
