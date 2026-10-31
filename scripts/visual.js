@@ -44,7 +44,12 @@ const { chromium } = require("playwright");
           const failures = [];
           for (const img of imgs) {
             img.loading = "eager";
-            try { await img.decode(); } catch { failures.push(img.src); }
+            if (!img.complete) await new Promise(resolve => {
+              img.addEventListener("load", resolve, { once: true });
+              img.addEventListener("error", resolve, { once: true });
+            });
+            if (!img.naturalWidth) failures.push(img.src);
+            else try { await img.decode(); } catch { /* Loaded animated images can reject decode. */ }
           }
           return failures;
         }) : [];
