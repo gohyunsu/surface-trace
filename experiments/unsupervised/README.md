@@ -2,6 +2,8 @@
 
 The reviewed, run-scoped reference experiment and its safety limits are
 documented in [CONDITION_REFERENCE.md](CONDITION_REFERENCE.md).
+The subsequent normal-only calibration, interval review queue, and measured
+shadow update are documented in [FEEDBACK_LOOP.md](FEEDBACK_LOOP.md).
 
 This directory is independent of the KolektorSDD browser prototype. Curated
 TSFabrics outputs from this experiment appear on the published site; the site
