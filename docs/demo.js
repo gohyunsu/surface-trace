@@ -2,7 +2,8 @@
 
 const $ = id => document.getElementById(id);
 const svgNS = "http://www.w3.org/2000/svg";
-const state = { manifest: null, evaluation: null, featureCases: [], featureIndex: 0, featureTimer: null, scene: 0, reviewIndex: 0, revealed: false, playing: false, timer: null };
+const state = { manifest: null, evaluation: null, featureCases: [], featureIndex: 0, featureTimer: null, shiftIndex: 0, shiftTimer: null, scene: 0, reviewIndex: 0, revealed: false, playing: false, timer: null };
+const shiftFrames = [1, 32, 64, 96, 192];
 
 function renderFeature(index) {
   state.featureIndex = index % state.featureCases.length;
@@ -43,20 +44,51 @@ function trace(parent, points, className) {
   svg(parent, "polyline", { points: points.map(([x, y]) => `${x.toFixed(2)},${y.toFixed(2)}`).join(" "), class: className, pathLength: 100 });
 }
 
-function drawChange({ window_ends: ends, window_scores: scores, limit, splice_boundary: boundary, alert }) {
+function drawChange({ window_ends: ends, window_scores: scores, limit, splice_boundary: boundary, alert }, frame) {
   const chart = $("demoChangeChart");
   chart.replaceChildren();
-  const x = frame => 19 + (frame - ends[0]) / (ends.at(-1) - ends[0]) * 601;
-  const y = score => 148 - score / (Math.max(...scores, limit) * 1.1) * 119;
+  const points = ends.map((end, index) => [end, scores[index]])
+    .filter(([end]) => end >= boundary - 128 && end <= boundary + 192);
+  const x = end => 19 + (end - points[0][0]) / (points.at(-1)[0] - points[0][0]) * 601;
+  const y = score => 148 - score / (Math.max(...points.map(point => point[1]), limit) * 1.1) * 119;
   for (const level of [0, .5, 1]) svg(chart, "line", { x1: 19, x2: 620, y1: 148 - level * 119, y2: 148 - level * 119, class: "demo-chart-grid" });
   svg(chart, "line", { x1: 19, x2: 620, y1: y(limit), y2: y(limit), class: "demo-chart-limit" });
   svg(chart, "line", { x1: x(boundary), x2: x(boundary), y1: 25, y2: 148, class: "demo-chart-boundary" });
-  trace(chart, scores.map((score, i) => [x(ends[i]), y(score)]), "demo-chart-line");
-  const index = ends.indexOf(alert);
-  if (index >= 0) svg(chart, "circle", { cx: x(alert), cy: y(scores[index]), r: 5, class: "demo-chart-alert" });
+  const visible = points.filter(([end]) => end <= boundary + frame);
+  trace(chart, visible.map(([end, score]) => [x(end), y(score)]), "demo-chart-line");
+  if (frame >= 32) {
+    const [end, score] = visible.at(-1);
+    svg(chart, "circle", { cx: x(end), cy: y(score), r: 5, class: "demo-chart-current" });
+  }
+  if (frame >= 96) {
+    const [, score] = points.find(([end]) => end === alert);
+    svg(chart, "circle", { cx: x(alert), cy: y(score), r: 6, class: "demo-chart-alert" });
+    svg(chart, "text", { x: x(alert) + 10, y: y(score) - 10, class: "demo-alert-label" }, "ALERT");
+  }
   svg(chart, "text", { x: 19, y: 171 }, "Reference");
   svg(chart, "text", { x: x(boundary) + 6, y: 171 }, "New run");
-  svg(chart, "text", { x: 615, y: 171, "text-anchor": "end" }, "Frame 96 alert");
+  svg(chart, "text", { x: 615, y: 171, "text-anchor": "end" }, `Frame ${frame}`);
+}
+
+function renderShift(index) {
+  state.shiftIndex = index;
+  const frame = shiftFrames[index];
+  const image = $("demoShiftPhoto");
+  image.src = `./scenario/demo-${String(frame).padStart(3, "0")}.jpg`;
+  image.alt = `Frame ${frame} of the separate changed run`;
+  image.classList.remove("is-advancing");
+  void image.offsetWidth;
+  image.classList.add("is-advancing");
+  $("demoShiftFrame").textContent = `Changed run · frame ${frame}`;
+  $("demoShiftCallout").textContent = frame >= 96 ? "Frame 96" : `${Math.floor(frame / 32)} / 3`;
+  $("demoShiftCalloutLabel").textContent = frame >= 96 ? "First sustained change alert" : "Consecutive windows above the limit";
+  drawChange(state.manifest.change, frame);
+}
+
+function rotateShift() {
+  clearTimeout(state.shiftTimer);
+  if (state.scene !== 1 || state.shiftIndex === shiftFrames.length - 1) return;
+  state.shiftTimer = setTimeout(() => { renderShift(state.shiftIndex + 1); rotateShift(); }, 1000);
 }
 
 function drawScores(manifest) {
@@ -126,6 +158,7 @@ function updateReview() {
 
 function showScene(index) {
   clearTimeout(state.featureTimer);
+  clearTimeout(state.shiftTimer);
   state.scene = index;
   state.revealed = false;
   if (index === 3) state.reviewIndex = 0;
@@ -135,6 +168,10 @@ function showScene(index) {
     else button.removeAttribute("aria-current");
   });
   if (index === 3) updateReview();
+  if (index === 1) {
+    renderShift(window.matchMedia("(prefers-reduced-motion: reduce)").matches ? shiftFrames.length - 1 : 0);
+    rotateShift();
+  }
   $("demoStatus").textContent = ["Patch features", "Visual shift", "Interval scores", "Recorded checks", "Separate validation"][index];
   if (!state.playing) $("demoPlay").textContent = index === 4 ? "Replay recorded run" : "Play recorded run";
   rotateFeatures();
@@ -143,6 +180,7 @@ function showScene(index) {
 function stop() {
   clearTimeout(state.timer);
   clearTimeout(state.featureTimer);
+  clearTimeout(state.shiftTimer);
   state.playing = false;
   document.body.classList.remove("is-playing");
   $("demoPlay").textContent = state.scene === 4 ? "Replay recorded run" : "Play recorded run";
@@ -195,7 +233,7 @@ async function main() {
       state.featureCases.push({ sample, classic, phase: id === 7 ? "Final" : "Development" });
     }
     renderFeature(0);
-    drawChange(manifest.change);
+    shiftFrames.forEach(frame => { const image = new Image(); image.src = `./scenario/demo-${String(frame).padStart(3, "0")}.jpg`; });
     drawScores(manifest);
     drawQueue(manifest.review);
     showScene(0);
@@ -206,6 +244,7 @@ async function main() {
       document.body.classList.add("is-playing");
       $("demoPlay").textContent = "Pause replay";
       rotateFeatures();
+      if (state.scene === 1) rotateShift();
       schedule();
     });
     $("demoNext").addEventListener("click", async () => { stop(); try { await advance(); } catch (error) { $("demoError").textContent = error.message; $("demoError").hidden = false; } });

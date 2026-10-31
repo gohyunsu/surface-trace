@@ -19,7 +19,7 @@ const fps = 4;
     const page = await browser.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
     await page.clock.install();
     await page.goto(new URL("demo.html", base).href, { waitUntil: "networkidle" });
-    await page.waitForFunction(() => document.querySelector("#demoChangeChart polyline") !== null);
+    await page.waitForFunction(() => document.querySelector("#demoScoreChart polyline") !== null);
     await page.addStyleTag({ content: `
       .site-header,.site-footer,.demo-source{display:none!important}
       .demo-main{width:min(1680px,calc(100% - 120px));padding:52px 0 0}

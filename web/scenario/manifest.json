@@ -54,5 +54,33 @@
     "index": 0,
     "display_frame": 1,
     "dataset_label": "Normal"
+  },
+  {
+    "file": "demo-032.jpg",
+    "scenario": "T1_S478_I118_2",
+    "index": 31,
+    "display_frame": 32,
+    "dataset_label": "Defect"
+  },
+  {
+    "file": "demo-064.jpg",
+    "scenario": "T1_S478_I118_2",
+    "index": 63,
+    "display_frame": 64,
+    "dataset_label": "Normal"
+  },
+  {
+    "file": "demo-096.jpg",
+    "scenario": "T1_S478_I118_2",
+    "index": 95,
+    "display_frame": 96,
+    "dataset_label": "Normal"
+  },
+  {
+    "file": "demo-192.jpg",
+    "scenario": "T1_S478_I118_2",
+    "index": 191,
+    "display_frame": 192,
+    "dataset_label": "Normal"
   }
 ]

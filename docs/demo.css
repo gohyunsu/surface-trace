@@ -44,6 +44,8 @@
 .shift-photos{display:grid;grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr);align-items:center;gap:9px}
 .shift-photos figure{margin:0;min-width:0}
 .shift-photos img{display:block;width:100%;aspect-ratio:1.8;object-fit:cover;border:1px solid #6f8198;border-radius:5px}
+.shift-photos img.is-advancing{animation:shift-frame-enter .5s ease-out both}
+@keyframes shift-frame-enter{from{opacity:.45;filter:blur(3px)}to{opacity:1;filter:blur(0)}}
 .shift-photos figcaption{margin-top:9px;color:#b1c0d0;font-size:11px}
 .shift-photos>span{color:#9fcfca;font-size:23px;text-align:center}
 .demo-visual svg{display:block;width:100%;height:auto;overflow:visible}
@@ -54,8 +56,11 @@
 .demo-chart-limit{stroke:#df988a;stroke-width:1.5;stroke-dasharray:5 4}
 .demo-chart-line{fill:none;stroke:#a8d3ce;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .demo-stage:not([hidden]) .demo-chart-line{stroke-dasharray:100;stroke-dashoffset:100;animation:demo-trace 1.45s ease-out forwards}
+.demo-stage:not([hidden]) .shift-visual .demo-chart-line{animation-duration:.45s}
 @keyframes demo-trace{to{stroke-dashoffset:0}}
 .demo-chart-alert{fill:#e3a28e;stroke:#253651;stroke-width:2}
+.demo-chart-current{fill:#a8d3ce;stroke:#253651;stroke-width:2}
+.demo-visual svg .demo-alert-label{fill:#efb5a4;font-size:12px;font-weight:600;letter-spacing:.08em}
 .demo-visual svg text{fill:#adc0d4;font:11px sans-serif}
 .demo-chart-heading{display:flex;justify-content:space-between;color:#a5b9d0;font-size:10px;letter-spacing:.13em}
 #demoScoreChart{margin:17px 0 22px}
@@ -104,4 +109,4 @@
 @media(max-width:850px){.demo-main{width:calc(100% - 36px)}.demo-stage{grid-template-columns:1fr;min-height:0}.demo-copy{padding:28px 32px}.demo-kicker{margin-bottom:13px}.demo-copy>p:not(.demo-kicker){margin-top:10px}.demo-callout{margin-top:19px;padding-top:15px}.demo-visual{min-height:320px}.demo-steps button{padding:12px 10px;gap:7px}}
 @media(max-width:560px){.demo-main{width:calc(100% - 24px);padding:33px 0 60px}.demo-intro{align-items:start;margin-bottom:20px}.demo-intro h1{font-size:39px}.demo-run{display:none}.demo-steps{gap:4px}.demo-steps button{display:block;padding:9px 4px;text-align:center;font-size:8px}.demo-steps button span{display:block;margin-bottom:4px}.demo-copy{padding:27px 22px}.demo-copy h2{font-size:34px}.demo-copy>p:not(.demo-kicker){font-size:12px}.demo-visual{padding:20px;min-height:300px}.feature-pair{gap:8px}.feature-pair figcaption{display:grid;gap:3px;font-size:10px}.feature-pair figcaption strong{text-align:left}.shift-photos{gap:5px;grid-template-columns:minmax(0,1fr) 17px minmax(0,1fr)}.shift-photos figcaption{font-size:9px}.shift-photos>span{font-size:16px}.demo-queue{gap:3px}.demo-queue span{font-size:7px}.check-visual{padding:20px}.demo-outcome{font-size:16px}.decision-visual{padding:25px 20px}.decision-row strong{font-size:16px}.demo-controls #demoStatus{font-size:10px}}
 @media(max-width:390px){.demo-page .main-nav a:not(:first-child){display:none}.demo-controls #demoStatus{display:none}.demo-controls .demo-play{min-width:0;flex:1}}
-@media(prefers-reduced-motion:reduce){.demo-steps button{transition:none}.demo-stage:not([hidden]) .demo-copy,.demo-stage:not([hidden]) .demo-visual,.demo-stage:not([hidden]) .demo-chart-line,.demo-page.is-playing .demo-steps button[aria-current=step]:after{animation:none}.demo-stage:not([hidden]) .demo-chart-line{stroke-dashoffset:0}}
+@media(prefers-reduced-motion:reduce){.demo-steps button{transition:none}.demo-stage:not([hidden]) .demo-copy,.demo-stage:not([hidden]) .demo-visual,.demo-stage:not([hidden]) .demo-chart-line,.demo-page.is-playing .demo-steps button[aria-current=step]:after,.shift-photos img.is-advancing{animation:none!important}.demo-stage:not([hidden]) .demo-chart-line{stroke-dashoffset:0}}

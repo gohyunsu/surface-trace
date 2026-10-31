@@ -89,6 +89,8 @@ const { chromium } = require("playwright");
     assert.strictEqual(await page.locator("#demoDinoVerdict").textContent(), "Normal retained");
     await page.getByRole("button", { name: "Next chapter" }).click();
     assert(await page.getByRole("heading", { name: "The appearance changes." }).isVisible());
+    assert.strictEqual(await page.locator("#demoChangeChart .demo-chart-alert").count(), 0);
+    await page.waitForFunction(() => document.querySelector("#demoShiftFrame").textContent.includes("frame 96"));
     assert.strictEqual(await page.locator("#demoChangeChart .demo-chart-alert").count(), 1);
     await page.getByRole("button", { name: "Next chapter" }).click();
     assert(await page.getByRole("heading", { name: "Inspect the unusual frames." }).isVisible());

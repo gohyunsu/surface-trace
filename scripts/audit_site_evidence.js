@@ -10,6 +10,7 @@ const read = name => JSON.parse(fs.readFileSync(path.join(root, name), "utf8"));
 const readEarlier = name => JSON.parse(fs.readFileSync(path.join(root, name), "utf8").replace(/\bNaN\b|-?\bInfinity\b/g, "null"));
 const site = fs.readFileSync(path.join(root, "web", "landing.html"), "utf8");
 const demo = fs.readFileSync(path.join(root, "web", "demo.html"), "utf8");
+const demoScript = fs.readFileSync(path.join(root, "web", "demo.js"), "utf8");
 const inspector = fs.readFileSync(path.join(root, "web", "next-inspector.html"), "utf8");
 const final = read("experiments/unsupervised/results/unlabeled_review_final.json");
 const earlier = readEarlier("experiments/unsupervised/results/tsfabrics.json");
@@ -46,7 +47,7 @@ const illustrated = [6, 7, 4].map(id => {
   return sample;
 });
 assert.deepEqual(illustrated.map(sample => final.protocol.targets.includes(sample.scenario)), [false, true, false]);
-assert(demo.includes("development and final runs"));
+assert(demo.includes("Feature examples span runs"));
 const normalShift = "T1_S164_I36_1";
 const selectedSource = earlier.methods.mutual.targets[normalShift].frozen;
 const allSource = earlier.methods.all_unlabeled.targets[normalShift].frozen;
@@ -100,12 +101,12 @@ const expectedPositions = manifest.review.map(item => item.frame).sort((a, b) =>
   .map(frame => Math.round((frame - firstFrame) / (lastFrame - firstFrame) * 1000) / 10);
 assert.deepEqual(timelinePositions, expectedPositions);
 assert.equal(manifest.change.alert - manifest.change.splice_boundary, 96);
-const sceneFrame = (file, run, frame) => {
+const sceneFrame = (file, run, frame, label = "Normal") => {
   const entry = scenarioFrames.find(item => item.file === file);
   assert(entry, `Missing scenario provenance: ${file}`);
   assert.equal(entry.scenario, run);
   assert.equal(entry.display_frame, frame);
-  assert.equal(entry.dataset_label, "Normal");
+  assert.equal(entry.dataset_label, label);
   assert(fs.existsSync(path.join(root, "web", "scenario", file)));
 };
 const chartEnd = changeFigure.source_holdout_start + changeFigure.source_holdout.ends.at(-1);
@@ -115,7 +116,15 @@ assert(site.includes(`scenario/source-${chartEnd - 1}.jpg`));
 assert(site.includes(`scenario/source-${chartEnd}.jpg`));
 const spliceSourceEnd = final.protocol.source_continuation[0] + manifest.change.splice_boundary;
 sceneFrame(`source-${spliceSourceEnd}.jpg`, manifest.source, spliceSourceEnd);
-sceneFrame("demo-001.jpg", manifest.run, 1);
+for (const [frame, label] of [[1, "Normal"], [32, "Defect"], [64, "Normal"], [96, "Normal"], [192, "Normal"]]) {
+  sceneFrame(`demo-${String(frame).padStart(3, "0")}.jpg`, manifest.run, frame, label);
+}
+const shiftFrames = demoScript.match(/const shiftFrames = \[([^\]]+)\]/)?.[1].split(",").map(Number);
+assert.deepEqual(shiftFrames, [1, 32, 64, 96, 192]);
+for (const frame of [32, 64, 96, 192]) {
+  const end = manifest.change.splice_boundary + frame;
+  assert(manifest.change.window_scores[manifest.change.window_ends.indexOf(end)] > manifest.change.limit);
+}
 assert(demo.includes(`scenario/source-${spliceSourceEnd}.jpg`));
 assert(demo.includes("scenario/demo-001.jpg"));
 assert.equal(changeFigure.target_start.first_alarm, 192);

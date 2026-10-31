@@ -35,7 +35,7 @@ const { chromium } = require("playwright");
         if (name === "inspector") await page.waitForFunction(() => document.querySelector("#sourceImage").naturalWidth > 0, null, { timeout: 60000 });
         if (name === "next-inspector") await page.waitForFunction(() => document.querySelector("#streamScore").textContent !== "—");
         if (name === "interval") await page.waitForFunction(() => document.querySelector(".request-card") !== null);
-        if (name === "demo") await page.waitForFunction(() => document.querySelector("#demoChangeChart polyline") !== null);
+        if (name === "demo") await page.waitForFunction(() => document.querySelector("#demoScoreChart polyline") !== null);
         const imageSelector = name === "landing"
           ? ".pipeline-hero-motion img, .method-animation img, .feedback-photo img, .ablation-gallery img, .reference-maps img, .change-frames img, .change-graph img, .review-frame-grid img"
           : name === "demo" ? ".shift-photos img"
@@ -64,7 +64,7 @@ const { chromium } = require("playwright");
         } else if (name === "demo") {
           for (let step = 1; step < 5; step++) {
             await page.locator(`.demo-steps button[data-step="${step}"]`).click();
-            await page.waitForTimeout(1550);
+            await page.waitForTimeout(step === 1 ? 4350 : 1550);
             if (step === 2) await page.locator("#demoQueue img").evaluateAll(async images => {
               for (const image of images) await image.decode();
             });
