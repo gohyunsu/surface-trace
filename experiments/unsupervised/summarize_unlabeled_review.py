@@ -140,6 +140,10 @@ def main() -> None:
               "(45.7% to 71.1% macro episode coverage), but the four-run bootstrap "
               "interval includes zero. Treat it as an optional candidate, not an "
               "approved replacement.", "",
+              "The packaged interval replay therefore keeps the frozen source DINO "
+              "reference active and uses the same 16-frame-spaced eight-review rule. "
+              "This conservative deployment choice was made after seeing final results; "
+              "it is not a new independent test of that choice.", "",
               "Temporal spacing was the stronger tested change: 37.3% to 71.1% macro "
               "episode coverage for eight ranked reviews. It spread requests across "
               "events but did not reduce the workload: all 16 runs still requested "

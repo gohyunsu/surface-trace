@@ -105,3 +105,12 @@ The period summary may show only image-derived facts: frame count, anomaly
 score quantiles and trend, change score/alert, ranked photos, model version,
 and pending review decisions. Dataset truth, TP/FP, and episode recall belong
 to the offline evaluation view, not the operational summary.
+
+## Post-evaluation operating choice
+
+The locked local-selected scorer tied the frozen source for episode coverage
+on the final runs and had lower macro frame AP. The packaged interval replay
+therefore keeps the frozen DINO source reference active and applies the same
+spaced eight-review queue. This is a conservative decision made after the
+final evaluation, not a second independent held-out validation. The selected
+local bank remains an unapproved candidate for future change-specific tests.

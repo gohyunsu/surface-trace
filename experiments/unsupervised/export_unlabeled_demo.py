@@ -9,11 +9,11 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-from core import PatchScorer, build_reference_bank
+from core import PatchScorer, build_reference_bank, mutual_image_scores, select_reference_indices
 from drift import DriftDetector
 from run_tsfabrics import SOURCE, _load
 from tsfabrics import TSFabricsArchive
-from unlabeled_review import GAP, MAX_FRAMES, SOURCE_CAL, SPLICE_PRELUDE, STARTUP, review_queues, selected_reference
+from unlabeled_review import GAP, MAX_FRAMES, SOURCE_CAL, SPLICE_PRELUDE, STARTUP, review_queues
 from condition_reference import encode_in_memory
 
 
@@ -45,13 +45,14 @@ def main() -> None:
     except FileNotFoundError:
         target, target_globals, rows = encode_in_memory(archive, TARGET, limit=MAX_FRAMES)
     target, target_globals, rows = target[:MAX_FRAMES], target_globals[:MAX_FRAMES], rows[:MAX_FRAMES]
-    reference = selected_reference(np.asarray(target[:STARTUP]), target_globals[:STARTUP])
-    scorer = PatchScorer(build_reference_bank(np.asarray(target[:STARTUP]), reference,
-                                             max_vectors=768))
+    source_startup = np.asarray(source[:512])
+    reference = select_reference_indices(mutual_image_scores(source_startup),
+                                         np.asarray(source_globals[:512]))
+    scorer = PatchScorer(build_reference_bank(source_startup, reference))
     first = STARTUP + GAP
     scores, maps = scorer.score(target[first:])
     selected = review_queues(scores)["spaced8"]
-    expected = audit["methods"]["local_selected_knn"]["queues"]["spaced8"]["frames"]
+    expected = audit["methods"]["source_knn"]["queues"]["spaced8"]["frames"]
     if [first + i + 1 for i in selected] != expected:
         raise ValueError("packaged review queue differs from locked final result")
     drift = DriftDetector(np.asarray(source_globals[:SOURCE_CAL[1]]))
@@ -81,7 +82,7 @@ def main() -> None:
                         "ambiguous": bool(rows[index]["ambiguous"])})
     manifest = {
         "dataset": "TSFabrics", "source": SOURCE, "run": TARGET,
-        "model": "Frozen DINOv2-S/14 · 32 label-free selected reference frames · patch nearest neighbor",
+        "model": "Frozen DINOv2-S/14 · selected source-run reference · patch nearest neighbor",
         "evaluation_frames": [first + 1, len(rows)],
         "frame_count": len(scores),
         "score_quantiles": dict(zip(("p50", "p90", "p99"),
@@ -97,8 +98,8 @@ def main() -> None:
         "selection": "fixed final evaluation, not shown in operational summary",
         "run": TARGET, "review": offline,
         "new_defect_episodes": audit["new_defect_episodes"],
-        "episodes_found": audit["methods"]["local_selected_knn"]["queues"]["spaced8"]["new_episodes"],
-        "source_episodes_found": audit["methods"]["source_knn"]["queues"]["spaced8"]["new_episodes"],
+        "episodes_found": audit["methods"]["source_knn"]["queues"]["spaced8"]["new_episodes"],
+        "local_candidate_episodes_found": audit["methods"]["local_selected_knn"]["queues"]["spaced8"]["new_episodes"],
         "random_expected_episodes": audit["random_100"]["mean_episodes"],
     }
     (args.out / "manifest.json").write_text(json.dumps(manifest, separators=(",", ":")) + "\n")

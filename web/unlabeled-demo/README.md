@@ -1,7 +1,8 @@
 # Recorded interval replay
 
 `manifest.json` contains only image-derived scores, change values, and the
-eight label-free review requests for TSFabrics run `T1_S478_I118_2`.
+eight label-free review requests from the frozen source DINO reference for
+TSFabrics run `T1_S478_I118_2`.
 `evaluation.json` contains published dataset labels and is fetched only when
 a visitor checks a selected frame. It is never used to create the queue or
 initial interval summary. The eight JPEGs are the recorded input frames;
