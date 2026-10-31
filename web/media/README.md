@@ -12,7 +12,9 @@ photos and dims six conditional requests. After the first two recorded outcomes
 are confirmed defects, the remaining six open. The final screen reveals a
 separate 15-run validation in order: fewer normal alerts, fewer detected
 defect frames, fewer detected defect episodes, and a decision to keep the
-frozen reference. Dataset images are CC BY 4.0: Ni et
+frozen reference. The scope above each scene distinguishes the three example
+runs, the one recorded review run, and the separate update test. Dataset images
+are CC BY 4.0: Ni et
 al. (2026),
 https://doi.org/10.6084/m9.figshare.29573381.
 

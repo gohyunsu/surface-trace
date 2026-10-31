@@ -1,6 +1,6 @@
 # Recorded-run presentation
 
-Open [the replay](../web/demo.html) and press **Play recorded run**. The five
+Open [the replay](../web/demo.html) and press **Play replay**. The five
 chapters take about 29 seconds in the GIF; the arrow buttons and chapter tabs let a
 presenter pause at any result. Use the [interval summary](../web/interval.html)
 for a longer inspection demonstration.
@@ -22,6 +22,10 @@ eight-review protocol across 15 runs. The two review queues must not be
 presented as one continuous model update. The first four chapters replay
 saved model outputs; they do not run DINOv2 in the browser. The final chapter
 uses public labels only for retrospective evaluation.
+
+The scope badge above the stage follows this distinction: three selected runs
+for the feature examples, one named run for the change and review sequence,
+and a separate 15-run update test for the decision.
 
 ## Evidence and next model gate
 

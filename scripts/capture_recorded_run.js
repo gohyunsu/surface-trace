@@ -25,6 +25,7 @@ const fps = 4;
       .demo-main{width:min(1680px,calc(100% - 120px));padding:52px 0 0}
       .demo-intro{margin-bottom:24px}
       .demo-intro h1{font-size:66px}
+      .demo-run{font-size:17px}
       .demo-steps button{font-size:16px;padding:14px 21px}
       .demo-stage{min-height:690px;grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr)}
       .demo-copy{padding:65px}
@@ -52,8 +53,16 @@ const fps = 4;
     };
     const chapter = async step => {
       await page.locator(`.demo-steps button[data-step="${step}"]`).click();
+      const expectedScope = step === 0 ? "THREE RUNS · EXAMPLES"
+        : step === 4 ? "15 RUNS · UPDATE TEST" : "RUN · T1_S478_I118_2";
+      if (await page.locator("#demoScope").textContent() !== expectedScope) {
+        throw new Error(`Unexpected replay scope in chapter ${step + 1}`);
+      }
       await page.evaluate(() => { document.querySelector("#demoPlay").textContent = "Recorded replay"; });
     };
+    if (await page.locator("#demoScope").textContent() !== "THREE RUNS · EXAMPLES") {
+      throw new Error("Feature examples are missing their three-run scope");
+    }
     for (let caseIndex = 0; caseIndex < 3; caseIndex++) {
       await page.evaluate(i => renderFeature(i), caseIndex);
       await page.locator("#demoClassicMap").evaluate(image => image.decode());

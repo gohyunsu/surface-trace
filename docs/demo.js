@@ -212,6 +212,8 @@ function showScene(index) {
   clearTimeout(state.shiftTimer);
   clearDecisionTimers();
   state.scene = index;
+  $("demoScope").textContent = index === 0 ? "THREE RUNS · EXAMPLES"
+    : index === 4 ? "15 RUNS · UPDATE TEST" : `RUN · ${state.manifest.run}`;
   state.revealed = false;
   if (index === 3) state.reviewIndex = 0;
   document.querySelectorAll(".demo-stage").forEach((stage, i) => { stage.hidden = i !== index; });
@@ -226,7 +228,7 @@ function showScene(index) {
   }
   if (index === 4) startDecision();
   $("demoStatus").textContent = ["Patch features", "Visual shift", "Interval scores", "Recorded checks", "Separate validation"][index];
-  if (!state.playing) $("demoPlay").textContent = index === 4 ? "Replay recorded run" : "Play recorded run";
+  if (!state.playing) $("demoPlay").textContent = index === 4 ? "Replay" : "Play replay";
   rotateFeatures();
 }
 
@@ -238,7 +240,7 @@ function stop() {
   if (state.scene === 4 && state.decisionPhase < 3) renderDecision(3);
   state.playing = false;
   document.body.classList.remove("is-playing");
-  $("demoPlay").textContent = state.scene === 4 ? "Replay recorded run" : "Play recorded run";
+  $("demoPlay").textContent = state.scene === 4 ? "Replay" : "Play replay";
 }
 
 async function revealReview() {
