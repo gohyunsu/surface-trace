@@ -111,10 +111,17 @@ const { chromium } = require("playwright");
       await page.waitForFunction(() => document.querySelector("#demoOutcome").textContent.includes("confirmed"));
     }
     assert.strictEqual(await page.locator("#demoCheckCount").textContent(), "8 / 8");
+    await page.clock.install();
     await page.getByRole("button", { name: "View update decision" }).click();
+    assert(await page.getByRole("heading", { name: "First, fewer false alarms." }).isVisible());
+    await page.clock.runFor(1400);
+    assert(await page.getByRole("heading", { name: "Check defect sensitivity." }).isVisible());
+    await page.clock.runFor(1300);
+    assert(await page.getByRole("heading", { name: "Check distinct events." }).isVisible());
+    await page.clock.runFor(1300);
+    assert(await page.getByRole("heading", { name: "Hold the candidate." }).isVisible());
     assert((await page.locator(".decision-visual").textContent()).includes("202 → 153"));
     assert((await page.locator(".demo-source").textContent()).includes("separate"));
-    await page.clock.install();
     await page.getByRole("button", { name: "Replay recorded run" }).click();
     await page.clock.runFor(7100);
     assert(await page.getByRole("heading", { name: "The appearance changes." }).isVisible());
@@ -127,6 +134,7 @@ const { chromium } = require("playwright");
       await page.waitForFunction(() => document.querySelector("#demoOutcome").textContent.includes("confirmed"));
       await page.clock.runFor(1200);
     }
+    await page.clock.runFor(4000);
     assert(await page.getByRole("heading", { name: "Hold the candidate." }).isVisible());
 
     await page.goto(new URL("interval.html", base).href, { waitUntil: "networkidle" });

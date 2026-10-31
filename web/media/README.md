@@ -7,8 +7,10 @@ final runs, including one where
 the handcrafted method flags a defect that DINOv2 misses. The visual-change
 scene advances through real frames 1, 32, 64, 96, and 192 from one recorded
 run as its saved feature-distribution trace grows; the alert is confirmed at
-frame 96. The middle scenes follow that run; the final update-decision screen
-summarizes a separate 15-run validation. Dataset images are CC BY 4.0: Ni et
+frame 96. The middle scenes follow that run. The final screen reveals a
+separate 15-run validation in order: fewer normal alerts, fewer detected
+defect frames, fewer detected defect episodes, and a decision to keep the
+frozen reference. Dataset images are CC BY 4.0: Ni et
 al. (2026),
 https://doi.org/10.6084/m9.figshare.29573381.
 

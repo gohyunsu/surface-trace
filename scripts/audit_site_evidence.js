@@ -100,6 +100,8 @@ assert.deepEqual(counts, { normal: 20273, defect: 642, frozenFP: 1050, candidate
 for (const [before, after] of [[counts.frozenFP, counts.candidateFP], [counts.frozenTP, counts.candidateTP], [counts.frozenEpisodes, counts.candidateEpisodes]]) {
   const change = `${before.toLocaleString("en-US")} <em>→</em> ${after.toLocaleString("en-US")}`;
   assert(demo.includes(change), `Demo missing validated pair: ${change}`);
+  const phaseValue = `${before.toLocaleString("en-US")} → ${after.toLocaleString("en-US")}`;
+  assert(demoScript.includes(phaseValue), `Demo reveal missing validated pair: ${phaseValue}`);
 }
 
 assert.equal(manifest.run, "T1_S478_I118_2");

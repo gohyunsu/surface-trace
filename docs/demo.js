@@ -2,7 +2,7 @@
 
 const $ = id => document.getElementById(id);
 const svgNS = "http://www.w3.org/2000/svg";
-const state = { manifest: null, evaluation: null, featureCases: [], featureIndex: 0, featureTimer: null, shiftIndex: 0, shiftTimer: null, scene: 0, reviewIndex: 0, revealed: false, playing: false, timer: null };
+const state = { manifest: null, evaluation: null, featureCases: [], featureIndex: 0, featureTimer: null, shiftIndex: 0, shiftTimer: null, decisionTimers: [], decisionPhase: 3, scene: 0, reviewIndex: 0, revealed: false, playing: false, timer: null };
 const shiftFrames = [1, 32, 64, 96, 192];
 
 function renderFeature(index) {
@@ -156,9 +156,54 @@ function updateReview() {
   }
 }
 
+const decisionPhases = [
+  ["First, fewer false alarms.", "A trial reference uses reviewed normal photos. It flags fewer normal photos on later test frames.", "1,050 → 0", "Normal frames flagged"],
+  ["Check defect sensitivity.", "The same trial also flags fewer defect photos on those later frames.", "202 → 153", "Defect frames flagged"],
+  ["Check distinct events.", "The total number of detected new defect episodes falls from 48 to 40.", "48 → 40", "New defect episodes found"],
+  ["Hold the candidate.", "Reviewed normal photos can form a trial reference. On later frames, it removes normal alerts but also misses more defects, so the frozen reference remains active.", "Keep frozen", "No automatic reference update"],
+];
+
+function clearDecisionTimers() {
+  state.decisionTimers.forEach(clearTimeout);
+  state.decisionTimers = [];
+}
+
+function renderDecision(phase) {
+  state.decisionPhase = phase;
+  const [title, explanation, value, label] = decisionPhases[phase];
+  $("decisionTitle").textContent = title;
+  $("decisionExplanation").textContent = explanation;
+  $("decisionValue").textContent = value;
+  $("decisionLabel").textContent = label;
+  $("decisionCallout").classList.toggle("demo-hold", phase === 3);
+  $("decisionCallout").classList.toggle("demo-risk", phase === 1 || phase === 2);
+  document.querySelectorAll(".decision-row").forEach(row => {
+    const index = Number(row.dataset.decisionStage);
+    const pending = phase < 3 && index > phase;
+    row.classList.toggle("is-pending", pending);
+    row.classList.toggle("is-focus", phase < 3 && index === phase);
+    if (pending) row.setAttribute("aria-hidden", "true");
+    else row.removeAttribute("aria-hidden");
+  });
+}
+
+function startDecision() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    renderDecision(3);
+    return;
+  }
+  renderDecision(0);
+  for (const [phase, delay] of [[1, 1400], [2, 2700], [3, 4000]]) {
+    state.decisionTimers.push(setTimeout(() => {
+      if (state.scene === 4) renderDecision(phase);
+    }, delay));
+  }
+}
+
 function showScene(index) {
   clearTimeout(state.featureTimer);
   clearTimeout(state.shiftTimer);
+  clearDecisionTimers();
   state.scene = index;
   state.revealed = false;
   if (index === 3) state.reviewIndex = 0;
@@ -172,6 +217,7 @@ function showScene(index) {
     renderShift(window.matchMedia("(prefers-reduced-motion: reduce)").matches ? shiftFrames.length - 1 : 0);
     rotateShift();
   }
+  if (index === 4) startDecision();
   $("demoStatus").textContent = ["Patch features", "Visual shift", "Interval scores", "Recorded checks", "Separate validation"][index];
   if (!state.playing) $("demoPlay").textContent = index === 4 ? "Replay recorded run" : "Play recorded run";
   rotateFeatures();
@@ -181,6 +227,8 @@ function stop() {
   clearTimeout(state.timer);
   clearTimeout(state.featureTimer);
   clearTimeout(state.shiftTimer);
+  clearDecisionTimers();
+  if (state.scene === 4 && state.decisionPhase < 3) renderDecision(3);
   state.playing = false;
   document.body.classList.remove("is-playing");
   $("demoPlay").textContent = state.scene === 4 ? "Replay recorded run" : "Play recorded run";
@@ -212,7 +260,7 @@ async function advance() {
 
 function schedule() {
   if (!state.playing) return;
-  if (state.scene === 4) { stop(); return; }
+  if (state.scene === 4) { state.timer = setTimeout(stop, 5200); return; }
   state.timer = setTimeout(async () => {
     try { await advance(); schedule(); }
     catch (error) { stop(); $("demoError").textContent = error.message; $("demoError").hidden = false; }

@@ -38,7 +38,7 @@ const { chromium } = require("playwright");
         if (name === "demo") await page.waitForFunction(() => document.querySelector("#demoScoreChart polyline") !== null);
         const imageSelector = name === "landing"
           ? ".pipeline-hero-motion img, .method-animation img, .feedback-photo img, .ablation-gallery img, .reference-maps img, .change-frames img, .change-graph img, .review-frame-grid img"
-          : name === "demo" ? ".shift-photos img"
+          : name === "demo" ? ".feature-pair img"
           : name === "inspector" ? viewport.label === "desktop" ? "#sourceImage, #heatmap" : "#sourceImage" : name === "review" ? "" : name === "interval" ? ".request-card img:not([hidden])" : "#frameImage, #frameHeat";
         const decodeFailures = imageSelector ? await page.locator(imageSelector).evaluateAll(async imgs => {
           const failures = [];
@@ -64,11 +64,16 @@ const { chromium } = require("playwright");
         } else if (name === "demo") {
           for (let step = 1; step < 5; step++) {
             await page.locator(`.demo-steps button[data-step="${step}"]`).click();
-            await page.waitForTimeout(step === 1 ? 4350 : 1550);
-            if (step === 2) await page.locator("#demoQueue img").evaluateAll(async images => {
-              for (const image of images) await image.decode();
-            });
-            if (step === 3) await page.locator("#demoReviewPhoto").evaluate(image => image.decode());
+            await page.waitForTimeout(step === 1 ? 4350 : step === 4 ? 4500 : 1550);
+            if (step === 1) {
+              await page.waitForFunction(() => document.querySelector("#demoShiftFrame").textContent.includes("frame 192") && document.querySelector("#demoShiftPhoto").naturalWidth > 0);
+              await page.locator(".shift-photos img").evaluateAll(async images => {
+                for (const image of images) await image.decode();
+              });
+            }
+            if (step === 2) await page.waitForFunction(() => [...document.querySelectorAll("#demoQueue img")].length === 8 && [...document.querySelectorAll("#demoQueue img")].every(image => image.complete && image.naturalWidth > 0));
+            if (step === 3) await page.waitForFunction(() => document.querySelector("#demoReviewPhoto").complete && document.querySelector("#demoReviewPhoto").naturalWidth > 0);
+            if (step === 4) await page.waitForFunction(() => document.querySelector("#decisionTitle").textContent === "Hold the candidate.");
             await page.screenshot({ path: path.join(out, `demo-${step}-${viewport.label}.png`), fullPage: true });
             if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)) throw new Error(`demo ${step} ${viewport.label}: horizontal overflow`);
           }
