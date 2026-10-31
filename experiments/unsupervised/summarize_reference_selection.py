@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+from random import Random
 from statistics import mean
 
 
@@ -14,6 +15,17 @@ def pair(left: object, right: object) -> str:
 
 def percentage(value: float | None) -> str:
     return "—" if value is None else f"{value:.1%}"
+
+
+def paired_interval(differences: list[float], *, seed: int = 42) -> str:
+    if not differences:
+        return "—"
+    rng = Random(seed)
+    count = len(differences)
+    resampled = sorted(mean(differences[rng.randrange(count)] for _ in range(count))
+                       for _ in range(10_000))
+    return (f"{mean(differences) * 100:+.1f} pp "
+            f"[{resampled[249] * 100:+.1f}, {resampled[9749] * 100:+.1f}]")
 
 
 def summarize(phase: str, result: dict) -> list[str]:
@@ -47,6 +59,13 @@ def summarize(phase: str, result: dict) -> list[str]:
     losses = sum(chosen["average_precision"] + 1e-9 < control["average_precision"]
                  for _, chosen, control in positive)
     ties = len(positive) - wins - losses
+    fp_fewer = sum(chosen["fp"] < control["fp"] for _, chosen, control in rows)
+    fp_more = sum(chosen["fp"] > control["fp"] for _, chosen, control in rows)
+    fp_tied = len(rows) - fp_fewer - fp_more
+    ap_difference = [chosen["average_precision"] - control["average_precision"]
+                     for _, chosen, control in positive]
+    coverage_difference = [(chosen["review_episodes"] - control["review_episodes"])
+                           / chosen["new_episodes"] for _, chosen, control in episodic]
     source = result["source"]
     selected_limit = f"{source['thresholds']['selected']:.4f}"
     all_limit = f"{source['thresholds']['all']:.4f}"
@@ -72,6 +91,12 @@ def summarize(phase: str, result: dict) -> list[str]:
         f"{pair(sum(chosen['review_episodes'] for _, chosen, _ in rows), sum(control['review_episodes'] for _, _, control in rows))} |",
         "",
         f"Selected-reference AP wins / ties / losses: {wins} / {ties} / {losses} defect runs.",
+        f"Selected-reference normal-alert reductions / ties / increases: "
+        f"{fp_fewer} / {fp_tied} / {fp_more} runs.",
+        f"Paired run-bootstrap AP difference (selected − all): "
+        f"{paired_interval(ap_difference)}.",
+        f"Paired run-bootstrap episode-coverage difference (selected − all): "
+        f"{paired_interval(coverage_difference)}.",
         "",
         "| Run | Defect frames | Frame AP · selected / all | Defect flags · selected / all | "
         "Normal flags · selected / all | Episodes @8 · selected / all |",
@@ -122,7 +147,8 @@ def main() -> None:
         "Thresholded flag counts depend on each bank's separate source calibration. "
         "AP and eight-review episode coverage compare the reference representations "
         "without choosing a target threshold. Per-run results should be read alongside "
-        "the macro figures before changing the site or active reference.",
+        "the macro figures before changing the site or active reference. Paired "
+        "run-bootstrap intervals reflect the few recorded runs, not field uncertainty.",
         "",
     ]
     args.out.parent.mkdir(parents=True, exist_ok=True)

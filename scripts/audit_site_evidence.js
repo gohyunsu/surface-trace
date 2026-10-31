@@ -99,7 +99,7 @@ assert.equal(selectedHoldout.fp + selectedHoldout.tn, 1984);
 assert.equal(allHoldout.fp + allHoldout.tn, 1984);
 assert(site.includes("Source holdout: 7 → 20 false alerts / 1,984 normal frames."));
 const referencePanel = site.match(/<article class="improvement improvement-adaptation"[\s\S]*?<\/article>/)?.[0];
-assert(referencePanel?.includes("SOURCE REFERENCE SELECTION"));
+assert(referencePanel?.includes("SOURCE REFERENCE SELECTION · DEVELOPMENT NORMAL RUN"));
 assert(referencePanel.includes("sample-06-all.png"));
 assert(referencePanel.includes("sample-06-current.png"));
 assert(!referencePanel.includes("sample-06-candidate.png"));

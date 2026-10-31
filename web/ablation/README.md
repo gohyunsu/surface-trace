@@ -12,7 +12,9 @@ threshold; their raw scores have different units.
 the same reference-bank capacity as the selected-reference method. On the
 landing page, it appears beside the selected-reference heatmap for the same
 normal photo. Its score, threshold, and result are recorded under
-`all_unlabeled` in `catalog.json`. The separate run-local trial overlay remains in
+`all_unlabeled` in `catalog.json`. The photo is from the development run
+`T1_S164_I36_1`, so the displayed false-alert reduction is one case rather
+than an all-run estimate. The separate run-local trial overlay remains in
 `web/next-samples/sample-06-candidate.png` for the sample explorer and research
 record; it is no longer a row in the landing comparison.
 

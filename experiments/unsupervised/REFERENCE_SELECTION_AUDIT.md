@@ -68,5 +68,6 @@ The script checks that its selected-reference AP, eight-review episode yield,
 thresholded flag count, and score quantiles agree with the previously recorded
 benchmark before accepting a newly scored run. The report command rejects
 incomplete checkpoints and lists every run, both source-continuation flag counts,
-macro frame AP, eight-review episode coverage, and per-run false alerts. It
+macro frame AP, eight-review episode coverage, per-run false alerts, and paired
+run-bootstrap intervals for AP and coverage differences. It
 does not promote a reference or select a threshold from final labels.
