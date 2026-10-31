@@ -90,8 +90,7 @@ continued from startup. Report per-run results and macro averages across runs
 with post-startup defects. Also report how many reviews are normal, and the
 mean/min/max random-queue yield over 100 predetermined seeds.
 
-Secondary: frame AUROC/AP per defective run, top-region mask hit for inspected
-defects where feasible, reference contamination audited afterward, and
+Secondary: frame AUROC/AP per defective run, reference contamination audited afterward, and
 single-model feature/scoring latency on the RTX 3090. Do not use accuracy or
 pooled AP as a primary result: defect prevalence varies sharply by run.
 

@@ -58,7 +58,27 @@ const { chromium } = require("playwright");
       assert((await link.getAttribute("href")).endsWith(destination));
       assert.strictEqual(await link.getAttribute("target"), null);
     }
-    assert(await page.locator(".summary-next .summary-title").getByText("Review & update").isVisible());
+    assert(await page.locator(".summary-next .summary-title").getByText("Scores, change, and eight review requests").isVisible());
+    assert.strictEqual(await page.locator(".limited-review-grid>div").count(), 4);
+
+    await page.goto(new URL("interval.html", base).href, { waitUntil: "networkidle" });
+    assert.strictEqual(await page.locator(".request-card").count(), 8);
+    assert.strictEqual(await page.locator("#frameCount").textContent(), "2,884");
+    assert.strictEqual(await page.locator("#changeFrame").textContent(), "Frame 96");
+    assert((await page.locator("#scoreChart polyline").getAttribute("points")).split(" ").length > 300);
+    assert.strictEqual(await page.locator("#changeChart .alert-dot").count(), 1);
+    assert(!(await page.locator(".request-panel").textContent()).includes("Defect"));
+    await page.locator(".request-card img:not([hidden])").evaluateAll(images =>
+      images.forEach(image => { image.loading = "eager"; }));
+    await page.waitForFunction(() => [...document.querySelectorAll(".request-card img:not([hidden])")]
+      .every(image => image.complete && image.naturalWidth > 0));
+    await page.locator(".request-card").first().getByRole("button", { name: "Show heatmap" }).click();
+    assert(await page.locator(".request-card").first().locator(".heat").isVisible());
+    await page.locator(".request-card").first().locator(".heat").evaluate(image => image.decode());
+    await page.locator(".request-card").first().getByRole("button", { name: "Check result" }).click();
+    await page.locator(".request-card").first().locator(".request-result").waitFor();
+    assert((await page.locator(".request-card").first().textContent()).includes("Recorded result · Defect"));
+    assert.strictEqual(await page.locator("#reviewProgress").textContent(), "1 / 8 checked");
 
     await page.goto(new URL("inspect.html?sample=1", base).href, { waitUntil: "networkidle" });
     await page.waitForFunction(() => document.querySelector("#score").textContent !== "—");

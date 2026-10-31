@@ -4,6 +4,10 @@ The reviewed, run-scoped reference experiment and its safety limits are
 documented in [CONDITION_REFERENCE.md](CONDITION_REFERENCE.md).
 The subsequent normal-only calibration, interval review queue, and measured
 shadow update are documented in [FEEDBACK_LOOP.md](FEEDBACK_LOOP.md).
+The latest label-free ranking and limited-review benchmark is documented in
+[UNLABELED_REVIEW_PROTOCOL.md](UNLABELED_REVIEW_PROTOCOL.md), with all-run
+[results](UNLABELED_REVIEW_RESULTS.md). Its fixed-run site replay is generated
+by `export_unlabeled_demo.py`.
 
 This directory is independent of the KolektorSDD browser prototype. Curated
 TSFabrics outputs from this experiment appear on the published site; the site
@@ -98,6 +102,10 @@ python experiments/unsupervised/run_tsfabrics.py extract --zip experiments/unsup
 python experiments/unsupervised/run_tsfabrics.py evaluate --zip experiments/unsupervised/data/TSfabrics.zip
 python experiments/unsupervised/run_tsfabrics.py evaluate --zip experiments/unsupervised/data/TSfabrics.zip --source T1_S148_I108_2 --targets T1_S174_I111_1 T1_S164_I36_1 T1_S478_I118_2 --output experiments/unsupervised/results/tsfabrics_contaminated_source.json
 python experiments/unsupervised/run_lusitano.py --mode both
+python experiments/unsupervised/unlabeled_review.py --zip experiments/unsupervised/data/TSfabrics.zip --cache experiments/unsupervised/features --phase development --out experiments/unsupervised/results/unlabeled_review_development.json
+python experiments/unsupervised/unlabeled_review.py --zip experiments/unsupervised/data/TSfabrics.zip --cache experiments/unsupervised/features --phase final --out experiments/unsupervised/results/unlabeled_review_final.json
+python experiments/unsupervised/summarize_unlabeled_review.py experiments/unsupervised/results/unlabeled_review_development.json experiments/unsupervised/results/unlabeled_review_final.json experiments/unsupervised/UNLABELED_REVIEW_RESULTS.md
+python experiments/unsupervised/export_unlabeled_demo.py --zip experiments/unsupervised/data/TSfabrics.zip --cache experiments/unsupervised/features --result experiments/unsupervised/results/unlabeled_review_final.json --out web/unlabeled-demo
 ```
 
 The dataset checksum and archive inventory must be verified before using the

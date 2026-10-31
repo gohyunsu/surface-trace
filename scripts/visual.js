@@ -19,6 +19,8 @@ const { chromium } = require("playwright");
       const page = await browser.newPage({ viewport });
       const pages = process.env.VISUAL_SCOPE === "summary"
         ? [["next-inspector", "next-inspect.html?sample=7"]]
+        : process.env.VISUAL_SCOPE === "interval"
+          ? [["interval", "interval.html"]]
         : process.env.VISUAL_SCOPE === "review"
           ? [["review", "review.html"]]
         : process.env.VISUAL_SCOPE === "landing"
@@ -29,9 +31,10 @@ const { chromium } = require("playwright");
         if (name === "inspector" && viewport.label === "desktop") await page.waitForFunction(() => document.querySelector("#score").textContent !== "—", null, { timeout: 60000 });
         if (name === "inspector") await page.waitForFunction(() => document.querySelector("#sourceImage").naturalWidth > 0, null, { timeout: 60000 });
         if (name === "next-inspector") await page.waitForFunction(() => document.querySelector("#streamScore").textContent !== "—");
+        if (name === "interval") await page.waitForFunction(() => document.querySelector(".request-card") !== null);
         const imageSelector = name === "landing"
           ? ".pipeline-hero-motion img, .method-animation img, .feedback-photo img, .scenario-timeline img, .ablation-step-image img, .change-effect img"
-          : name === "inspector" ? viewport.label === "desktop" ? "#sourceImage, #heatmap" : "#sourceImage" : name === "review" ? "" : "#frameImage, #frameHeat";
+          : name === "inspector" ? viewport.label === "desktop" ? "#sourceImage, #heatmap" : "#sourceImage" : name === "review" ? "" : name === "interval" ? ".request-card img:not([hidden])" : "#frameImage, #frameHeat";
         const decodeFailures = imageSelector ? await page.locator(imageSelector).evaluateAll(async imgs => {
           const failures = [];
           for (const img of imgs) {
@@ -47,9 +50,12 @@ const { chromium } = require("playwright");
         }));
         await page.screenshot({ path: path.join(out, `${name}-${viewport.label}.png`), fullPage: true });
         if (name === "landing") {
-          for (const section of ["scenario", "ablation-chart", "ablation-effects", "ablation-gallery"]) {
+          for (const section of ["scenario", "ablation-chart", "ablation-effects", "ablation-gallery", "limited-review"]) {
             await page.locator(`.${section}`).screenshot({ path: path.join(out, `${section}-${viewport.label}.png`) });
           }
+        } else if (name === "interval") {
+          await page.locator(".request-card").first().getByRole("button", { name: "Show heatmap" }).click();
+          await page.locator(".request-card").first().screenshot({ path: path.join(out, `interval-heat-${viewport.label}.png`) });
         } else if (name === "review") {
           await page.getByRole("button", { name: "Review selected frames" }).click();
           await page.locator("#reviewPhoto").evaluate(image => image.decode());
