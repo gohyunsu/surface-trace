@@ -80,6 +80,7 @@ const { chromium } = require("playwright");
     page.on("request", request => { if (request.url().endsWith("/unlabeled-demo/evaluation.json")) evaluationRequests.push(request.url()); });
     assert.strictEqual(await page.locator(".demo-steps button").count(), 5);
     assert(await page.getByRole("heading", { name: "See what the patches reveal." }).isVisible());
+    assert((await page.locator("#demoFeatureContext").textContent()).startsWith("Development · Normal"));
     assert.strictEqual(await page.locator("#demoClassicVerdict").textContent(), "False alarm");
     assert.strictEqual(await page.locator("#demoDinoVerdict").textContent(), "Normal retained");
     await page.getByRole("button", { name: "Next chapter" }).click();

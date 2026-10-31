@@ -13,7 +13,8 @@ for a longer inspection demonstration.
 | Eight checks | This run's first photo is a defect, so review continues to eight. Each recorded outcome appears only after its photo is checked. | “The outcome becomes available after review; confirmed defects never enter the normal reference.” |
 | Update decision | A **separate** 15-run, later-frame validation compares the frozen reference with a trial reference built from reviewed normals. Normal alerts fall 1,050→0, while flagged defect frames fall 202→153 and detected new episodes 48→40. | “We keep the frozen reference. Fewer false alarms alone are not enough to approve a model update.” |
 
-The first chapter is a curated comparison, drawn from three TSFabrics runs.
+The first chapter is a curated comparison, drawn from two development runs and
+one final run. Its AP caption comes from the four defect-bearing final runs.
 Chapters two through four use the same recorded TSFabrics run and the saved
 `web/unlabeled-demo/manifest.json` queue. The fifth chapter uses
 `experiments/unsupervised/results/feedback_validation_final.json`, a distinct

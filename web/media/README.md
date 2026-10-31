@@ -2,7 +2,8 @@
 
 `recorded-run-1080p.gif` is a 1920 x 1080 capture of the site's recorded-data
 replay, not live camera inference. It uses saved TSFabrics photos and model
-outputs. The first scene compares three curated photos, including one where
+outputs. The first scene compares three curated photos from development and
+final runs, including one where
 the handcrafted method flags a defect that DINOv2 misses. The middle scenes
 follow one recorded run; the final update-decision screen summarizes a separate 15-run
 validation. Dataset images are CC BY 4.0: Ni et al. (2026),

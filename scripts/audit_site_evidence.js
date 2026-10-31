@@ -6,10 +6,15 @@ const path = require("node:path");
 
 const root = path.resolve(__dirname, "..");
 const read = name => JSON.parse(fs.readFileSync(path.join(root, name), "utf8"));
+// The earlier Python experiment contains bare NaN values in unrelated recall fields.
+const readEarlier = name => JSON.parse(fs.readFileSync(path.join(root, name), "utf8").replace(/\bNaN\b|-?\bInfinity\b/g, "null"));
 const site = fs.readFileSync(path.join(root, "web", "landing.html"), "utf8");
 const demo = fs.readFileSync(path.join(root, "web", "demo.html"), "utf8");
 const final = read("experiments/unsupervised/results/unlabeled_review_final.json");
+const earlier = readEarlier("experiments/unsupervised/results/tsfabrics.json");
 const feedback = read("experiments/unsupervised/results/feedback_validation_final.json");
+const siteCatalog = read("web/next-samples/catalog.json");
+const classicCatalog = read("web/ablation/catalog.json");
 const manifest = read("web/unlabeled-demo/manifest.json");
 const evaluation = read("web/unlabeled-demo/evaluation.json");
 const sequentialDevelopment = read("experiments/unsupervised/results/sequential_review_development.json");
@@ -24,6 +29,20 @@ const frozenAP = average(defectRuns.map(run => run.methods.source_knn.average_pr
 const wins = defectRuns.filter(run => run.methods.source_knn.average_precision > run.methods.handcrafted_source.average_precision).length;
 assert(site.includes(percent(handcraftedAP)) && site.includes(percent(frozenAP)));
 assert(site.includes(`leads in ${wins} of ${defectRuns.length} runs`));
+assert(site.includes("4 FINAL DEFECT RUNS") && demo.includes("four final defect runs"));
+assert.equal(siteCatalog.source, final.protocol.source);
+assert.equal(siteCatalog.source, earlier.protocol.source);
+const illustrated = [6, 7, 4].map(id => {
+  const sample = siteCatalog.samples.find(item => item.id === id);
+  const classic = classicCatalog.find(item => item.id === id);
+  assert(sample && classic && sample.scenario === classic.scenario && sample.frame === classic.frame);
+  assert.equal(sample.current.threshold, earlier.methods.mutual.threshold);
+  assert.equal(classic.threshold, earlier.methods.classic_8_feature.threshold);
+  assert.equal(classic.alert, classic.score >= classic.threshold);
+  return sample;
+});
+assert.deepEqual(illustrated.map(sample => final.protocol.targets.includes(sample.scenario)), [false, true, false]);
+assert(demo.includes("development and final runs"));
 
 const coverage = queue => average(defectRuns.map(run => run.methods.source_knn.queues[queue].new_episodes / run.new_defect_episodes));
 const adjacent = coverage("top8"), spaced = coverage("spaced8");

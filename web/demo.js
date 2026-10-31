@@ -6,11 +6,11 @@ const state = { manifest: null, evaluation: null, featureCases: [], featureIndex
 
 function renderFeature(index) {
   state.featureIndex = index % state.featureCases.length;
-  const { sample, classic } = state.featureCases[state.featureIndex];
+  const { sample, classic, phase } = state.featureCases[state.featureIndex];
   const defect = sample.label === "Defect";
   const dinoAlert = sample.current.score >= sample.current.threshold;
   const verdict = alert => defect ? alert ? "Defect flagged" : "Defect missed" : alert ? "False alarm" : "Normal retained";
-  $("demoFeatureContext").textContent = `${sample.label} · frame ${sample.frame.toLocaleString()}`;
+  $("demoFeatureContext").textContent = `${phase} · ${sample.label} · frame ${sample.frame.toLocaleString()}`;
   $("demoFeatureCounter").textContent = `${String(state.featureIndex + 1).padStart(2, "0")} / ${String(state.featureCases.length).padStart(2, "0")}`;
   $("demoClassicPhoto").src = sample.image;
   $("demoDinoPhoto").src = sample.image;
@@ -192,7 +192,7 @@ async function main() {
       const sample = nextCatalog.samples.find(item => item.id === id);
       const classic = classicCatalog.find(item => item.id === id);
       if (!sample || !classic || sample.scenario !== classic.scenario || sample.frame !== classic.frame || sample.label !== classic.dataset_label) throw new Error("Paired feature examples do not match.");
-      state.featureCases.push({ sample, classic });
+      state.featureCases.push({ sample, classic, phase: id === 7 ? "Final" : "Development" });
     }
     renderFeature(0);
     drawChange(manifest.change);
