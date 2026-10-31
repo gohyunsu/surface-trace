@@ -14,6 +14,11 @@ The subsequent fixed eight-review update test is documented in
 final runs, adding reviewed-normal patches reduced normal-frame alerts from
 1,050 to zero but also reduced defect-frame alerts from 202 to 153 and detected
 new defect episodes from 48 to 40. The frozen reference remains active.
+The separate completed-interval [score-fusion protocol](FUSION_REVIEW_PROTOCOL.md)
+and [results](FUSION_REVIEW_RESULTS.md) test whether the older handcrafted
+score complements frozen DINOv2 in the same eight-review queue. A 75/25 rank
+mix gained on development runs but lost AP and two discovered episodes on the
+sixteen final runs, so the frozen DINOv2 queue also remains active.
 
 This directory is independent of the KolektorSDD browser prototype. Curated
 TSFabrics outputs from this experiment appear on the published site; the site
@@ -117,6 +122,9 @@ python experiments/unsupervised/export_unlabeled_demo.py --zip experiments/unsup
 python experiments/unsupervised/feedback_validation.py --zip experiments/unsupervised/data/TSfabrics.zip --cache experiments/unsupervised/features --phase development --out experiments/unsupervised/results/feedback_validation_development.json
 python experiments/unsupervised/feedback_validation.py --zip experiments/unsupervised/data/TSfabrics.zip --cache experiments/unsupervised/features --phase final --out experiments/unsupervised/results/feedback_validation_final.json
 python experiments/unsupervised/summarize_feedback_validation.py experiments/unsupervised/results/feedback_validation_development.json experiments/unsupervised/results/feedback_validation_final.json experiments/unsupervised/FEEDBACK_VALIDATION_RESULTS.md
+python experiments/unsupervised/fusion_review.py --zip experiments/unsupervised/data/TSfabrics.zip --cache experiments/unsupervised/features --phase development --out experiments/unsupervised/results/fusion_review_development.json
+python experiments/unsupervised/fusion_review.py --zip experiments/unsupervised/data/TSfabrics.zip --cache experiments/unsupervised/features --phase final --out experiments/unsupervised/results/fusion_review_final.json
+python experiments/unsupervised/audit_fusion_review.py --zip experiments/unsupervised/data/TSfabrics.zip --result experiments/unsupervised/results/fusion_review_final.json --baseline experiments/unsupervised/results/unlabeled_review_final.json
 ```
 
 The dataset checksum and archive inventory must be verified before using the

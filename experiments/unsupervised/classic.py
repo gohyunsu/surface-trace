@@ -15,7 +15,7 @@ BLOCK = 8
 
 
 def feature_map(image: Image.Image) -> np.ndarray:
-    gray_image = image.convert("L").resize(SIZE, Image.Resampling.BILINEAR)
+    gray_image = image.convert("L").resize(SIZE, getattr(Image, "Resampling", Image).BILINEAR)
     raw = np.asarray(gray_image, dtype=np.float32) / 255.0
     centered = np.clip((raw - np.median(raw)) / max(float(np.std(raw)), 0.06), -4, 4)
 
