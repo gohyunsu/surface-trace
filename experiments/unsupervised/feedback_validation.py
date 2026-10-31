@@ -247,11 +247,21 @@ def main() -> None:
                      "promotion": "shadow only; no automatic update"},
         "runs": {},
     }
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    if args.out.exists() and args.out.stat().st_size:
+        previous = json.loads(args.out.read_text())
+        if previous["protocol"] != result["protocol"]:
+            raise ValueError("existing checkpoint has a different protocol")
+        result = previous
     for name in targets:
+        if name in result["runs"]:
+            print(f"skip saved {name}", flush=True)
+            continue
         result["runs"][name] = run_target(archive, args.cache, name,
                                           source_bank, source_threshold, drift, prelude)
-    args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(json.dumps(result, separators=(",", ":"), allow_nan=False) + "\n")
+        temporary = args.out.with_suffix(args.out.suffix + ".tmp")
+        temporary.write_text(json.dumps(result, separators=(",", ":"), allow_nan=False) + "\n")
+        temporary.replace(args.out)
 
 
 if __name__ == "__main__":

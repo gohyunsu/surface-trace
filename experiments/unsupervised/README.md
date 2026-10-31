@@ -8,6 +8,12 @@ The latest label-free ranking and limited-review benchmark is documented in
 [UNLABELED_REVIEW_PROTOCOL.md](UNLABELED_REVIEW_PROTOCOL.md), with all-run
 [results](UNLABELED_REVIEW_RESULTS.md). Its fixed-run site replay is generated
 by `export_unlabeled_demo.py`.
+The subsequent fixed eight-review update test is documented in
+[FEEDBACK_VALIDATION_PROTOCOL.md](FEEDBACK_VALIDATION_PROTOCOL.md) and
+[FEEDBACK_VALIDATION_RESULTS.md](FEEDBACK_VALIDATION_RESULTS.md). On 15 eligible
+final runs, adding reviewed-normal patches reduced normal-frame alerts from
+1,050 to zero but also reduced defect-frame alerts from 202 to 153 and detected
+new defect episodes from 48 to 40. The frozen reference remains active.
 
 This directory is independent of the KolektorSDD browser prototype. Curated
 TSFabrics outputs from this experiment appear on the published site; the site
@@ -106,6 +112,9 @@ python experiments/unsupervised/unlabeled_review.py --zip experiments/unsupervis
 python experiments/unsupervised/unlabeled_review.py --zip experiments/unsupervised/data/TSfabrics.zip --cache experiments/unsupervised/features --phase final --out experiments/unsupervised/results/unlabeled_review_final.json
 python experiments/unsupervised/summarize_unlabeled_review.py experiments/unsupervised/results/unlabeled_review_development.json experiments/unsupervised/results/unlabeled_review_final.json experiments/unsupervised/UNLABELED_REVIEW_RESULTS.md
 python experiments/unsupervised/export_unlabeled_demo.py --zip experiments/unsupervised/data/TSfabrics.zip --cache experiments/unsupervised/features --result experiments/unsupervised/results/unlabeled_review_final.json --out web/unlabeled-demo
+python experiments/unsupervised/feedback_validation.py --zip experiments/unsupervised/data/TSfabrics.zip --cache experiments/unsupervised/features --phase development --out experiments/unsupervised/results/feedback_validation_development.json
+python experiments/unsupervised/feedback_validation.py --zip experiments/unsupervised/data/TSfabrics.zip --cache experiments/unsupervised/features --phase final --out experiments/unsupervised/results/feedback_validation_final.json
+python experiments/unsupervised/summarize_feedback_validation.py experiments/unsupervised/results/feedback_validation_development.json experiments/unsupervised/results/feedback_validation_final.json experiments/unsupervised/FEEDBACK_VALIDATION_RESULTS.md
 ```
 
 The dataset checksum and archive inventory must be verified before using the

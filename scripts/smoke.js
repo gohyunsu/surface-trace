@@ -31,6 +31,10 @@ const { chromium } = require("playwright");
     assert.strictEqual(await page.locator(".trial-run-grid section").count(), 3);
     assert((await page.locator(".trial-evaluation").textContent()).includes("40.2% → 6.1%"));
     assert((await page.locator(".trial-evaluation").textContent()).includes(".9873 → .9943"));
+    const feedbackValidation = page.locator(".limited-review-note", { hasText: "eight-review update test" });
+    assert((await feedbackValidation.textContent()).includes("202 to 153"));
+    assert((await feedbackValidation.textContent()).includes("The update was withheld."));
+    assert((await feedbackValidation.locator("a").getAttribute("href")).endsWith("FEEDBACK_VALIDATION_RESULTS.md"));
     assert((await page.locator(".ablation-chart-labels").textContent()).includes("FRAME 1,264"));
     await page.locator(".ablation-gallery").scrollIntoViewIfNeeded();
     await page.waitForFunction(() => document.querySelector(".ablation-gallery").dataset.ready === "true");
@@ -68,10 +72,17 @@ const { chromium } = require("playwright");
     assert((await page.locator("#scoreChart polyline").getAttribute("points")).split(" ").length > 300);
     assert.strictEqual(await page.locator("#changeChart .alert-dot").count(), 1);
     assert(!(await page.locator(".request-panel").textContent()).includes("Defect"));
-    await page.locator(".request-card img:not([hidden])").evaluateAll(images =>
-      images.forEach(image => { image.loading = "eager"; }));
-    await page.waitForFunction(() => [...document.querySelectorAll(".request-card img:not([hidden])")]
-      .every(image => image.complete && image.naturalWidth > 0));
+    await page.locator(".request-card img:not([hidden])").evaluateAll(async images => {
+      await Promise.all(images.map(async image => {
+        image.loading = "eager";
+        try { await image.decode(); }
+        catch { throw new Error(`Image failed to decode: ${image.src}`); }
+        assertImage(image);
+      }));
+      function assertImage(image) {
+        if (!image.naturalWidth) throw new Error(`Image failed to load: ${image.src}`);
+      }
+    });
     await page.locator(".request-card").first().getByRole("button", { name: "Show heatmap" }).click();
     assert(await page.locator(".request-card").first().locator(".heat").isVisible());
     await page.locator(".request-card").first().locator(".heat").evaluate(image => image.decode());
