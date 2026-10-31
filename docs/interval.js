@@ -63,9 +63,20 @@ function renderRequests(manifest) {
   const grid = document.getElementById("requestGrid");
   const checked = {};
   let evaluationPromise;
-  for (const item of manifest.review) {
+  const pilot = manifest.review.slice(0, 2);
+  function updateGate() {
+    const decisions = pilot.map(item => checked[item.frame]).filter(Boolean);
+    const continueReview = decisions.some(value => value !== "Normal");
+    const complete = decisions.length === pilot.length && !continueReview;
+    [...grid.children].forEach((card, index) => { card.hidden = index >= 2 && !continueReview; });
+    document.getElementById("requestsTitle").textContent = continueReview ? "Continue through eight frames" : complete ? "Review complete" : "Start with two frames";
+    document.getElementById("reviewGate").textContent = continueReview ? "A defect or uncertain result opened six more checks." : complete ? "Both initial photos were confirmed normal." : "Highest scores, at least 16 frames apart.";
+    updateProgress(checked, continueReview ? manifest.review.length : pilot.length);
+  }
+  for (const [index, item] of manifest.review.entries()) {
     const card = document.createElement("article");
     card.className = "request-card";
+    card.hidden = index >= 2;
     const image = document.createElement("div");
     image.className = "request-image";
     const photo = document.createElement("img");
@@ -124,7 +135,7 @@ function renderRequests(manifest) {
         label.textContent = `Recorded result · ${status}`;
         body.append(label);
         check.textContent = "Checked";
-        updateProgress(checked, manifest.review.length);
+        updateGate();
       } catch (error) {
         check.disabled = false;
         document.getElementById("intervalError").textContent = error.message;
@@ -136,7 +147,7 @@ function renderRequests(manifest) {
     card.append(image, body);
     grid.append(card);
   }
-  updateProgress(checked, manifest.review.length);
+  updateGate();
 }
 
 async function main() {

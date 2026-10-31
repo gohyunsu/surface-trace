@@ -12,6 +12,8 @@ const final = read("experiments/unsupervised/results/unlabeled_review_final.json
 const feedback = read("experiments/unsupervised/results/feedback_validation_final.json");
 const manifest = read("web/unlabeled-demo/manifest.json");
 const evaluation = read("web/unlabeled-demo/evaluation.json");
+const sequentialDevelopment = read("experiments/unsupervised/results/sequential_review_development.json");
+const sequentialFinal = read("experiments/unsupervised/results/sequential_review_final.json");
 const average = values => values.reduce((sum, value) => sum + value, 0) / values.length;
 const percent = value => `${(value * 100).toFixed(1)}%`;
 
@@ -53,10 +55,34 @@ assert.equal(manifest.run, "T1_S478_I118_2");
 assert.equal(manifest.frame_count, manifest.scores.length);
 assert.deepEqual(manifest.review.map(item => item.frame), final.runs[manifest.run].methods.source_knn.queues.spaced8.frames);
 assert.deepEqual(evaluation.review.map(item => item.frame), manifest.review.map(item => item.frame));
+const timeline = site.match(/class="review-timeline-track"[^>]*>(.*?)<\/div>/s)?.[1];
+assert(timeline, "Landing page is missing the review timeline");
+const timelinePositions = [...timeline.matchAll(/left:([\d.]+)%/g)].map(match => Number(match[1]));
+const [firstFrame, lastFrame] = manifest.evaluation_frames;
+const expectedPositions = manifest.review.map(item => item.frame).sort((a, b) => a - b)
+  .map(frame => Math.round((frame - firstFrame) / (lastFrame - firstFrame) * 1000) / 10);
+assert.deepEqual(timelinePositions, expectedPositions);
 assert.equal(manifest.change.alert - manifest.change.splice_boundary, 96);
 assert.notDeepEqual(manifest.review.map(item => item.frame), feedback.runs[manifest.run].strategies.spaced8.review_frames,
   "The demonstration and the separate update validation use different review queues");
 
+for (const phase of [sequentialDevelopment, sequentialFinal]) {
+  const fixed = phase.summary.methods.fixed8, pilot = phase.summary.methods.pilot2;
+  assert.equal(pilot.episodes_found, fixed.episodes_found);
+  assert.equal(pilot.runs_losing_episodes.length, 0);
+  assert(pilot.requests < fixed.requests);
+  assert(pilot.normal_reviews < fixed.normal_reviews);
+  for (const run of Object.values(phase.runs)) {
+    assert.deepEqual(run.pilot2.frames, run.fixed8.frames.slice(0, run.pilot2.requests));
+    assert(run.pilot2.requests === 2 || run.pilot2.requests === 8);
+  }
+}
+assert.equal(sequentialFinal.summary.methods.fixed8.requests, 128);
+assert.equal(sequentialFinal.summary.methods.pilot2.requests, 56);
+assert(site.includes("<strong>128</strong>") && site.includes("<strong>56</strong>"));
+assert(site.includes("26 / 90 in both"));
+
 console.log(JSON.stringify({ handcraftedAP: percent(handcraftedAP), frozenAP: percent(frozenAP), wins,
   adjacentCoverage: percent(adjacent), spacedCoverage: percent(spaced), changedRuns,
-  feedbackRuns: selected.length, counts, replayFrames: manifest.frame_count, reviewRequests: manifest.review.length }));
+  feedbackRuns: selected.length, counts, replayFrames: manifest.frame_count, reviewRequests: manifest.review.length,
+  sequentialRequests: [sequentialFinal.summary.methods.fixed8.requests, sequentialFinal.summary.methods.pilot2.requests] }));

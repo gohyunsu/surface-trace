@@ -54,7 +54,7 @@ const { chromium } = require("playwright");
         }));
         await page.screenshot({ path: path.join(out, `${name}-${viewport.label}.png`), fullPage: true });
         if (name === "landing") {
-          for (const section of ["foundation", "reference", "change", "review", "decision"]) {
+          for (const section of ["foundation", "change", "review", "handoff", "reference"]) {
             await page.locator(`#${section}`).screenshot({ path: path.join(out, `${section}-${viewport.label}.png`) });
           }
         } else if (name === "interval") {

@@ -53,7 +53,7 @@
     </div></section>
 
     <section class="method-section next-section" id="next"><div class="section method-inner">
-      <div class="method-heading improvement-heading"><div><p class="section-kicker">02 / CHANGE-AWARE EXPERIMENT</p><h2>What changed after feedback.</h2></div></div>
+      <div class="method-heading improvement-heading"><div><p class="section-kicker">02 / CHANGE-AWARE EXPERIMENT</p><h2>From feedback to tested changes.</h2></div></div>
       <div class="dataset-note"><span>TSFabrics</span><p>93,196 time-ordered knitting-line frames across 22 production scenarios.</p></div>
 
       <article class="improvement" id="foundation" aria-labelledby="foundation-title">
@@ -78,25 +78,6 @@
         </div>
       </article>
 
-      <article class="improvement" id="reference" aria-labelledby="reference-title">
-        <div class="improvement-copy">
-          <p class="improvement-kicker">UNLABELED REFERENCE</p>
-          <p class="improvement-input">Normal examples are not guaranteed</p>
-          <h3 id="reference-title">Select typical startup frames.</h3>
-          <p>Group frames by appearance, then keep representative images as the reference without using defect labels.</p>
-          <div class="improvement-measure"><span>CHANGED NORMAL RUN · FALSE ALERTS / 975 FRAMES</span><div><small>All frames</small><strong>971</strong><i aria-hidden="true">→</i><small>Selected</small><strong>11</strong></div></div>
-        </div>
-        <div class="improvement-display reference-display">
-          <div class="reference-maps">
-            <figure><div class="reference-map"><img src="./next-samples/sample-06.jpg" alt="Normal textile frame from a changed run" loading="lazy"></div><figcaption>Recorded photo</figcaption></figure>
-            <figure><div class="reference-map"><img src="./next-samples/sample-06.jpg" alt="" loading="lazy"><img src="./ablation/sample-06-all.png" alt="False alert heatmap with an all-frame DINOv2 reference" loading="lazy"></div><figcaption>All startup frames <span>Flagged</span></figcaption></figure>
-            <figure><div class="reference-map"><img src="./next-samples/sample-06.jpg" alt="" loading="lazy"><img src="./next-samples/sample-06-current.png" alt="Heatmap with a selected DINOv2 reference" loading="lazy"></div><figcaption>Selected frames <span>Clear</span></figcaption></figure>
-          </div>
-          <div class="reference-bars" aria-label="False alerts on the same 975 normal frames"><div><span>All frames</span><div class="bar-track"><i style="width:99.6%"></i></div><strong>971</strong></div><div><span>Selected</span><div class="bar-track"><i style="width:1.2%"></i></div><strong>11</strong></div></div>
-          <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/EXPERIMENT_RESULTS.md">Three-run comparison ↗</a>
-        </div>
-      </article>
-
       <article class="improvement" id="change" aria-labelledby="change-title">
         <div class="improvement-copy">
           <p class="improvement-kicker">VISUAL CHANGE</p>
@@ -117,39 +98,54 @@
 
       <article class="improvement" id="review" aria-labelledby="review-title">
         <div class="improvement-copy">
-          <p class="improvement-kicker">LIMITED REVIEW</p>
-          <p class="improvement-input">Every-frame handoff is impractical</p>
-          <h3 id="review-title">Request eight spaced checks.</h3>
-          <p>Rank unusual frames and keep requests at least 16 frames apart. An interval summary gathers the scores, change signal, and review decisions.</p>
-          <div class="improvement-measure"><span>NEW DEFECT EPISODES FOUND @8 · 4 DEFECT RUNS</span><div><small>Top 8</small><strong>41.8%</strong><i aria-hidden="true">→</i><small>Spaced 8</small><strong>71.1%</strong></div><p>Frozen DINOv2 · same scorer and review budget</p></div>
+          <p class="improvement-kicker">REVIEW COVERAGE</p>
+          <p class="improvement-input">Review time is limited</p>
+          <h3 id="review-title">Spread checks across the run.</h3>
+          <p>Rank frames by anomaly score, then keep selected photos at least 16 frames apart to avoid repeated checks of one event.</p>
+          <div class="improvement-measure"><span>MACRO EPISODE COVERAGE @8 · 4 DEFECT RUNS</span><div><small>Top 8</small><strong>41.8%</strong><i aria-hidden="true">→</i><small>Spaced 8</small><strong>71.1%</strong></div><p>Frozen DINOv2 · same scorer and review budget</p></div>
           <a class="button button-dark improvement-action" href="./interval.html">Open interval summary <span aria-hidden="true">→</span></a>
         </div>
-        <div class="improvement-display review-display"><div class="review-frame-grid" aria-label="Eight recorded photos selected for review">
-          <img src="./unlabeled-demo/review-01.jpg" alt="Review request 1, recorded textile frame 1506" loading="lazy">
-          <img src="./unlabeled-demo/review-02.jpg" alt="Review request 2, recorded textile frame 2473" loading="lazy">
-          <img src="./unlabeled-demo/review-03.jpg" alt="Review request 3, recorded textile frame 538" loading="lazy">
-          <img src="./unlabeled-demo/review-04.jpg" alt="Review request 4, recorded textile frame 1984" loading="lazy">
-          <img src="./unlabeled-demo/review-05.jpg" alt="Review request 5, recorded textile frame 1026" loading="lazy">
-          <img src="./unlabeled-demo/review-06.jpg" alt="Review request 6, recorded textile frame 2967" loading="lazy">
-          <img src="./unlabeled-demo/review-07.jpg" alt="Review request 7, recorded textile frame 405" loading="lazy">
-          <img src="./unlabeled-demo/review-08.jpg" alt="Review request 8, recorded textile frame 1380" loading="lazy">
-        </div><p>One recorded interval · eight score-ranked requests</p></div>
+        <div class="improvement-display review-display">
+          <div class="review-timeline"><div><span>ONE RECORDED RUN</span><strong>8 requests, spread over time</strong></div><div class="review-timeline-track" role="img" aria-label="Review frames 405, 538, 1026, 1380, 1506, 1984, 2473, and 2967 distributed across the recorded run"><i style="left:2.9%"></i><i style="left:7.5%"></i><i style="left:24.5%"></i><i style="left:36.7%"></i><i style="left:41.1%"></i><i style="left:57.7%"></i><i style="left:74.6%"></i><i style="left:91.8%"></i></div><div class="review-timeline-ends"><span>START</span><span>END</span></div></div>
+          <div class="review-frame-grid" aria-label="Four of the eight requested photos, in recording order">
+            <figure><img src="./unlabeled-demo/review-07.jpg" alt="Recorded textile frame 405" loading="lazy"><figcaption>Frame 405</figcaption></figure>
+            <figure><img src="./unlabeled-demo/review-01.jpg" alt="Recorded textile frame 1506" loading="lazy"><figcaption>Frame 1506</figcaption></figure>
+            <figure><img src="./unlabeled-demo/review-02.jpg" alt="Recorded textile frame 2473" loading="lazy"><figcaption>Frame 2473</figcaption></figure>
+            <figure><img src="./unlabeled-demo/review-06.jpg" alt="Recorded textile frame 2967" loading="lazy"><figcaption>Frame 2967</figcaption></figure>
+          </div>
+        </div>
       </article>
 
-      <article class="improvement improvement-decision" id="decision" aria-labelledby="decision-title">
+      <article class="improvement" id="handoff" aria-labelledby="handoff-title">
         <div class="improvement-copy">
-          <p class="improvement-kicker">UPDATE DECISION</p>
-          <p class="improvement-input">False alerts and missed defects both matter</p>
-          <h3 id="decision-title">Keep the reference when recall falls.</h3>
-          <p>Only reviewed normal frames enter a trial reference. We compare it on later frames before any update.</p>
-          <p class="decision-state"><span aria-hidden="true"></span> Candidate withheld · frozen reference active</p>
-          <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/FEEDBACK_VALIDATION_RESULTS.md">Full 15-run validation ↗</a>
+          <p class="improvement-kicker">REVIEW WORKLOAD</p>
+          <p class="improvement-input">Do not request eight checks by default</p>
+          <h3 id="handoff-title">Start with two checks.</h3>
+          <p>Ask for the two highest-ranked spaced photos first. If either is a defect or uncertain, release the remaining six.</p>
+          <div class="improvement-measure"><span>FINAL 16 RUNS · REVIEW REQUESTS</span><div><small>Fixed eight</small><strong>128</strong><i aria-hidden="true">→</i><small>Two first</small><strong>56</strong></div><p>New defect episodes: 26 / 90 in both.</p></div>
+          <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/SEQUENTIAL_REVIEW_RESULTS.md">Review-budget results ↗</a>
         </div>
-        <div class="improvement-display decision-display"><p>FROZEN → REVIEWED CANDIDATE <span>15 eligible runs</span></p><div class="decision-metrics">
-          <div><span>Normal-frame alerts</span><strong>1,050 <i>→</i> 0</strong></div>
-          <div><span>Defect frames flagged</span><strong>202 <i>→</i> 153</strong></div>
-          <div><span>New defect episodes found</span><strong>48 <i>→</i> 40</strong></div>
-        </div><p class="decision-denominators">20,273 normal frames · 642 defect frames · 65 new defect episodes</p></div>
+        <div class="improvement-display handoff-display" aria-label="Sequential review decision"><div class="handoff-start"><span>FIRST REQUEST</span><strong>2 spaced photos</strong></div><div class="handoff-branches"><div><span>Both confirmed normal</span><strong>Finish this interval</strong></div><div><span>Defect or uncertain</span><strong>Check six more</strong></div></div><p>Review outcomes decide the next request. They do not change the detector.</p></div>
+      </article>
+
+      <article class="improvement improvement-adaptation" id="reference" aria-labelledby="reference-title">
+        <div class="improvement-copy">
+          <p class="improvement-kicker">REFERENCE UPDATE · EVALUATED</p>
+          <p class="improvement-input">A new appearance can trigger false alerts</p>
+          <h3 id="reference-title">Test a candidate before switching.</h3>
+          <p>We tested two reference changes: selecting startup frames without labels, and adding reviewed normal patches. Both need later-frame checks before use.</p>
+          <div class="improvement-measure"><span>STARTUP SELECTION · ONE CHANGED NORMAL RUN</span><div><small>All frames</small><strong>971</strong><i aria-hidden="true">→</i><small>Selected</small><strong>11</strong></div><p>False alerts / 975 normal frames · candidate only</p></div>
+        </div>
+        <div class="improvement-display reference-display">
+          <div class="reference-maps">
+            <figure><div class="reference-map"><img src="./next-samples/sample-06.jpg" alt="Normal textile frame from a changed run" loading="lazy"></div><figcaption>Recorded photo</figcaption></figure>
+            <figure><div class="reference-map"><img src="./next-samples/sample-06.jpg" alt="" loading="lazy"><img src="./ablation/sample-06-all.png" alt="False alert heatmap with an all-frame DINOv2 reference" loading="lazy"></div><figcaption>All startup frames <span>Flagged</span></figcaption></figure>
+            <figure><div class="reference-map"><img src="./next-samples/sample-06.jpg" alt="" loading="lazy"><img src="./next-samples/sample-06-current.png" alt="Heatmap with a selected DINOv2 reference" loading="lazy"></div><figcaption>Selected frames <span>Clear</span></figcaption></figure>
+          </div>
+          <div class="reference-bars" aria-label="False alerts on the same 975 normal frames"><div><span>All frames</span><div class="bar-track"><i style="width:99.6%"></i></div><strong>971</strong></div><div><span>Selected</span><div class="bar-track"><i style="width:1.2%"></i></div><strong>11</strong></div></div>
+          <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/EXPERIMENT_RESULTS.md">Three-run comparison ↗</a>
+        </div>
+        <div class="adaptation-outcome"><div><span>REVIEWED-PATCH ADDITION · 15 RUNS</span><strong>Keep the frozen reference.</strong><p>Adding reviewed normal patches removed false alerts but also hid defects on later frames.</p></div><div class="decision-metrics"><div><span>Normal-frame alerts</span><strong>1,050 <i>→</i> 0</strong></div><div><span>Defect frames flagged</span><strong>202 <i>→</i> 153</strong></div><div><span>New defect episodes found</span><strong>48 <i>→</i> 40</strong></div></div><a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/FEEDBACK_VALIDATION_RESULTS.md">Full validation ↗</a></div>
       </article>
 
       <div class="improvement-links"><a class="button button-dark" href="./demo.html">Watch the recorded run <span aria-hidden="true">→</span></a><a href="./next-inspect.html">Explore recorded samples →</a><a href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/UNLABELED_REVIEW_RESULTS.md">Experiment results ↗</a></div>

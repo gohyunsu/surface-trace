@@ -7,6 +7,10 @@ TSFabrics run `T1_S478_I118_2`.
 a visitor checks a selected frame. It is never used to create the queue or
 initial interval summary. The eight JPEGs are the recorded input frames;
 transparent PNGs visualize the model's patch-distance map.
+The interval page initially requests the first two ranked photos. A checked
+defect or uncertain result exposes the remaining six; two normal checks end
+that interval's review. This is a review-budget experiment, not a detector or
+reference update.
 
 Regenerate with `experiments/unsupervised/export_unlabeled_demo.py` using the
 checked-in final-result JSON and TSFabrics ZIP. The script checks that the

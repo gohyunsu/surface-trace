@@ -8,8 +8,8 @@ for a longer inspection demonstration.
 | Chapter | What appears | What to say |
 | --- | --- | --- |
 | Visual shift | A source-run photo, a later photo from `T1_S478_I118_2`, and the recorded global-feature trace. The source and target recordings are joined at the experimental boundary. | “The appearance changed. The signal held above its limit, so the first alert was confirmed 96 frames into the new run.” |
-| Interval scores | The frozen DINOv2 score trace for 2,884 later frames and the eight score-ranked, 16-frame-spaced photos. | “The model ranks unusual areas, then sends a small number of separated frames for review.” |
-| Eight checks | Each photo and heatmap appears before its recorded dataset outcome. Check the photos one by one or let the replay advance. | “The outcome becomes available after review; confirmed defects never enter the normal reference.” |
+| Interval scores | The frozen DINOv2 score trace for 2,884 later frames and eight ranked, 16-frame-spaced candidates. | “We start with two photos. A defect or uncertain result opens the rest of the queue.” |
+| Eight checks | This run's first photo is a defect, so review continues to eight. Each recorded outcome appears only after its photo is checked. | “The outcome becomes available after review; confirmed defects never enter the normal reference.” |
 | Update decision | A **separate** 15-run, later-frame validation compares the frozen reference with a trial reference built from reviewed normals. Normal alerts fall 1,050→0, while flagged defect frames fall 202→153 and detected new episodes 48→40. | “We keep the frozen reference. Fewer false alarms alone are not enough to approve a model update.” |
 
 The first three chapters use the same recorded TSFabrics run and the saved
