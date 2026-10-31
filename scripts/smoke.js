@@ -97,9 +97,13 @@ const { chromium } = require("playwright");
     await page.getByRole("button", { name: "Next chapter" }).click();
     assert(await page.getByRole("heading", { name: "Inspect the unusual frames." }).isVisible());
     assert.strictEqual(await page.locator("#demoQueue img").count(), 8);
+    assert.strictEqual(await page.locator("#demoQueue .is-conditional").count(), 6);
     assert.strictEqual(await page.locator("#demoScoreChart .demo-score-marker").count(), 8);
+    assert.strictEqual(await page.locator("#demoScoreChart .demo-score-marker.is-conditional").count(), 6);
     await page.getByRole("button", { name: "Next chapter" }).click();
     assert.strictEqual(await page.locator("#demoCheckCount").textContent(), "0 / 8");
+    assert.strictEqual(await page.locator("#demoCheckDots .is-conditional").count(), 6);
+    assert.strictEqual(await page.locator("#demoRoute").textContent(), "Two checks first");
     assert.strictEqual(evaluationRequests.length, 0);
     await page.getByRole("button", { name: "Check this photo" }).click();
     await page.waitForFunction(() => document.querySelector("#demoOutcome").textContent.includes("confirmed"));
@@ -111,6 +115,10 @@ const { chromium } = require("playwright");
       assert.strictEqual(await page.locator("#demoCheckCount").textContent(), `${i} / 8`);
       await page.getByRole("button", { name: "Check this photo" }).click();
       await page.waitForFunction(() => document.querySelector("#demoOutcome").textContent.includes("confirmed"));
+      if (i === 1) {
+        assert((await page.locator("#demoRoute").textContent()).includes("six more checks opened"));
+        assert.strictEqual(await page.locator("#demoCheckDots .is-conditional").count(), 0);
+      }
     }
     assert.strictEqual(await page.locator("#demoCheckCount").textContent(), "8 / 8");
     await page.clock.install();

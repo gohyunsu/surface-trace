@@ -104,7 +104,8 @@ function drawScores(manifest) {
   const [first, last] = manifest.evaluation_frames;
   for (const item of manifest.review) {
     const index = Math.min(groups.length - 1, Math.max(0, Math.floor((item.frame - first) / 8)));
-    svg(chart, "circle", { cx: x(index), cy: y(groups[index]), r: 4.5, class: "demo-score-marker" });
+    svg(chart, "circle", { cx: x(index), cy: y(groups[index]), r: 4.5,
+      class: item.rank > 2 ? "demo-score-marker is-conditional" : "demo-score-marker" });
   }
   svg(chart, "text", { x: 18, y: 192 }, first.toLocaleString());
   svg(chart, "text", { x: 620, y: 192, "text-anchor": "end" }, last.toLocaleString());
@@ -115,6 +116,7 @@ function drawQueue(review) {
   queue.replaceChildren();
   for (const item of review) {
     const cell = document.createElement("div");
+    if (item.rank > 2) cell.classList.add("is-conditional");
     const image = document.createElement("img");
     image.src = item.image;
     image.alt = `Review request ${item.rank}, recorded frame ${item.frame}`;
@@ -135,11 +137,16 @@ function updateReview() {
   $("demoReviewFrame").textContent = `Frame ${item.frame.toLocaleString()}`;
   $("demoReviewScore").textContent = `Score ${item.score.toFixed(3)}`;
   $("demoCheckCount").textContent = `${state.reviewIndex + Number(state.revealed)} / ${state.manifest.review.length}`;
+  const pilotDone = state.reviewIndex + Number(state.revealed) >= 2;
+  const route = $("demoRoute");
+  route.classList.toggle("is-expanded", pilotDone);
+  route.textContent = pilotDone ? "Defect found in first two · six more checks opened" : "Two checks first";
   const dots = $("demoCheckDots");
   dots.replaceChildren();
   state.manifest.review.forEach((_, index) => {
     const dot = document.createElement("span");
     dot.className = index < state.reviewIndex || index === state.reviewIndex && state.revealed ? "is-done" : index === state.reviewIndex ? "is-current" : "";
+    if (!pilotDone && index >= 2) dot.classList.add("is-conditional");
     dots.append(dot);
   });
   const outcome = $("demoOutcome");

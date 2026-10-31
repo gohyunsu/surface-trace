@@ -126,6 +126,11 @@ assert.equal(manifest.run, "T1_S478_I118_2");
 assert.equal(manifest.frame_count, manifest.scores.length);
 assert.deepEqual(manifest.review.map(item => item.frame), final.runs[manifest.run].methods.source_knn.queues.spaced8.frames);
 assert.deepEqual(evaluation.review.map(item => item.frame), manifest.review.map(item => item.frame));
+assert(manifest.review.slice(0, 2).every(item => {
+  const outcome = evaluation.review.find(row => row.frame === item.frame);
+  return outcome && !outcome.ambiguous && outcome.dataset_label === "Defect";
+}));
+assert(demoScript.includes("Defect found in first two · six more checks opened"));
 const timeline = site.match(/class="review-timeline-track"[^>]*>(.*?)<\/div>/s)?.[1];
 assert(timeline, "Landing page is missing the review timeline");
 const timelinePositions = [...timeline.matchAll(/left:([\d.]+)%/g)].map(match => Number(match[1]));

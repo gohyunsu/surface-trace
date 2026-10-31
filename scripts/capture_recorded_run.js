@@ -68,6 +68,9 @@ const fps = 4;
       await hold(2);
       await page.locator("#demoReveal").click();
       await page.waitForFunction(() => document.querySelector("#demoOutcome").textContent.includes("confirmed") || document.querySelector("#demoOutcome").textContent.startsWith("Uncertain"));
+      if (reviewIndex === 1 && !(await page.locator("#demoRoute").textContent()).includes("six more checks opened")) {
+        throw new Error("The recorded two-check decision did not open the remaining queue");
+      }
       await hold(2);
       if (reviewIndex < 7) await page.locator("#demoReveal").click();
     }
