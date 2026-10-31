@@ -110,16 +110,17 @@
           <p class="improvement-input">Review time is limited</p>
           <h3 id="review-title">Spread checks across the run.</h3>
           <p>Rank frames by anomaly score, then keep selected photos at least 16 frames apart to avoid repeated checks of one event.</p>
-          <div class="improvement-measure"><span>MACRO EPISODE COVERAGE @8 · 4 DEFECT RUNS</span><div><small>Top 8</small><strong>41.8%</strong><i aria-hidden="true">→</i><small>Spaced 8</small><strong>71.1%</strong></div><p>Frozen DINOv2 · same scorer and review budget</p></div>
+          <div class="improvement-measure"><span>MACRO EPISODE COVERAGE @8 · 4 DEFECT RUNS</span><div><small>Top 8</small><strong>41.8%</strong><i aria-hidden="true">→</i><small>Spaced 8</small><strong>71.1%</strong></div><p>Same DINOv2 scores and eight checks · improved in all four runs</p></div>
           <a class="button button-dark improvement-action" href="./interval.html">Open interval summary <span aria-hidden="true">→</span></a>
         </div>
         <div class="improvement-display review-display">
           <div class="review-timeline"><div><span>ONE RECORDED RUN</span><strong>8 requests, spread over time</strong></div><div class="review-timeline-track" role="img" aria-label="Review frames 405, 538, 1026, 1380, 1506, 1984, 2473, and 2967 distributed across the recorded run"><i style="left:2.9%"></i><i style="left:7.5%"></i><i style="left:24.5%"></i><i style="left:36.7%"></i><i style="left:41.1%"></i><i style="left:57.7%"></i><i style="left:74.6%"></i><i style="left:91.8%"></i></div><div class="review-timeline-ends"><span>START</span><span>END</span></div></div>
-          <div class="review-frame-grid" aria-label="Four of the eight requested photos, in recording order">
-            <figure><img src="./unlabeled-demo/review-07.jpg" alt="Recorded textile frame 405" loading="lazy"><figcaption>Frame 405</figcaption></figure>
-            <figure><img src="./unlabeled-demo/review-01.jpg" alt="Recorded textile frame 1506" loading="lazy"><figcaption>Frame 1506</figcaption></figure>
-            <figure><img src="./unlabeled-demo/review-02.jpg" alt="Recorded textile frame 2473" loading="lazy"><figcaption>Frame 2473</figcaption></figure>
-            <figure><img src="./unlabeled-demo/review-06.jpg" alt="Recorded textile frame 2967" loading="lazy"><figcaption>Frame 2967</figcaption></figure>
+          <div class="review-coverage" aria-label="New defect episodes found with eight checks in each final defect run">
+            <div class="review-coverage-head"><span>NEW EPISODES FOUND · 8 CHECKS PER RUN</span><div><span><i class="is-top"></i>Top 8</span><span><i class="is-spaced"></i>Spaced 8</span></div></div>
+            <div class="review-coverage-row" data-run="T1_S148_I108_1" style="--top:37.5%;--spaced:100%"><div><span>T1_S148_I108_1</span><small>69 episodes</small></div><div class="review-coverage-bars"><span><i class="is-top"></i></span><span><i class="is-spaced"></i></span></div><strong>3 <small>→</small> 8</strong></div>
+            <div class="review-coverage-row" data-run="T1_S174_I108_1" style="--top:75%;--spaced:100%"><div><span>T1_S174_I108_1</span><small>11 episodes</small></div><div class="review-coverage-bars"><span><i class="is-top"></i></span><span><i class="is-spaced"></i></span></div><strong>6 <small>→</small> 8</strong></div>
+            <div class="review-coverage-row" data-run="T1_S478_I118_2" style="--top:62.5%;--spaced:75%"><div><span>T1_S478_I118_2</span><small>6 episodes</small></div><div class="review-coverage-bars"><span><i class="is-top"></i></span><span><i class="is-spaced"></i></span></div><strong>5 <small>→</small> 6</strong></div>
+            <div class="review-coverage-row" data-run="T2_S287_I185_1" style="--top:12.5%;--spaced:50%"><div><span>T2_S287_I185_1</span><small>4 episodes</small></div><div class="review-coverage-bars"><span><i class="is-top"></i></span><span><i class="is-spaced"></i></span></div><strong>1 <small>→</small> 4</strong></div>
           </div>
         </div>
       </article>

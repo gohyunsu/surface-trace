@@ -42,7 +42,7 @@ for (const [, name, classic, dino] of apRows) {
   assert(run && run.new_defect_episodes > 0, `Unexpected AP chart run: ${name}`);
   assert.equal(classic, (run.methods.handcrafted_source.average_precision * 100).toFixed(1));
   assert.equal(dino, (run.methods.source_knn.average_precision * 100).toFixed(1));
-  const rowStart = site.indexOf(`data-run="${name}"`);
+  const rowStart = site.indexOf(`class="run-ap-row" data-run="${name}"`);
   const rowEnd = site.indexOf('class="run-ap-row"', rowStart + 1);
   const row = site.slice(rowStart, rowEnd < 0 ? undefined : rowEnd);
   assert(row.includes(`<strong>${classic} <small>/</small> ${dino}</strong>`));
@@ -80,6 +80,24 @@ const coverage = queue => average(defectRuns.map(run => run.methods.source_knn.q
 const adjacent = coverage("top8"), spaced = coverage("spaced8");
 assert(site.includes(percent(adjacent)) && site.includes(percent(spaced)));
 assert(spaced > adjacent);
+const coverageRows = [...site.matchAll(/class="review-coverage-row" data-run="([^"]+)" style="--top:([\d.]+)%;--spaced:([\d.]+)%"/g)];
+assert.equal(coverageRows.length, defectRuns.length);
+for (const [, name, topWidth, spacedWidth] of coverageRows) {
+  const run = final.runs[name];
+  assert(run && run.new_defect_episodes > 0, `Unexpected review chart run: ${name}`);
+  const topCount = run.methods.source_knn.queues.top8.new_episodes;
+  const spacedCount = run.methods.source_knn.queues.spaced8.new_episodes;
+  assert.equal(Number(topWidth), topCount / 8 * 100);
+  assert.equal(Number(spacedWidth), spacedCount / 8 * 100);
+  const rowStart = site.indexOf(`class="review-coverage-row" data-run="${name}"`);
+  const rowEnd = site.indexOf('class="review-coverage-row"', rowStart + 1);
+  const row = site.slice(rowStart, rowEnd < 0 ? undefined : rowEnd);
+  assert(row.includes(`${run.new_defect_episodes} episodes`));
+  assert(row.includes(`<strong>${topCount} <small>→</small> ${spacedCount}</strong>`));
+}
+assert.equal(new Set(coverageRows.map(row => row[1])).size, defectRuns.length);
+assert(defectRuns.every(run => run.methods.source_knn.queues.spaced8.new_episodes > run.methods.source_knn.queues.top8.new_episodes));
+assert(site.includes("improved in all four runs"));
 const changedRuns = Object.values(final.runs).filter(run => run.operational_summary.change_alert != null).length;
 assert.equal(changedRuns, 15);
 assert(site.includes(`${changedRuns} / ${Object.keys(final.runs).length}`));

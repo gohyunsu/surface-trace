@@ -37,7 +37,7 @@ const { chromium } = require("playwright");
         if (name === "interval") await page.waitForFunction(() => document.querySelector(".request-card") !== null);
         if (name === "demo") await page.waitForFunction(() => document.querySelector("#demoScoreChart polyline") !== null);
         const imageSelector = name === "landing"
-          ? ".pipeline-hero-motion img, .method-animation img, .feedback-photo img, .ablation-gallery img, .reference-maps img, .change-frames img, .change-graph img, .review-frame-grid img"
+          ? ".pipeline-hero-motion img, .method-animation img, .feedback-photo img, .ablation-gallery img, .reference-maps img, .change-frames img, .change-graph img"
           : name === "demo" ? ".feature-pair img"
           : name === "inspector" ? viewport.label === "desktop" ? "#sourceImage, #heatmap" : "#sourceImage" : name === "review" ? "" : name === "interval" ? ".request-card img:not([hidden])" : "#frameImage, #frameHeat";
         const decodeFailures = imageSelector ? await page.locator(imageSelector).evaluateAll(async imgs => {
