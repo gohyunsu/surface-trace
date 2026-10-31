@@ -25,6 +25,7 @@ const sequentialFinal = read("experiments/unsupervised/results/sequential_review
 const routing = read("web/ablation/review-routing.json");
 const scenarioFrames = read("web/scenario/manifest.json");
 const changeFigure = read("web/ablation/change-figure.json");
+const development = read("experiments/unsupervised/results/unlabeled_review_development.json");
 const average = values => values.reduce((sum, value) => sum + value, 0) / values.length;
 const percent = value => `${(value * 100).toFixed(1)}%`;
 
@@ -216,6 +217,10 @@ for (const frame of [32, 64, 96, 192]) {
 assert(demo.includes(`scenario/source-${spliceSourceEnd}.jpg`));
 assert(demo.includes("scenario/demo-001.jpg"));
 assert.equal(changeFigure.target_start.first_alarm, 192);
+assert(Object.hasOwn(development.runs, changeFigure.target));
+assert(!Object.hasOwn(final.runs, changeFigure.target));
+assert(site.includes("16 FINAL RUNS · KNOWN SWITCH"));
+assert(site.includes("Development example · alert at new-run frame 192."));
 sceneFrame("target-192.jpg", changeFigure.target, changeFigure.target_start.first_alarm);
 assert.notDeepEqual(manifest.review.map(item => item.frame), feedback.runs[manifest.run].strategies.spaced8.review_frames,
   "The demonstration and the separate update validation use different review queues");

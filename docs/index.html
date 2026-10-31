@@ -92,7 +92,7 @@
           <p class="improvement-input">Process changes may not be shared</p>
           <h3 id="change-title">Detect the shift separately.</h3>
           <p>Compare global image features across time, independently of the patch anomaly score.</p>
-          <div class="improvement-measure"><span>SEPARATE RECORDED RUNS · SYNTHETIC SWITCH</span><div><strong>15 / 16</strong><small>runs alerted</small></div><p>No alert on the 1,984-frame source continuation.</p></div>
+          <div class="improvement-measure"><span>16 FINAL RUNS · KNOWN SWITCH</span><div><strong>15 / 16</strong><small>runs alerted</small></div><p>No alert on the 1,984-frame source continuation.</p></div>
         </div>
         <div class="improvement-display change-display">
           <div class="change-frames" aria-label="Reference frames followed by a separate changed run">
@@ -100,7 +100,7 @@
             <b aria-hidden="true">→</b>
             <div><span>CHANGED RUN</span><figure><img src="./scenario/target-001.jpg" alt="Changed run frame 1" loading="lazy"><figcaption>1</figcaption></figure><figure><img src="./scenario/target-064.jpg" alt="Changed run frame 64" loading="lazy"><figcaption>64</figcaption></figure><figure><img src="./scenario/target-128.jpg" alt="Changed run frame 128" loading="lazy"><figcaption>128</figcaption></figure><figure><img src="./scenario/target-192.jpg" alt="Changed run frame 192, first sustained alert" loading="lazy"><figcaption>192 <em>ALERT</em></figcaption></figure></div>
           </div>
-          <figure class="change-graph"><picture><source media="(max-width:700px)" srcset="./ablation/change-figure-mobile.svg"><img src="./ablation/change-figure.svg" alt="Global-feature change scores stay low on the reference run and cross the alert limit after the switch, with a sustained alert at target frame 192" width="600" height="238" loading="lazy"></picture><figcaption>Example alert: frame 192 of the changed run.</figcaption></figure>
+          <figure class="change-graph"><picture><source media="(max-width:700px)" srcset="./ablation/change-figure-mobile.svg"><img src="./ablation/change-figure.svg" alt="Global-feature change scores stay low on the reference run and cross the alert limit after the switch, with a sustained alert at target frame 192" width="600" height="238" loading="lazy"></picture><figcaption>Development example · alert at new-run frame 192.</figcaption></figure>
         </div>
       </article>
 

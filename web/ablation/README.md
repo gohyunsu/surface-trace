@@ -18,7 +18,8 @@ than an all-run estimate. The separate run-local trial overlay remains in
 `web/next-samples/sample-06-candidate.png` for the sample explorer and research
 record; it is no longer a row in the landing comparison.
 
-`change-figure.svg` and `change-figure-mobile.svg` plot the last 16 consecutive
+`change-figure.svg` and `change-figure-mobile.svg` show the development run
+`T1_S164_I36_1` as an example, separate from the final-run 15/16 metric. They plot the last 16 consecutive
 source windows and first 16 changed-run windows at equal x-axis intervals on
 the same 0–1 score scale. The line crosses a marked run boundary, so it does
 not imply one continuous production run. All 59 held-out source windows stay below the source-calibrated
