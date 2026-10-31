@@ -61,13 +61,13 @@ const { chromium } = require("playwright");
           await page.locator(".request-card").first().getByRole("button", { name: "Show heatmap" }).click();
           await page.locator(".request-card").first().screenshot({ path: path.join(out, `interval-heat-${viewport.label}.png`) });
         } else if (name === "demo") {
-          for (let step = 1; step < 4; step++) {
+          for (let step = 1; step < 5; step++) {
             await page.locator(`.demo-steps button[data-step="${step}"]`).click();
             await page.waitForTimeout(1550);
-            if (step === 1) await page.locator("#demoQueue img").evaluateAll(async images => {
+            if (step === 2) await page.locator("#demoQueue img").evaluateAll(async images => {
               for (const image of images) await image.decode();
             });
-            if (step === 2) await page.locator("#demoReviewPhoto").evaluate(image => image.decode());
+            if (step === 3) await page.locator("#demoReviewPhoto").evaluate(image => image.decode());
             await page.screenshot({ path: path.join(out, `demo-${step}-${viewport.label}.png`), fullPage: true });
             if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)) throw new Error(`demo ${step} ${viewport.label}: horizontal overflow`);
           }

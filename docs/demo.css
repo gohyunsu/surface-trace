@@ -5,14 +5,14 @@
 .demo-intro .section-kicker{margin:0 0 12px;color:#6479a4}
 .demo-intro h1{margin:0;font-size:clamp(40px,4.6vw,62px);font-weight:500;line-height:1.05;letter-spacing:-.065em}
 .demo-run{padding-bottom:7px;color:#7c8ca6;font-size:12px;letter-spacing:.07em}
-.demo-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:13px}
+.demo-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:13px}
 .demo-steps button{position:relative;display:flex;align-items:center;gap:11px;padding:13px 16px;border:1px solid #dbe1ec;border-radius:5px;background:#fff;color:#7888a2;text-align:left;font:inherit;font-size:12px;cursor:pointer;overflow:hidden;transition:background .2s,color .2s,border-color .2s}
 .demo-steps button span{color:#9dabc0;font-size:10px}
 .demo-steps button[aria-current=step]{background:#263957;border-color:#263957;color:#fff}
 .demo-steps button[aria-current=step] span{color:#a9d6d0}
 .demo-page.is-playing .demo-steps button[aria-current=step]:after{content:"";position:absolute;left:0;bottom:0;height:3px;width:100%;background:#a2d4cb;transform-origin:left;animation:demo-progress 7s linear forwards}
-.demo-page.is-playing .demo-steps button[data-step="0"][aria-current=step]:after{animation-duration:6.5s}
-.demo-page.is-playing .demo-steps button[data-step="2"][aria-current=step]:after{animation-duration:20s}
+.demo-page.is-playing .demo-steps button[data-step="1"][aria-current=step]:after{animation-duration:6.5s}
+.demo-page.is-playing .demo-steps button[data-step="3"][aria-current=step]:after{animation-duration:20s}
 @keyframes demo-progress{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 .demo-steps button:hover:not([aria-current=step]){border-color:#8ea2be;color:#40597d}
 .demo-stage-wrap{border:1px solid #dbe2ee;border-radius:10px;overflow:hidden;background:#fff;box-shadow:0 22px 70px #24345513}
@@ -28,6 +28,19 @@
 .demo-callout strong{color:#3c6289;font-size:clamp(31px,3vw,42px);font-weight:500;letter-spacing:-.055em;line-height:1.1}
 .demo-callout span{color:#8897ac;font-size:11px}
 .demo-visual{min-width:0;padding:32px;background:#253651;color:#eef4fb;display:flex;flex-direction:column;justify-content:center}
+.feature-visual{gap:16px}
+.feature-head{display:flex;justify-content:space-between;gap:14px;color:#b8c9da;font-size:11px;letter-spacing:.05em}
+.feature-head span:last-child{color:#8fa9bc;font-variant-numeric:tabular-nums}
+.feature-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.feature-pair figure{min-width:0;margin:0}
+.feature-photo{position:relative;overflow:hidden;aspect-ratio:1.25;border:1px solid #71839c;border-radius:5px;background:#53647b}
+.feature-photo img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover}
+.feature-photo img+img{z-index:1}
+.feature-pair figcaption{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-top:12px;font-size:12px}
+.feature-pair figcaption span{color:#c0cddd}
+.feature-pair figcaption strong{font-weight:500;text-align:right}
+.feature-pair .is-correct{color:#a8d8ce}
+.feature-pair .is-error{color:#efaa98}
 .shift-photos{display:grid;grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr);align-items:center;gap:9px}
 .shift-photos figure{margin:0;min-width:0}
 .shift-photos img{display:block;width:100%;aspect-ratio:1.8;object-fit:cover;border:1px solid #6f8198;border-radius:5px}
@@ -89,6 +102,6 @@
 .demo-source a{color:#607ca3;text-underline-offset:2px}
 .demo-error{padding:15px;background:#fbecea;color:#a15550;border-radius:5px}
 @media(max-width:850px){.demo-main{width:calc(100% - 36px)}.demo-stage{grid-template-columns:1fr;min-height:0}.demo-copy{padding:28px 32px}.demo-kicker{margin-bottom:13px}.demo-copy>p:not(.demo-kicker){margin-top:10px}.demo-callout{margin-top:19px;padding-top:15px}.demo-visual{min-height:320px}.demo-steps button{padding:12px 10px;gap:7px}}
-@media(max-width:560px){.demo-main{width:calc(100% - 24px);padding:33px 0 60px}.demo-intro{align-items:start;margin-bottom:20px}.demo-intro h1{font-size:39px}.demo-run{display:none}.demo-steps{gap:4px}.demo-steps button{display:block;padding:9px 5px;text-align:center;font-size:9px}.demo-steps button span{display:block;margin-bottom:4px}.demo-copy{padding:27px 22px}.demo-copy h2{font-size:34px}.demo-copy>p:not(.demo-kicker){font-size:12px}.demo-visual{padding:20px;min-height:300px}.shift-photos{gap:5px;grid-template-columns:minmax(0,1fr) 17px minmax(0,1fr)}.shift-photos figcaption{font-size:9px}.shift-photos>span{font-size:16px}.demo-queue{gap:3px}.demo-queue span{font-size:7px}.check-visual{padding:20px}.demo-outcome{font-size:16px}.decision-visual{padding:25px 20px}.decision-row strong{font-size:16px}.demo-controls #demoStatus{font-size:10px}}
+@media(max-width:560px){.demo-main{width:calc(100% - 24px);padding:33px 0 60px}.demo-intro{align-items:start;margin-bottom:20px}.demo-intro h1{font-size:39px}.demo-run{display:none}.demo-steps{gap:4px}.demo-steps button{display:block;padding:9px 4px;text-align:center;font-size:8px}.demo-steps button span{display:block;margin-bottom:4px}.demo-copy{padding:27px 22px}.demo-copy h2{font-size:34px}.demo-copy>p:not(.demo-kicker){font-size:12px}.demo-visual{padding:20px;min-height:300px}.feature-pair{gap:8px}.feature-pair figcaption{display:grid;gap:3px;font-size:10px}.feature-pair figcaption strong{text-align:left}.shift-photos{gap:5px;grid-template-columns:minmax(0,1fr) 17px minmax(0,1fr)}.shift-photos figcaption{font-size:9px}.shift-photos>span{font-size:16px}.demo-queue{gap:3px}.demo-queue span{font-size:7px}.check-visual{padding:20px}.demo-outcome{font-size:16px}.decision-visual{padding:25px 20px}.decision-row strong{font-size:16px}.demo-controls #demoStatus{font-size:10px}}
 @media(max-width:390px){.demo-page .main-nav a:not(:first-child){display:none}.demo-controls #demoStatus{display:none}.demo-controls .demo-play{min-width:0;flex:1}}
 @media(prefers-reduced-motion:reduce){.demo-steps button{transition:none}.demo-stage:not([hidden]) .demo-copy,.demo-stage:not([hidden]) .demo-visual,.demo-stage:not([hidden]) .demo-chart-line,.demo-page.is-playing .demo-steps button[aria-current=step]:after{animation:none}.demo-stage:not([hidden]) .demo-chart-line{stroke-dashoffset:0}}

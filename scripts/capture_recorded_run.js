@@ -8,11 +8,12 @@ const path = require("path");
 const { chromium } = require("playwright");
 
 const base = process.env.SITE_URL || "http://127.0.0.1:8766/";
-const frameDir = path.resolve(process.argv[2] || "out/recorded-run-frames");
+const frameDir = path.resolve("out/recorded-run-frames");
 const fps = 4;
 
 (async () => {
   fs.mkdirSync(frameDir, { recursive: true });
+  for (const file of fs.readdirSync(frameDir)) if (/^frame-\d{4}\.png$/.test(file)) fs.unlinkSync(path.join(frameDir, file));
   const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROME_PATH || undefined });
   try {
     const page = await browser.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
@@ -41,26 +42,43 @@ const fps = 4;
       .decision-row strong{font-size:27px}
       .demo-controls{margin-top:15px}
     ` });
-    const save = async index => {
-      await page.screenshot({ path: path.join(frameDir, `frame-${String(index).padStart(4, "0")}.png`), animations: "allow" });
-    };
+    await page.evaluate(() => { document.querySelector("#demoPlay").textContent = "Recorded replay"; });
     let index = 0;
-    for (let i = 0; i < fps * 2; i++) await save(index++);
-    await page.getByRole("button", { name: "Play recorded run" }).click();
-    for (let elapsed = 0; elapsed < 45 * fps; elapsed++) {
-      await page.clock.runFor(1000 / fps);
-      await save(index++);
-      if (await page.locator('.demo-stage[data-scene="3"]').isVisible() &&
-          !await page.locator("body").evaluate(node => node.classList.contains("is-playing"))) break;
+    const hold = async frames => {
+      for (let i = 0; i < frames; i++) {
+        await page.screenshot({ path: path.join(frameDir, `frame-${String(index++).padStart(4, "0")}.png`), animations: "allow" });
+        await page.clock.runFor(1000 / fps);
+      }
+    };
+    const chapter = async step => {
+      await page.locator(`.demo-steps button[data-step="${step}"]`).click();
+      await page.evaluate(() => { document.querySelector("#demoPlay").textContent = "Recorded replay"; });
+    };
+    for (let caseIndex = 0; caseIndex < 3; caseIndex++) {
+      await page.evaluate(i => renderFeature(i), caseIndex);
+      await page.locator("#demoClassicMap").evaluate(image => image.decode());
+      await page.locator("#demoDinoMap").evaluate(image => image.decode());
+      await hold(fps * 2);
     }
-    for (let i = 0; i < fps * 2; i++) await save(index++);
+    await chapter(1); await hold(fps * 5);
+    await chapter(2); await hold(fps * 5);
+    await chapter(3);
+    for (let reviewIndex = 0; reviewIndex < 8; reviewIndex++) {
+      await page.locator("#demoReviewPhoto").evaluate(image => image.decode());
+      await hold(2);
+      await page.locator("#demoReveal").click();
+      await page.waitForFunction(() => document.querySelector("#demoOutcome").textContent.includes("confirmed") || document.querySelector("#demoOutcome").textContent.startsWith("Uncertain"));
+      await hold(2);
+      if (reviewIndex < 7) await page.locator("#demoReveal").click();
+    }
+    await chapter(4); await hold(fps * 5);
     const final = await page.evaluate(() => ({
       scene: document.querySelector('.demo-steps button[aria-current="step"]')?.dataset.step,
       width: innerWidth,
       height: innerHeight,
       error: document.querySelector("#demoError")?.textContent,
     }));
-    if (final.scene !== "3" || final.width !== 1920 || final.height !== 1080 || final.error) {
+    if (final.scene !== "4" || final.width !== 1920 || final.height !== 1080 || final.error || index !== 116) {
       throw new Error(`Capture stopped in an unexpected state: ${JSON.stringify(final)}`);
     }
     console.log(JSON.stringify({ frames: index, fps, resolution: "1920x1080", directory: frameDir }));

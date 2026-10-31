@@ -2,7 +2,34 @@
 
 const $ = id => document.getElementById(id);
 const svgNS = "http://www.w3.org/2000/svg";
-const state = { manifest: null, evaluation: null, scene: 0, reviewIndex: 0, revealed: false, playing: false, timer: null };
+const state = { manifest: null, evaluation: null, featureCases: [], featureIndex: 0, featureTimer: null, scene: 0, reviewIndex: 0, revealed: false, playing: false, timer: null };
+
+function renderFeature(index) {
+  state.featureIndex = index % state.featureCases.length;
+  const { sample, classic } = state.featureCases[state.featureIndex];
+  const defect = sample.label === "Defect";
+  const dinoAlert = sample.current.score >= sample.current.threshold;
+  const verdict = alert => defect ? alert ? "Defect flagged" : "Defect missed" : alert ? "False alarm" : "Normal retained";
+  $("demoFeatureContext").textContent = `${sample.label} · frame ${sample.frame.toLocaleString()}`;
+  $("demoFeatureCounter").textContent = `${String(state.featureIndex + 1).padStart(2, "0")} / ${String(state.featureCases.length).padStart(2, "0")}`;
+  $("demoClassicPhoto").src = sample.image;
+  $("demoDinoPhoto").src = sample.image;
+  $("demoClassicMap").src = `./ablation/${classic.overlay}`;
+  $("demoDinoMap").src = sample.current.heatmap;
+  $("demoClassicPhoto").alt = `${sample.label} textile photo, frame ${sample.frame}`;
+  $("demoDinoPhoto").alt = `Same ${sample.label.toLowerCase()} textile photo, frame ${sample.frame}`;
+  for (const [id, alert] of [["demoClassicVerdict", classic.alert], ["demoDinoVerdict", dinoAlert]]) {
+    const node = $(id);
+    node.textContent = verdict(alert);
+    node.className = alert === defect ? "is-correct" : "is-error";
+  }
+}
+
+function rotateFeatures() {
+  clearTimeout(state.featureTimer);
+  if (!state.playing || state.scene !== 0) return;
+  state.featureTimer = setTimeout(() => { renderFeature(state.featureIndex + 1); rotateFeatures(); }, 2050);
+}
 
 function svg(parent, tag, attributes, label) {
   const node = document.createElementNS(svgNS, tag);
@@ -98,24 +125,27 @@ function updateReview() {
 }
 
 function showScene(index) {
+  clearTimeout(state.featureTimer);
   state.scene = index;
   state.revealed = false;
-  if (index === 2) state.reviewIndex = 0;
+  if (index === 3) state.reviewIndex = 0;
   document.querySelectorAll(".demo-stage").forEach((stage, i) => { stage.hidden = i !== index; });
   document.querySelectorAll(".demo-steps button").forEach((button, i) => {
     if (i === index) button.setAttribute("aria-current", "step");
     else button.removeAttribute("aria-current");
   });
-  if (index === 2) updateReview();
-  $("demoStatus").textContent = ["Visual shift", "Interval scores", "Recorded checks", "Separate validation"][index];
-  if (!state.playing) $("demoPlay").textContent = index === 3 ? "Replay recorded run" : "Play recorded run";
+  if (index === 3) updateReview();
+  $("demoStatus").textContent = ["Patch features", "Visual shift", "Interval scores", "Recorded checks", "Separate validation"][index];
+  if (!state.playing) $("demoPlay").textContent = index === 4 ? "Replay recorded run" : "Play recorded run";
+  rotateFeatures();
 }
 
 function stop() {
   clearTimeout(state.timer);
+  clearTimeout(state.featureTimer);
   state.playing = false;
   document.body.classList.remove("is-playing");
-  $("demoPlay").textContent = state.scene === 3 ? "Replay recorded run" : "Play recorded run";
+  $("demoPlay").textContent = state.scene === 4 ? "Replay recorded run" : "Play recorded run";
 }
 
 async function revealReview() {
@@ -131,49 +161,57 @@ async function revealReview() {
 }
 
 async function advance() {
-  if (state.scene < 2) showScene(state.scene + 1);
-  else if (state.scene === 2) {
+  if (state.scene < 3) showScene(state.scene + 1);
+  else if (state.scene === 3) {
     if (!state.revealed) await revealReview();
     else if (state.reviewIndex < state.manifest.review.length - 1) {
       state.reviewIndex++;
       state.revealed = false;
       updateReview();
-    } else showScene(3);
+    } else showScene(4);
   } else showScene(0);
 }
 
 function schedule() {
   if (!state.playing) return;
-  if (state.scene === 3) { stop(); return; }
+  if (state.scene === 4) { stop(); return; }
   state.timer = setTimeout(async () => {
     try { await advance(); schedule(); }
     catch (error) { stop(); $("demoError").textContent = error.message; $("demoError").hidden = false; }
-  }, state.scene === 2 ? state.revealed ? 1100 : 1400 : state.scene === 0 ? 6500 : 7000);
+  }, state.scene === 3 ? state.revealed ? 1100 : 1400 : state.scene === 0 ? 7000 : state.scene === 1 ? 6500 : 7000);
 }
 
 async function main() {
   try {
-    const response = await fetch("./unlabeled-demo/manifest.json");
-    if (!response.ok) throw new Error("Recorded run could not be loaded.");
-    const manifest = await response.json();
+    const responses = await Promise.all(["./unlabeled-demo/manifest.json", "./next-samples/catalog.json", "./ablation/catalog.json"].map(path => fetch(path)));
+    if (responses.some(response => !response.ok)) throw new Error("Recorded comparison could not be loaded.");
+    const [manifest, nextCatalog, classicCatalog] = await Promise.all(responses.map(response => response.json()));
     if (manifest.run !== "T1_S478_I118_2" || manifest.frame_count !== 2884 || manifest.review.length !== 8) throw new Error("Recorded run data do not match this replay.");
     state.manifest = manifest;
+    for (const id of [6, 7, 4]) {
+      const sample = nextCatalog.samples.find(item => item.id === id);
+      const classic = classicCatalog.find(item => item.id === id);
+      if (!sample || !classic || sample.scenario !== classic.scenario || sample.frame !== classic.frame || sample.label !== classic.dataset_label) throw new Error("Paired feature examples do not match.");
+      state.featureCases.push({ sample, classic });
+    }
+    renderFeature(0);
     drawChange(manifest.change);
     drawScores(manifest);
     drawQueue(manifest.review);
     showScene(0);
     $("demoPlay").addEventListener("click", () => {
       if (state.playing) { stop(); return; }
-      if (state.scene === 3) showScene(0);
+      if (state.scene === 4) showScene(0);
       state.playing = true;
       document.body.classList.add("is-playing");
       $("demoPlay").textContent = "Pause replay";
+      rotateFeatures();
       schedule();
     });
     $("demoNext").addEventListener("click", async () => { stop(); try { await advance(); } catch (error) { $("demoError").textContent = error.message; $("demoError").hidden = false; } });
     $("demoBack").addEventListener("click", () => {
       stop();
-      if (state.scene === 2 && state.reviewIndex > 0) { state.reviewIndex--; state.revealed = false; updateReview(); }
+      if (state.scene === 3 && state.reviewIndex > 0) { state.reviewIndex--; state.revealed = false; updateReview(); }
       else showScene(Math.max(0, state.scene - 1));
     });
     $("demoReveal").addEventListener("click", async () => { stop(); try { await advance(); } catch (error) { $("demoError").textContent = error.message; $("demoError").hidden = false; } });
