@@ -154,7 +154,17 @@
           <div class="reference-bars" aria-label="False alerts on the same 975 normal frames"><div><span>All frames</span><div class="bar-track"><i style="width:99.6%"></i></div><strong>971</strong></div><div><span>Selected</span><div class="bar-track"><i style="width:1.2%"></i></div><strong>11</strong></div></div>
           <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/EXPERIMENT_RESULTS.md">Three-run comparison ↗</a>
         </div>
-        <div class="adaptation-outcome"><div><span>REVIEWED-PATCH ADDITION · 15 RUNS</span><strong>Keep the frozen reference.</strong><p>Adding reviewed normal patches removed false alerts but also hid defects on later frames.</p></div><div class="decision-metrics"><div><span>Normal-frame alerts</span><strong>1,050 <i>→</i> 0</strong></div><div><span>Defect frames flagged</span><strong>202 <i>→</i> 153</strong></div><div><span>New defect episodes found</span><strong>48 <i>→</i> 40</strong></div></div><a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/FEEDBACK_VALIDATION_RESULTS.md">Full validation ↗</a></div>
+        <div class="adaptation-outcome">
+          <div><span>REVIEWED-PATCH ADDITION · 15 RUNS</span><strong>Keep the frozen reference.</strong><p>Adding reviewed normal patches removed false alerts but also hid defects on later frames.</p></div>
+          <div class="decision-metrics">
+            <div class="decision-metrics-key"><span><i class="is-frozen"></i>Frozen</span><span><i class="is-candidate"></i>Candidate</span></div>
+            <div class="decision-metric"><div><span>Normal-frame alerts</span><strong>1,050 <i>→</i> 0</strong></div><div class="decision-pair" aria-hidden="true"><span><i style="width:100%"></i></span><span><i style="width:0%"></i></span></div></div>
+            <div class="decision-metric"><div><span>Defect frames flagged</span><strong>202 <i>→</i> 153</strong></div><div class="decision-pair" aria-hidden="true"><span><i style="width:100%"></i></span><span><i style="width:75.7%"></i></span></div></div>
+            <div class="decision-metric"><div><span>New defect episodes found</span><strong>48 <i>→</i> 40</strong></div><div class="decision-pair" aria-hidden="true"><span><i style="width:100%"></i></span><span><i style="width:83.3%"></i></span></div></div>
+            <p class="decision-scope">Same later frames · 20,273 normal · 642 defect</p>
+          </div>
+          <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/FEEDBACK_VALIDATION_RESULTS.md">Full validation ↗</a>
+        </div>
       </article>
 
       <div class="improvement-links"><a class="button button-dark" href="./demo.html">Watch the replay <span aria-hidden="true">→</span></a><a href="./next-inspect.html">Explore recorded samples →</a><a href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/UNLABELED_REVIEW_RESULTS.md">Experiment results ↗</a></div>

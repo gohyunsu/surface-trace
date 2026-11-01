@@ -146,10 +146,20 @@
 .adaptation-outcome>div:first-child span{display:block;color:#aebcf0;font-size:10px;letter-spacing:.12em}
 .adaptation-outcome>div:first-child strong{display:block;margin-top:10px;font-size:24px;font-weight:500;letter-spacing:-.04em}
 .adaptation-outcome>div:first-child p{max-width:330px;margin:10px 0 0;color:#c2cce0;font-size:12px;line-height:1.6}
-.adaptation-outcome .decision-metrics>div{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #53637f}
-.adaptation-outcome .decision-metrics span{color:#bdc9dc;font-size:12px}
+.decision-metrics-key{display:flex;justify-content:flex-end;gap:16px;margin-bottom:3px}
+.decision-metrics-key span{display:inline-flex;align-items:center;gap:5px;color:#bdc9dc;font-size:10px}
+.decision-metrics-key i{width:8px;height:8px;border-radius:2px;background:#dfaa9a}
+.decision-metrics-key .is-candidate{background:#a3d1ca}
+.adaptation-outcome .decision-metric{padding:9px 0;border-bottom:1px solid #53637f}
+.decision-metric>div:first-child{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.adaptation-outcome .decision-metric span{color:#bdc9dc;font-size:12px}
 .adaptation-outcome .decision-metrics strong{color:#f8fafc;font-size:22px;font-weight:500;letter-spacing:-.045em;font-variant-numeric:tabular-nums;white-space:nowrap}
 .adaptation-outcome .decision-metrics i{color:#d9a89a;font-size:15px;font-style:normal}
+.decision-pair{display:grid;gap:4px;margin-top:10px}
+.decision-pair span{display:block;height:5px;border-radius:5px;background:#374762;overflow:hidden}
+.decision-pair span i{display:block;height:100%;border-radius:5px;background:#dfaa9a}
+.decision-pair span:last-child i{background:#a3d1ca}
+.decision-scope{margin:10px 0 0;color:#a8b7cf;font-size:10px}
 .adaptation-outcome .evidence-link{grid-column:1/-1;margin-top:0;color:#c3d7ff}
 .improvement-links{display:flex;align-items:center;gap:22px;margin-top:33px}
 .improvement-links>a:not(.button){color:#556a9b;font-size:12px;text-decoration:underline;text-underline-offset:3px}

@@ -154,6 +154,19 @@ for (const [before, after] of [[counts.frozenFP, counts.candidateFP], [counts.fr
   const phaseValue = `${before.toLocaleString("en-US")} → ${after.toLocaleString("en-US")}`;
   assert(demoScript.includes(phaseValue), `Demo reveal missing validated pair: ${phaseValue}`);
 }
+const decisionRows = [...site.matchAll(/<div class="decision-metric"><div><span>([^<]+)<\/span><strong>([\s\S]*?)<\/strong><\/div><div class="decision-pair"[^>]*><span><i style="width:100%"><\/i><\/span><span><i style="width:([\d.]+)%"><\/i><\/span><\/div><\/div>/g)];
+assert.equal(decisionRows.length, 3);
+for (const [label, before, after] of [
+  ["Normal-frame alerts", counts.frozenFP, counts.candidateFP],
+  ["Defect frames flagged", counts.frozenTP, counts.candidateTP],
+  ["New defect episodes found", counts.frozenEpisodes, counts.candidateEpisodes],
+]) {
+  const row = decisionRows.find(([, rowLabel]) => rowLabel === label);
+  assert(row, `Missing landing comparison: ${label}`);
+  assert.equal(row[2], `${before.toLocaleString("en-US")} <i>→</i> ${after.toLocaleString("en-US")}`);
+  assert(Math.abs(Number(row[3]) - after / before * 100) < .06, `Incorrect comparison bar: ${label}`);
+}
+assert(site.includes(`Same later frames · ${counts.normal.toLocaleString("en-US")} normal · ${counts.defect} defect`));
 
 assert.equal(manifest.run, "T1_S478_I118_2");
 assert.equal(manifest.frame_count, manifest.scores.length);

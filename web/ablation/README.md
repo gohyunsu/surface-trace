@@ -49,6 +49,12 @@ checks and four requested six more. Regenerate with
 `scripts/export_review_routing.py`; `scripts/audit_site_evidence.js` checks the
 export against the saved experiment result.
 
+The landing page's final paired bars compare the frozen reference and reviewed
+candidate on the same later frames from 15 eligible runs. Each pair is scaled
+to its own frozen count: 1,050/0 normal alerts, 202/153 flagged defect frames,
+and 48/40 detected new defect episodes. The site audit checks the displayed
+counts and candidate bar lengths against `feedback_validation_final.json`.
+
 Regenerate the handcrafted overlays with
 `experiments/unsupervised/export_ablation_comparison.py` on the experiment
 machine, after the TSFabrics feature cache and site sample export are present.
