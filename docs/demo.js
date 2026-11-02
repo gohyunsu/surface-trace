@@ -165,10 +165,21 @@ function updateReview() {
     : pilotDone ? "Defect found in first two · six more checks opened" : "Two checks first";
   const dots = $("demoCheckDots");
   dots.replaceChildren();
-  state.manifest.review.forEach((_, index) => {
+  const [firstFrame, lastFrame] = state.manifest.evaluation_frames;
+  $("demoReviewStart").textContent = `FRAME ${firstFrame.toLocaleString()}`;
+  $("demoReviewEnd").textContent = `FRAME ${lastFrame.toLocaleString()}`;
+  dots.setAttribute("aria-label", `${state.reviewIndex + Number(state.revealed)} of ${state.manifest.review.length} photos checked across frames ${firstFrame.toLocaleString()} to ${lastFrame.toLocaleString()}`);
+  state.manifest.review.forEach((review, index) => {
     const dot = document.createElement("span");
     dot.className = index < state.reviewIndex || index === state.reviewIndex && state.revealed ? "is-done" : index === state.reviewIndex ? "is-current" : "";
     if (!pilotDone && index >= 2) dot.classList.add("is-conditional");
+    dot.style.left = `${((review.frame - firstFrame) / (lastFrame - firstFrame) * 100).toFixed(3)}%`;
+    const checked = index < state.reviewIndex || index === state.reviewIndex && state.revealed;
+    if (checked) {
+      const result = state.evaluation.review.find(row => row.frame === review.frame);
+      dot.classList.add(result.dataset_label === "Defect" ? "is-defect" : "is-normal");
+    }
+    dot.title = `Check ${review.rank} · frame ${review.frame.toLocaleString()}`;
     dots.append(dot);
   });
   const outcome = $("demoOutcome");

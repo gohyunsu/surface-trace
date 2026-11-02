@@ -123,12 +123,19 @@
           <a class="button button-dark improvement-action" href="./interval.html">Open interval summary <span aria-hidden="true">→</span></a>
         </div>
         <div class="improvement-display review-display">
-          <div class="review-timeline">
+          <div class="review-coverage" aria-label="New defect episodes found with eight checks in each final defect run">
+            <div class="review-coverage-head"><span>FOUR DEFECT RUNS · EIGHT CHECKS EACH</span><div><span><i class="is-top"></i>Top 8</span><span><i class="is-spaced"></i>Spaced 8</span></div></div>
+            <div class="review-coverage-row" data-run="T1_S148_I108_1" style="--top:4.3%;--spaced:11.6%" title="T1_S148_I108_1"><div><span>Run 01</span><small>69 episodes</small></div><div class="review-coverage-bars"><span><i class="is-top"></i></span><span><i class="is-spaced"></i></span></div><strong>3 <small>→</small> 8</strong></div>
+            <div class="review-coverage-row" data-run="T1_S174_I108_1" style="--top:54.5%;--spaced:72.7%" title="T1_S174_I108_1"><div><span>Run 02</span><small>11 episodes</small></div><div class="review-coverage-bars"><span><i class="is-top"></i></span><span><i class="is-spaced"></i></span></div><strong>6 <small>→</small> 8</strong></div>
+            <div class="review-coverage-row" data-run="T1_S478_I118_2" style="--top:83.3%;--spaced:100%" title="T1_S478_I118_2"><div><span>Run 03</span><small>6 episodes</small></div><div class="review-coverage-bars"><span><i class="is-top"></i></span><span><i class="is-spaced"></i></span></div><strong>5 <small>→</small> 6</strong></div>
+            <div class="review-coverage-row" data-run="T2_S287_I185_1" style="--top:25%;--spaced:100%" title="T2_S287_I185_1"><div><span>Run 04</span><small>4 episodes</small></div><div class="review-coverage-bars"><span><i class="is-top"></i></span><span><i class="is-spaced"></i></span></div><strong>1 <small>→</small> 4</strong></div>
+          </div>
+          <details class="evidence-details review-example"><summary>Why spacing helps</summary><div class="review-timeline">
             <div class="review-timeline-head"><span>ONE RECORDED RUN · 6 DEFECT EPISODES</span><strong>8 checks per rule</strong></div>
             <div class="review-timeline-row"><span>Top 8</span><div class="review-timeline-track is-top" data-queue="top8" role="img" aria-label="Eight highest-score reviews include adjacent frames 536 and 538, 1506 and 1509, and 1984 and 1986"><i data-frame="536" style="left:7.5%;--rise:-5px"></i><i data-frame="538" style="left:7.5%;--rise:5px"></i><i data-frame="1026" style="left:24.5%"></i><i data-frame="1506" style="left:41.1%;--rise:-5px"></i><i data-frame="1509" style="left:41.2%;--rise:5px"></i><i data-frame="1984" style="left:57.7%;--rise:-5px"></i><i data-frame="1986" style="left:57.8%;--rise:5px"></i><i data-frame="2473" style="left:74.6%"></i></div><strong>5 found</strong></div>
             <div class="review-timeline-row"><span>Spaced 8</span><div class="review-timeline-track is-spaced" data-queue="spaced8" role="img" aria-label="Eight time-spaced reviews at frames 405, 538, 1026, 1380, 1506, 1984, 2473, and 2967"><i data-frame="405" style="left:2.9%"></i><i data-frame="538" style="left:7.5%"></i><i data-frame="1026" style="left:24.5%"></i><i data-frame="1380" style="left:36.7%"></i><i data-frame="1506" style="left:41.1%"></i><i data-frame="1984" style="left:57.7%"></i><i data-frame="2473" style="left:74.6%"></i><i data-frame="2967" style="left:91.8%"></i></div><strong>6 found</strong></div>
             <div class="review-timeline-ends"><span>START</span><span>END</span></div>
-          </div>
+          </div></details>
           <details class="evidence-details spacing-details"><summary>Spacing sensitivity</summary><div class="spacing-panel" aria-label="Distinct new defect episodes found with eight reviews per run across 16 final runs">
             <div class="spacing-head"><span>MINIMUM GAP · FRAMES</span><span>EPISODES / 90</span></div>
             <div class="spacing-row" data-spacing="1" data-episodes="15" style="--extent:57.7%"><span>No gap</span><i aria-hidden="true"></i><strong>15</strong></div>
@@ -139,13 +146,7 @@
             <p>12 and 16 frames also tied on development: 20 / 43 episodes. Same eight checks per run.</p>
             <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/REVIEW_SPACING_RESULTS.md">Spacing audit ↗</a>
           </div></details>
-          <details class="evidence-details"><summary>Results by run</summary><div class="review-coverage" aria-label="New defect episodes found with eight checks in each final defect run">
-            <div class="review-coverage-head"><span>EPISODES FOUND / RUN TOTAL · 8 CHECKS PER RUN</span><div><span><i class="is-top"></i>Top 8</span><span><i class="is-spaced"></i>Spaced 8</span></div></div>
-            <div class="review-coverage-row" data-run="T1_S148_I108_1" style="--top:4.3%;--spaced:11.6%"><div><span>T1_S148_I108_1</span><small>69 episodes</small></div><div class="review-coverage-bars"><span><i class="is-top"></i></span><span><i class="is-spaced"></i></span></div><strong>3 <small>→</small> 8</strong></div>
-            <div class="review-coverage-row" data-run="T1_S174_I108_1" style="--top:54.5%;--spaced:72.7%"><div><span>T1_S174_I108_1</span><small>11 episodes</small></div><div class="review-coverage-bars"><span><i class="is-top"></i></span><span><i class="is-spaced"></i></span></div><strong>6 <small>→</small> 8</strong></div>
-            <div class="review-coverage-row" data-run="T1_S478_I118_2" style="--top:83.3%;--spaced:100%"><div><span>T1_S478_I118_2</span><small>6 episodes</small></div><div class="review-coverage-bars"><span><i class="is-top"></i></span><span><i class="is-spaced"></i></span></div><strong>5 <small>→</small> 6</strong></div>
-            <div class="review-coverage-row" data-run="T2_S287_I185_1" style="--top:25%;--spaced:100%"><div><span>T2_S287_I185_1</span><small>4 episodes</small></div><div class="review-coverage-bars"><span><i class="is-top"></i></span><span><i class="is-spaced"></i></span></div><strong>1 <small>→</small> 4</strong></div>
-          </div></details>
+
         </div>
       </article>
 

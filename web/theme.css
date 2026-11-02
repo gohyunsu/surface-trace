@@ -87,6 +87,18 @@ button:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visi
 .improvement-measure>div{color:#263d80}
 .improvement-measure small,.improvement-measure p,.reference-factorial>span{color:#66758c}
 .improvement .ablation-gallery,.run-ap-panel,.reference-display,.change-display,.review-display,.handoff-display{border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 32px #1b2b4b0a}
+.review-coverage{padding:6px 4px 4px}
+.review-coverage-head{margin-bottom:12px;color:#607399;font-size:10px}
+.review-coverage-row{grid-template-columns:84px minmax(0,1fr) 52px;gap:16px;padding:13px 0;border-top-color:#e8ecf3}
+.review-coverage-row>div:first-child span{color:#283b64;font-size:12px}
+.review-coverage-row>div:first-child small{margin-top:3px;color:#8290a5;font-size:10px}
+.review-coverage-bars{gap:6px}
+.review-coverage-bars>span{height:7px;background:#eef1f7}
+.review-coverage .is-top{background:#d89283}
+.review-coverage .is-spaced{background:#6074d5}
+.review-coverage-row strong{color:#273d84;font-size:14px}
+.review-coverage-row strong small{padding:0 2px;font-size:11px}
+.review-example{margin-top:16px}
 .evidence-details{border-top-color:#e2e6ee}
 .evidence-details summary{color:#455bb5;font-size:12px}
 .improvement-adaptation .adaptation-outcome{border-radius:16px}
@@ -130,6 +142,7 @@ button:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visi
   .feedback-points a{min-height:65px;font-size:12px}
   .improvement{gap:25px;padding:51px 0}
   .improvement-copy h3{font-size:clamp(30px,8vw,37px)}
+  .review-coverage-row{grid-template-columns:70px minmax(0,1fr) 50px;gap:9px;padding:11px 0}
   .inspector-page .inspect-main,.demo-main,.interval-main,.review-main{padding-top:34px}
 }
 @media(max-width:390px){

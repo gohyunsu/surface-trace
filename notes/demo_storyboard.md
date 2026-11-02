@@ -10,7 +10,7 @@ for a longer inspection demonstration.
 | Patch features | Three curated paired photos rotate: a changed-run normal where handcrafted falsely alerts, a defect where DINOv2 succeeds, and a defect where DINOv2 misses. The complete handcrafted and DINOv2-plus-selection methods have macro frame AP 66.4%→85.4% over four defect-bearing runs, with the latter ahead on two. | “The combined method ranks frames better on average, but neither method wins every run. Here is a counterexample.” |
 | Visual shift | Source frame 3136 appears beside real frames 1, 32, 64, 96, and 192 of `T1_S478_I118_2`. The global-feature trace extends with each frame; three windows cross the limit by frame 96 and the signal remains high at frame 192. The two recordings are joined at a known boundary. | “The image distribution changed. Three consecutive windows confirmed an alert at frame 96. The signal still held after the early defect episode; it does not tell us what caused the shift.” |
 | Interval scores | The frozen DINOv2 score trace for 2,884 later frames. Two aligned timelines show the eight highest scores clustering and eight requests spaced by at least 16 frames. Only the spaced queue proceeds to review. | “Both rules request eight photos. Spacing avoids using several checks on neighboring frames.” |
-| Eight checks | The first two reviewed photos are recorded defects, so the remaining six open. Each outcome appears after its photo is checked. Once all eight are checked, the recorded result shows six distinct defect episodes versus five for the unspaced top-eight rule. A separately labeled four-run result then shows 15 versus 26 of 90 new episodes. | “Two checks come first. Because these reveal defects, we continue to eight. Spacing found one more event in this run. Across four defect runs, it found 26 instead of 15 with the same eight checks per run.” |
+| Eight checks | The first two reviewed photos are recorded defects, so the remaining six open. Each selected photo is marked at its actual position in the run; the outcome appears only after it is checked. Once all eight are checked, the recorded result shows six distinct defect episodes versus five for the unspaced top-eight rule. A separately labeled four-run result then shows 15 versus 26 of 90 new episodes; spacing leads in all four defect runs. | “Two checks come first. Because these reveal defects, we continue to eight. Spacing found one more event in this run. Across four defect runs, it found 26 instead of 15 with the same eight checks per run.” |
 | Update decision | A **separate** 15-run, later-frame validation reveals each tradeoff in sequence. Normal alerts fall 1,050→0, then flagged defect frames fall 202→153 and detected new episodes 48→40. The final decision keeps the frozen reference. | “We keep the frozen reference. Fewer false alarms alone are not enough to approve a model update.” |
 
 The first chapter is a curated comparison, drawn from two development runs and
@@ -50,6 +50,9 @@ landing page's review section. The five equal-budget settings found 15, 24,
 25, 26, and 26 of 90 new episodes across the final runs; 12 and 16 frames
 also tied on development. This is a robustness check on review scheduling,
 not a change to the detector.
+
+The landing page shows the four defect-run results directly. Open **Why spacing
+helps** only when explaining the adjacent-frame example.
 
 ## Evidence and next model gate
 
