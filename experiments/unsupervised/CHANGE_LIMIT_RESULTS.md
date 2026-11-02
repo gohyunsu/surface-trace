@@ -44,6 +44,25 @@ check. There are no annotated within-recording change times, so the
 10,496-frame signal is an **unexplained within-run alert**, not a verified
 false alarm. This probe did not set or revise the 75% factor.
 
+### Post-hoc margin around the 75% trial
+
+For a three-window confirmation rule, let `M` be the largest minimum of any
+three consecutive saved scores. A limit below `M` produces a confirmed alert.
+The 16,518-frame source continuation has `M = 0.041361`, or **0.647** of the
+original source limit. Among the known joins, the smallest after-join `M` is
+`0.051104` (**0.799** of the original limit) in development and `0.055040`
+(**0.861**) in the extended set. The fixed 0.75 trial therefore sits between
+the source-continuation alert boundary and the weakest observed join. Its
+margin to the weaker development join is only about **0.049** of the original
+limit. These values are calculated from the saved score arrays in
+[`results/source_continuation_full.json`](results/source_continuation_full.json),
+[`results/change_limit_development.json`](results/change_limit_development.json),
+and [`results/change_limit_final.json`](results/change_limit_final.json).
+
+This is a retrospective sensitivity diagnostic, not a new threshold choice.
+It does not replace the additional independently calibrated continuity checks
+in [`CHANGE_STABILITY_PROTOCOL.md`](CHANGE_STABILITY_PROTOCOL.md).
+
 **Interpretation.** This fixed rule improves sensitivity on the measured
 joins between existing recordings without increasing *confirmed* alerts on
 the one long source continuation. It does not identify the true time of an
