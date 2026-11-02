@@ -26,6 +26,7 @@ const manifest = read("web/unlabeled-demo/manifest.json");
 const evaluation = read("web/unlabeled-demo/evaluation.json");
 const sequentialDevelopment = read("experiments/unsupervised/results/sequential_review_development.json");
 const sequentialFinal = read("experiments/unsupervised/results/sequential_review_final.json");
+const adaptiveFinal = read("experiments/unsupervised/results/adaptive_budget_final.json");
 const routing = read("web/ablation/review-routing.json");
 const scenarioFrames = read("web/scenario/manifest.json");
 const changeFigure = read("web/ablation/change-figure.json");
@@ -368,8 +369,44 @@ assert(site.includes("<strong>128</strong>") && site.includes("<strong>56</stron
 assert(site.includes("12 stopped at 2") && site.includes("4 continued to 8"));
 assert(site.includes("26 / 90 in both"));
 
+const fixedAllocation = adaptiveFinal.methods.fixed8;
+const guidedAllocation = adaptiveFinal.methods.baseline_reserving_audit;
+const quietRuns = Object.keys(adaptiveFinal.methods.two_first).filter(
+  name => adaptiveFinal.methods.two_first[name].requests === 2);
+const activeRuns = Object.keys(adaptiveFinal.methods.two_first).filter(name => !quietRuns.includes(name));
+const sumRequests = (runs, method) => runs.reduce((sum, name) => sum + method[name].requests, 0);
+const fixedQuiet = sumRequests(quietRuns, fixedAllocation);
+const fixedActive = sumRequests(activeRuns, fixedAllocation);
+const guidedQuiet = sumRequests(quietRuns, guidedAllocation);
+const guidedActive = sumRequests(activeRuns, guidedAllocation);
+const fixedFound = adaptiveFinal.summary.methods.fixed8.episodes_found;
+const guidedFound = adaptiveFinal.summary.methods.baseline_reserving_audit.episodes_found;
+const gains = activeRuns.map(name => guidedAllocation[name].found_episode_ids.length -
+  fixedAllocation[name].found_episode_ids.length).filter(value => value > 0);
+assert.deepEqual([quietRuns.length, activeRuns.length, fixedQuiet, fixedActive, guidedQuiet, guidedActive],
+  [12, 4, 96, 32, 36, 92]);
+assert.equal(adaptiveFinal.summary.budget, 128);
+assert.equal(adaptiveFinal.summary.methods.baseline_reserving_audit.requests, 128);
+assert.equal(guidedFound - fixedFound, 24);
+assert.deepEqual(gains, [24]);
+for (const name of activeRuns) {
+  assert(fixedAllocation[name].found_episode_ids.every(id =>
+    guidedAllocation[name].found_episode_ids.includes(id)));
+}
+const allocationStart = site.indexOf('class="allocation-panel" id="reviewAllocation"');
+assert(allocationStart >= 0);
+const allocationMarkup = site.slice(allocationStart, site.indexOf('</article>', allocationStart));
+assert(allocationMarkup.includes(`style="width:${fixedQuiet / 128 * 100}%"`));
+assert(allocationMarkup.includes(`style="width:${guidedQuiet / 128 * 100}%"`));
+assert(allocationMarkup.includes(`<strong>${fixedFound}</strong>`));
+assert(allocationMarkup.includes(`<strong>${guidedFound}</strong>`));
+assert(allocationMarkup.includes('Post-hoc exploratory replay'));
+assert(allocationMarkup.includes('All 24 additional episodes came from one run.'));
+assert(allocationMarkup.includes('ADAPTIVE_BUDGET_RESULTS.md'));
+
 console.log(JSON.stringify({ handcraftedAP: percent(handcraftedAP), frozenAP: percent(frozenAP), wins,
   referenceCounts, referenceAP: [percent(allAP), percent(selectedAP)], referenceWins,
   adjacentCoverage: percent(adjacent), spacedCoverage: percent(spaced), changedRuns,
   feedbackRuns: selected.length, counts, replayFrames: manifest.frame_count, reviewRequests: manifest.review.length,
-  sequentialRequests: [sequentialFinal.summary.methods.fixed8.requests, sequentialFinal.summary.methods.pilot2.requests] }));
+  sequentialRequests: [sequentialFinal.summary.methods.fixed8.requests, sequentialFinal.summary.methods.pilot2.requests],
+  adaptiveEpisodes: [fixedFound, guidedFound] }));

@@ -37,3 +37,14 @@ if (routingPanel) {
     })
     .catch(error => console.error("Review routing:", error));
 }
+
+const allocationPanel = document.getElementById("reviewAllocation");
+if (allocationPanel && "IntersectionObserver" in window) {
+  const observer = new IntersectionObserver(entries => {
+    if (entries.some(entry => entry.isIntersecting)) {
+      allocationPanel.classList.add("is-revealed");
+      observer.disconnect();
+    }
+  }, { threshold: .45 });
+  observer.observe(allocationPanel);
+}

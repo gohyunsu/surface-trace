@@ -142,11 +142,31 @@
           <p class="improvement-kicker">REVIEW WORKLOAD</p>
           <p class="improvement-input">Do not request eight checks by default</p>
           <h3 id="handoff-title">Start with two checks.</h3>
-          <p>Check two high-ranked spaced photos first. A defect or uncertain result opens six more; reviewers can also request them.</p>
+          <p>Check two high-ranked spaced photos first. A defect or uncertain result opens six more; reviewers can also request them. Across a completed batch, spare checks can move to runs with confirmed issues.</p>
           <div class="improvement-measure"><span>FINAL 16 RUNS · REVIEW REQUESTS</span><div><small>Fixed eight</small><strong>128</strong><i aria-hidden="true">→</i><small>Two first</small><strong>56</strong></div><p>New defect episodes: 26 / 90 in both.</p></div>
           <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/SEQUENTIAL_REVIEW_RESULTS.md">Review-budget results ↗</a>
         </div>
-        <div class="improvement-display handoff-display"><div class="handoff-head"><span>16 RECORDED RUNS</span><strong>12 stopped at 2 <i>·</i> 4 continued to 8</strong></div><div id="reviewRouting" class="handoff-bars" role="group" aria-label="Requests by recorded run"></div><div class="handoff-key"><span><i class="is-first"></i>First two checks</span><span><i class="is-extra"></i>Additional checks</span><span><i class="is-idle"></i>Not requested</span></div><p>Review outcomes control requests; the detector stays fixed.</p></div>
+        <div class="improvement-display handoff-display">
+          <div class="handoff-head"><span>16 RECORDED RUNS</span><strong>12 stopped at 2 <i>·</i> 4 continued to 8</strong></div>
+          <div id="reviewRouting" class="handoff-bars" role="group" aria-label="Requests by recorded run"></div>
+          <div class="handoff-key"><span><i class="is-first"></i>First two checks</span><span><i class="is-extra"></i>Additional checks</span><span><i class="is-idle"></i>Not requested</span></div>
+          <div class="allocation-panel" id="reviewAllocation" aria-label="Exploratory batch allocation with the same 128 review requests">
+            <div class="allocation-head"><span>SAME BUDGET · 128 CHECKS</span><span>FOUND / 90</span></div>
+            <div class="allocation-row">
+              <span>Fixed 8 per run</span>
+              <div class="allocation-track" role="img" aria-label="96 checks in quiet runs and 32 checks in runs with an early confirmed issue"><i class="is-quiet" style="width:75%"></i><i class="is-active"></i></div>
+              <strong>26</strong>
+            </div>
+            <div class="allocation-row is-guided">
+              <span>Feedback allocation</span>
+              <div class="allocation-track" role="img" aria-label="36 checks in quiet runs and 92 checks in runs with an early confirmed issue"><i class="is-quiet" style="width:28.125%"></i><i class="is-active"></i></div>
+              <strong>50</strong>
+            </div>
+            <div class="allocation-key"><span><i class="is-quiet"></i>No issue in first two</span><span><i class="is-active"></i>Issue in first two</span></div>
+            <p>Post-hoc exploratory replay · 12 quiet runs received one audit check each. All 24 additional episodes came from one run.</p>
+            <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/ADAPTIVE_BUDGET_RESULTS.md">Review-allocation results ↗</a>
+          </div>
+        </div>
       </article>
 
       <article class="improvement improvement-adaptation" id="reference" aria-labelledby="reference-title">
