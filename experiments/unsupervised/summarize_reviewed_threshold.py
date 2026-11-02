@@ -98,7 +98,9 @@ def main() -> None:
         "The DINOv2 source reference, scores, spaced-eight queue, and source "
         "limit stay fixed. The trial limit uses only confirmed normal reviews "
         "and is tested on disjoint later frames. `REVIEWED_THRESHOLD_PROTOCOL.md` "
-        "records the rule and development success condition before the results.", "",
+        "records the rule and development success condition before the results. "
+        "The later test begins at frame 704, after the review window and gap; "
+        "its episode denominator differs from the earlier frame-320 ranking audit.", "",
         "## Development · five runs", "", *summary(dev), "",
         "## Follow-up · sixteen runs", "", *summary(final), "",
     ]
