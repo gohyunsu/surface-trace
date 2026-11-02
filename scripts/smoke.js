@@ -102,6 +102,17 @@ const { chromium } = require("playwright");
     assert.strictEqual(await page.locator("#demoQueue .is-conditional").count(), 6);
     assert.strictEqual(await page.locator("#demoScoreChart .demo-score-marker").count(), 8);
     assert.strictEqual(await page.locator("#demoScoreChart .demo-score-marker.is-conditional").count(), 6);
+    const recordedRun = await (await page.request.get(new URL("unlabeled-demo/manifest.json", base).href)).json();
+    const scorePoints = (await page.locator("#demoScoreChart polyline").getAttribute("points"))
+      .split(" ").map(point => point.split(",").map(Number));
+    const scoreMarkers = await page.locator("#demoScoreChart .demo-score-marker")
+      .evaluateAll(nodes => nodes.map(node => [Number(node.getAttribute("cx")), Number(node.getAttribute("cy"))]));
+    assert.strictEqual(scorePoints.length, recordedRun.scores.length);
+    for (const [index, item] of recordedRun.review.entries()) {
+      const point = scorePoints[item.frame - recordedRun.evaluation_frames[0]];
+      assert(Math.abs(scoreMarkers[index][0] - point[0]) < .01 && Math.abs(scoreMarkers[index][1] - point[1]) < .01,
+        `Review marker ${item.rank} must match its recorded frame score`);
+    }
     await page.getByRole("button", { name: "Next chapter" }).click();
     assert.strictEqual(await page.locator("#demoCheckCount").textContent(), "0 / 8");
     assert.strictEqual(await page.locator("#demoCheckDots .is-conditional").count(), 6);

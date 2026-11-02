@@ -94,17 +94,19 @@ function rotateShift() {
 function drawScores(manifest) {
   const chart = $("demoScoreChart");
   chart.replaceChildren();
-  const groups = [];
-  for (let i = 0; i < manifest.scores.length; i += 8) groups.push(Math.max(...manifest.scores.slice(i, i + 8)));
-  const low = Math.min(...groups), high = Math.max(...groups);
-  const x = index => 18 + index / (groups.length - 1) * 602;
+  const scores = manifest.scores;
+  const low = Math.min(...scores), high = Math.max(...scores);
+  const x = index => 18 + index / (scores.length - 1) * 602;
   const y = score => 162 - (score - low) / Math.max(1e-8, high - low) * 132;
   for (const level of [0, .5, 1]) svg(chart, "line", { x1: 18, x2: 620, y1: 162 - level * 132, y2: 162 - level * 132, class: "demo-chart-grid" });
-  trace(chart, groups.map((score, index) => [x(index), y(score)]), "demo-chart-line");
+  trace(chart, scores.map((score, index) => [x(index), y(score)]), "demo-chart-line");
   const [first, last] = manifest.evaluation_frames;
   for (const item of manifest.review) {
-    const index = Math.min(groups.length - 1, Math.max(0, Math.floor((item.frame - first) / 8)));
-    svg(chart, "circle", { cx: x(index), cy: y(groups[index]), r: 4.5,
+    const index = item.frame - first;
+    if (index < 0 || index >= scores.length || Math.abs(scores[index] - item.score) > 1e-5) {
+      throw new Error(`Review frame ${item.frame} does not match the recorded score trace.`);
+    }
+    svg(chart, "circle", { cx: x(index), cy: y(scores[index]), r: 4.5,
       class: item.rank > 2 ? "demo-score-marker is-conditional" : "demo-score-marker" });
   }
   svg(chart, "text", { x: 18, y: 192 }, first.toLocaleString());
