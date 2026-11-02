@@ -60,6 +60,11 @@ prespecified five-run development screen, but in 15 eligible follow-up runs
 normal flags fell from 1,049 to 48 while defect flags fell from 202 to 156
 and newly flagged episodes from 48 to 43. The trial was rejected; even a
 guard based on reviewed defects did not protect later unreviewed defects.
+The [dual source-reference trial](DUAL_REFERENCE_RESULTS.md) combined the
+selected and all-startup DINOv2 scores with a fixed source-calibrated rule.
+It failed its development normal-alert gate after three of five runs
+(31 → 1,979 normal alerts), so no final runs were tested and the active
+single-bank scorer is unchanged.
 
 This directory is independent of the KolektorSDD browser prototype. Curated
 TSFabrics outputs from this experiment appear on the published site; the site

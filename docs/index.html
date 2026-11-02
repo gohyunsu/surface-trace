@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="./site.css?v=78ae2b1d60a2">
   <link rel="stylesheet" href="./pipeline.css?v=8869817cbf14">
   <link rel="stylesheet" href="./improvements.css?v=422df57bb09e">
-  <link rel="stylesheet" href="./theme.css?v=b44b32844efd">
+  <link rel="stylesheet" href="./theme.css?v=6108101b32fe">
   <script src="./ablation.js?v=e884db45faa8" defer></script>
   <script src="./review-routing.js?v=1676cde7d12a" defer></script>
 </head>
@@ -84,6 +84,11 @@
             <div class="run-ap-row" data-run="T1_S478_I118_2" style="--classic:62.0%;--dino:87.4%"><span>Run 03</span><div><div class="run-ap-track"><i class="is-classic"></i></div><div class="run-ap-track"><i class="is-dino"></i></div></div><strong>62.0 <small>/</small> 87.4</strong></div>
             <div class="run-ap-row" data-run="T2_S287_I185_1" style="--classic:11.1%;--dino:82.3%"><span>Run 04</span><div><div class="run-ap-track"><i class="is-classic"></i></div><div class="run-ap-track"><i class="is-dino"></i></div></div><strong>11.1 <small>/</small> 82.3</strong></div>
             <details class="evidence-details"><summary>AP and AUROC</summary><p>Macro frame AUROC: 0.884 → 0.965 across the same four defect runs. AP summarizes precision across recall levels; AUROC measures how often a defect frame scores above a normal frame. Neither measures alert workload at a fixed limit.</p></details>
+            <details class="evidence-details setting-check"><summary>Different-setting check</summary><div class="setting-check-panel">
+              <div class="setting-check-row"><span>Complete method<small>Handcrafted → DINOv2 + selection</small></span><div><small>All 4 defect runs</small><strong>66.4% → 85.4%</strong></div><div><small>Different settings · 2</small><strong>54.8% → 84.1%</strong></div></div>
+              <div class="setting-check-row"><span>Reference choice<small>All startup → selected DINOv2</small></span><div><small>All 4 defect runs</small><strong>70.3% → 85.4%</strong></div><div><small>Different settings · 2</small><strong>89.0% → 84.1%</strong></div></div>
+              <p>The different-setting subset has 14 recordings, including 2 with defects. It excludes settings shared with development and is a post-hoc sensitivity check.</p><a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/SETTING_DISJOINT_RESULTS.md">Split details ↗</a>
+            </div></details>
           </div>
         </div>
       </article>
@@ -130,6 +135,7 @@
             <div class="review-coverage-row" data-run="T1_S478_I118_2" style="--top:83.3%;--spaced:100%" title="T1_S478_I118_2"><div><span>Run 03</span><small>6 episodes</small></div><div class="review-coverage-bars"><span><i class="is-top"></i></span><span><i class="is-spaced"></i></span></div><strong>5 <small>→</small> 6</strong></div>
             <div class="review-coverage-row" data-run="T2_S287_I185_1" style="--top:25%;--spaced:100%" title="T2_S287_I185_1"><div><span>Run 04</span><small>4 episodes</small></div><div class="review-coverage-bars"><span><i class="is-top"></i></span><span><i class="is-spaced"></i></span></div><strong>1 <small>→</small> 4</strong></div>
           </div>
+          <p class="review-coverage-note">Different-setting subset (2 defect runs): 7 → 12 of 15 episodes · post-hoc</p>
           <details class="evidence-details review-example"><summary>Why spacing helps</summary><div class="review-timeline">
             <div class="review-timeline-head"><span>ONE RECORDED RUN · 6 DEFECT EPISODES</span><strong>8 checks per rule</strong></div>
             <div class="review-timeline-row"><span>Top 8</span><div class="review-timeline-track is-top" data-queue="top8" role="img" aria-label="Eight highest-score reviews include adjacent frames 536 and 538, 1506 and 1509, and 1984 and 1986"><i data-frame="536" style="left:7.5%;--rise:-5px"></i><i data-frame="538" style="left:7.5%;--rise:5px"></i><i data-frame="1026" style="left:24.5%"></i><i data-frame="1506" style="left:41.1%;--rise:-5px"></i><i data-frame="1509" style="left:41.2%;--rise:5px"></i><i data-frame="1984" style="left:57.7%;--rise:-5px"></i><i data-frame="1986" style="left:57.8%;--rise:5px"></i><i data-frame="2473" style="left:74.6%"></i></div><strong>5 found</strong></div>
@@ -225,7 +231,6 @@
       </article>
 
       <div class="improvement-links"><a class="button button-dark" href="./demo.html">Watch the replay <span aria-hidden="true">→</span></a><a href="./next-inspect.html">Explore recorded samples →</a><a href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/UNLABELED_REVIEW_RESULTS.md">Experiment results ↗</a></div>
-      <details class="evidence-details split-audit"><summary>Check the experiment split</summary><p>Two final defect recordings repeat the fabric, speed, and lighting settings of development recordings. On the other 14 runs (2 with defects), macro frame AP is 54.8% → 84.1% for handcrafted vs DINOv2 + selection. Reference selection lowers AP from 89.0% to 84.1%; spaced review finds 12 rather than 7 of 15 new defect episodes at eight checks per run. This is a post-hoc sensitivity check.</p><a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/SETTING_DISJOINT_RESULTS.md">Setting-split audit ↗</a></details>
     </div></section>
   </main>
   <footer class="site-footer"><div class="footer-top"><a class="footer-brand" href="./index.html">SurfaceTrace</a><span>ISM × RIKU</span></div><div class="footer-bottom"><p>© 2026 Hyunsu Go · <a href="https://github.com/gohyunsu/surface-trace" target="_blank" rel="noopener noreferrer">GitHub</a></p><p>Images: <a href="https://www.vicos.si/resources/kolektorsdd/" target="_blank" rel="noopener noreferrer">KolektorSDD</a> · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a> / <a href="https://doi.org/10.6084/m9.figshare.29573381" target="_blank" rel="noopener noreferrer">TSFabrics</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a></p></div></footer>

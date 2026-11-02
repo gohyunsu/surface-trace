@@ -87,6 +87,9 @@ const { chromium } = require("playwright");
           for (const section of ["feedback", "foundation", "change", "review", "handoff", "reference"]) {
             await page.locator(`#${section}`).screenshot({ path: path.join(out, `${section}-${viewport.label}.png`) });
           }
+          await page.locator("#foundation .setting-check summary").click();
+          await page.locator("#foundation").screenshot({ path: path.join(out, `foundation-setting-${viewport.label}.png`) });
+          if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)) throw new Error(`setting check ${viewport.label}: horizontal overflow`);
           await page.locator("#review .spacing-details summary").click();
           await page.locator("#review").screenshot({ path: path.join(out, `review-spacing-${viewport.label}.png`) });
           if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)) throw new Error(`review spacing ${viewport.label}: horizontal overflow`);

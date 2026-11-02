@@ -54,9 +54,11 @@ assert.deepEqual(settingAudit.repeated_setting_runs, ["T1_S148_I108_1", "T1_S478
 assert.equal(distinct.runs.length, 14);
 assert.equal(distinct.defect_runs.length, 2);
 assert.equal(distinct.new_episodes, 15);
-assert(site.includes(`${percent(distinct.methods.handcrafted_source.macro_ap)} → ${percent(distinct.methods.source_knn.macro_ap)}`));
-assert(site.includes(`${percent(distinct.reference.all.macro_ap)} to ${percent(distinct.reference.selected.macro_ap)}`));
-assert(site.includes(`${distinct.review_episodes.spaced8} rather than ${distinct.review_episodes.top8} of ${distinct.new_episodes}`));
+for (const group of [settingAudit.all_final, distinct]) {
+  assert(site.includes(`<strong>${percent(group.methods.handcrafted_source.macro_ap)} → ${percent(group.methods.source_knn.macro_ap)}</strong>`));
+  assert(site.includes(`<strong>${percent(group.reference.all.macro_ap)} → ${percent(group.reference.selected.macro_ap)}</strong>`));
+}
+assert(site.includes(`${distinct.review_episodes.top8} → ${distinct.review_episodes.spaced8} of ${distinct.new_episodes} episodes`));
 assert(site.includes("SETTING_DISJOINT_RESULTS.md"));
 
 const defectRuns = Object.values(final.runs).filter(run => run.new_defect_episodes > 0);

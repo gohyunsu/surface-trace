@@ -98,12 +98,18 @@ button:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visi
 .review-coverage .is-spaced{background:#6074d5}
 .review-coverage-row strong{color:#273d84;font-size:14px}
 .review-coverage-row strong small{padding:0 2px;font-size:11px}
+.review-coverage-note{margin:11px 4px 0;color:#6b7b96;font-size:11px;line-height:1.5}
 .review-example{margin-top:16px}
 .evidence-details{border-top-color:#e2e6ee}
 .evidence-details summary{color:#455bb5;font-size:12px}
 .improvement-adaptation .adaptation-outcome{border-radius:16px}
-.split-audit{max-width:790px;margin-top:31px;padding-bottom:4px}
-.split-audit p{margin:11px 0 0;color:var(--muted);font-size:12px;line-height:1.65}
+.setting-check-panel{display:grid;gap:9px;margin-top:13px}
+.setting-check-row{display:grid;grid-template-columns:minmax(150px,1.15fr) 1fr 1fr;align-items:center;gap:12px;padding:12px 13px;border:1px solid #e3e8f2;border-radius:10px;background:#f8f9fc}
+.setting-check-row>span{color:#2a3d65;font-size:12px}
+.setting-check-row small{display:block;margin-top:3px;color:#7787a0;font-size:10px;font-weight:400;line-height:1.35}
+.setting-check-row>div strong{display:block;margin-top:5px;color:#354a91;font-size:13px;font-weight:500;white-space:nowrap;font-variant-numeric:tabular-nums}
+.setting-check-panel>p{margin:4px 0 0;color:var(--muted);font-size:11px;line-height:1.55}
+.setting-check-panel>.evidence-link{margin-top:0}
 
 /* Recorded samples, replay, and review all use the same canvas and panel shape. */
 .inspector-page .inspect-main,.demo-main,.interval-main,.review-main{padding-top:52px}
@@ -125,6 +131,8 @@ button:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visi
 @media(max-width:1000px){
   .pipeline-landing .hero-inner{grid-template-columns:1fr;min-height:0;padding-top:68px;padding-bottom:76px}
   .pipeline-hero-motion{justify-self:start;max-width:760px}
+  .setting-check-row{grid-template-columns:1fr 1fr;gap:8px}
+  .setting-check-row>span{grid-column:1/-1}
 }
 @media(max-width:700px){
   html{scroll-padding-top:0}
