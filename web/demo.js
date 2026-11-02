@@ -63,10 +63,10 @@ function drawChange({ window_ends: ends, window_scores: scores, limit, splice_bo
     const [end, score] = visible.at(-1);
     svg(chart, "circle", { cx: x(end), cy: y(score), r: 5, class: "demo-chart-current" });
   }
-  if (frame >= 96) {
+  if (frame >= alert - boundary) {
     const [, score] = points.find(([end]) => end === alert);
     svg(chart, "circle", { cx: x(alert), cy: y(score), r: 6, class: "demo-chart-alert" });
-    svg(chart, "text", { x: x(alert) + 10, y: y(score) - 10, class: "demo-alert-label" }, "ALERT");
+    svg(chart, "text", { x: x(alert) + 10, y: y(score) - 10, class: "demo-alert-label" }, `ALERT · ${alert - boundary}`);
   }
   svg(chart, "text", { x: 19, y: 171 }, "Reference");
   svg(chart, "text", { x: x(boundary) + 6, y: 171 }, "New run");
@@ -83,8 +83,16 @@ function renderShift(index) {
   void image.offsetWidth;
   image.classList.add("is-advancing");
   $("demoShiftFrame").textContent = `Changed run · frame ${frame}`;
-  $("demoShiftCallout").textContent = frame >= 96 ? "Frame 96" : `${Math.floor(frame / 32)} / 3`;
-  $("demoShiftCalloutLabel").textContent = frame >= 96 ? "First sustained change alert" : "Consecutive windows above the limit";
+  const { alert, splice_boundary: boundary, window_ends: ends, window_scores: scores, limit } = state.manifest.change;
+  let streak = 0;
+  for (let i = ends.length - 1; i >= 0; i--) {
+    if (ends[i] > boundary + frame) continue;
+    if (ends[i] <= boundary || scores[i] <= limit) break;
+    streak++;
+  }
+  const alerted = frame >= alert - boundary;
+  $("demoShiftCallout").textContent = alerted ? `Frame ${alert - boundary}` : `${Math.min(streak, 3)} / 3`;
+  $("demoShiftCalloutLabel").textContent = alerted ? "First sustained change alert" : "Consecutive windows above the limit";
   drawChange(state.manifest.change, frame);
 }
 

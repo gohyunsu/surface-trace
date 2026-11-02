@@ -200,11 +200,11 @@ assert(spaced > adjacent);
 const topEpisodes = defectRuns.reduce((total, run) => total + run.methods.source_knn.queues.top8.new_episodes, 0);
 const spacedEpisodes = defectRuns.reduce((total, run) => total + run.methods.source_knn.queues.spaced8.new_episodes, 0);
 assert(site.includes(`<small>Top 8</small><strong>${topEpisodes}</strong><i aria-hidden="true">→</i><small>Spaced 8</small><strong>${spacedEpisodes}</strong>`));
-const randomMeanEpisodes = Object.values(final.runs).reduce((total, run) => total + run.random_100.mean_episodes, 0);
-assert(site.includes(`Random 8 averaged ${randomMeanEpisodes.toFixed(1)} (100 draws)`));
+assert(defectRuns.every(run => run.methods.source_knn.queues.spaced8.new_episodes >
+  run.methods.source_knn.queues.top8.new_episodes));
 assert(demo.includes(`Top 8 <strong>${topEpisodes}</strong>`) && demo.includes(`Spaced 8 <strong>${spacedEpisodes}</strong>`));
 assert(demo.includes(`Distinct new defect episodes found / ${referenceCounts.episodes}`));
-assert(site.includes(`of ${referenceCounts.episodes} episodes · same score trace and eight checks per run`));
+assert(site.includes(`Of ${referenceCounts.episodes} new episodes · all four runs improved with the same eight checks per run.`));
 assert(spacingDevelopment.complete && spacingFinal.complete);
 assert.deepEqual(spacingFinal.protocol.spacing_frames, [1, 4, 8, 12, 16]);
 assert.equal(Object.keys(spacingFinal.runs).length, Object.keys(final.runs).length);

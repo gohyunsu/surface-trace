@@ -96,6 +96,7 @@ const { chromium } = require("playwright");
     }
 
     await page.goto(new URL("demo.html", base).href, { waitUntil: "networkidle" });
+    await page.waitForFunction(() => document.querySelector("#demoScoreChart polyline") !== null);
     const evaluationRequests = [];
     page.on("request", request => { if (new URL(request.url()).pathname.endsWith("/unlabeled-demo/evaluation.json")) evaluationRequests.push(request.url()); });
     assert.strictEqual(await page.locator(".demo-steps button").count(), 6);
@@ -117,6 +118,7 @@ const { chromium } = require("playwright");
     assert.strictEqual(await page.locator("#demoChangeChart .demo-chart-alert").count(), 0);
     await page.waitForFunction(() => document.querySelector("#demoShiftFrame").textContent.includes("frame 96"));
     assert.strictEqual(await page.locator("#demoChangeChart .demo-chart-alert").count(), 1);
+    assert.strictEqual(await page.locator("#demoChangeChart .demo-alert-label").textContent(), "ALERT · 96");
     await page.getByRole("button", { name: "Next chapter" }).click();
     assert(await page.getByRole("heading", { name: "Spread checks across the run." }).isVisible());
     assert.strictEqual(await page.locator("#demoTop8Track i").count(), 8);
