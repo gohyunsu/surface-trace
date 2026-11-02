@@ -66,6 +66,9 @@ def summarize(phase: str, result: dict) -> list[str]:
                      for _, chosen, control in positive]
     coverage_difference = [(chosen["review_episodes"] - control["review_episodes"])
                            / chosen["new_episodes"] for _, chosen, control in episodic]
+    flag_deltas = [(name, run["selected_flag_reproduction_delta"])
+                   for name, run in result["runs"].items()
+                   if run.get("selected_flag_reproduction_delta", 0)]
     source = result["source"]
     selected_limit = f"{source['thresholds']['selected']:.4f}"
     all_limit = f"{source['thresholds']['all']:.4f}"
@@ -97,6 +100,9 @@ def summarize(phase: str, result: dict) -> list[str]:
         f"{paired_interval(ap_difference)}.",
         f"Paired run-bootstrap episode-coverage difference (selected − all): "
         f"{paired_interval(coverage_difference)}.",
+        "Fresh-encode selected-reference alert-count differences from the saved "
+        "benchmark: " + (", ".join(f"`{name}` {delta:+d}" for name, delta in flag_deltas)
+                        if flag_deltas else "none") + ".",
         "",
         "| Run | Defect frames | Frame AP · selected / all | Defect flags · selected / all | "
         "Normal flags · selected / all | Episodes @8 · selected / all |",

@@ -77,7 +77,11 @@ python3 experiments/unsupervised/summarize_reference_selection.py \
 
 The script checks that its selected-reference AP, eight-review episode yield,
 thresholded flag count, and score quantiles agree with the previously recorded
-benchmark before accepting a newly scored run. The report command rejects
+benchmark before accepting a newly scored run. A fresh encode under PyTorch
+2.2.2 is permitted at most one extra or missing threshold flag, and only when
+a score lies within 0.0005 of the fixed limit. That difference is recorded per
+run and reported; AP, episode yield, and score quantiles retain their separate
+reproduction checks. The report command rejects
 incomplete checkpoints and lists every run, both source-continuation flag counts,
 macro frame AP, eight-review episode coverage, per-run false alerts, and paired
 run-bootstrap intervals for AP and coverage differences. It
