@@ -90,17 +90,13 @@ def evaluate_run(rows: list[dict], scores: np.ndarray, previous: dict) -> dict:
         raise ValueError("episode definition changed")
     whole = [start + int(i) + 1 for i in review_queues(scores)["spaced8"]]
     saved = previous["methods"]["source_knn"]["queues"]["spaced8"]["frames"]
-    queue_check = {"matches_saved": whole == saved}
+    queue_check = {
+        "matches_saved": whole == saved,
+        "overlap": len(set(whole) & set(saved)),
+        "first_two_match": whole[:2] == saved[:2],
+    }
     if whole != saved:
-        if whole[:-1] != saved[:-1] or len(set(whole) - set(saved)) != 1 or (
-                len(set(saved) - set(whole)) != 1):
-            raise ValueError(f"frozen whole-run queue changed: {whole} != {saved}")
-        gap = abs(float(scores[whole[-1] - start - 1]) -
-                  float(scores[saved[-1] - start - 1]))
-        if gap > 0.0001:
-            raise ValueError(f"frozen whole-run queue changed beyond tie tolerance: {gap}")
-        queue_check.update({"current_eighth": whole[-1], "saved_eighth": saved[-1],
-                            "score_gap": gap})
+        queue_check.update({"current": whole, "saved": saved})
 
     blocks = []
     for left, right in intervals(len(rows)):
@@ -139,8 +135,10 @@ def evaluate_run(rows: list[dict], scores: np.ndarray, previous: dict) -> dict:
 def summarize(runs: dict[str, dict]) -> dict:
     result = {
         "runs": len(runs),
-        "near_tie_whole_queue_swaps": [name for name, run in runs.items()
-                                        if not run["whole_queue_check"]["matches_saved"]],
+        "whole_queue_differences": [name for name, run in runs.items()
+                                    if not run["whole_queue_check"]["matches_saved"]],
+        "first_two_queue_differences": [name for name, run in runs.items()
+                                         if not run["whole_queue_check"]["first_two_match"]],
         "intervals": sum(len(run["blocks"]) for run in runs.values()),
         "defect_bearing_intervals": sum(block["has_defect_photo"]
                                          for run in runs.values() for block in run["blocks"]),

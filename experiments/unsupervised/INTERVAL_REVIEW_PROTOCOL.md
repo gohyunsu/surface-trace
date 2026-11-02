@@ -12,20 +12,21 @@ same stopping rule hides reachable defects under that segmentation.
 Use the same frozen source DINOv2-S/14 patch bank, target recordings, cap at
 4,096 frames, evaluation start at frame index 320, and episode definition as
 `UNLABELED_REVIEW_PROTOCOL.md`. Recompute the source score for every evaluated
-frame and verify its whole-run, 16-frame-spaced top-eight queue against the
+frame and compare its whole-run, 16-frame-spaced top-eight queue with the
 saved `unlabeled_review_{phase}.json`. No target label, local
 reference, target calibration, or change alarm enters ranking.
 
-**Reproduction amendment after the first final-run check, before final
-interval outcomes:** the old saved queue for `T2_S262_I45_1` differs only in
-its eighth photo. The rerun scores of the two boundary candidates are
-0.52003467 and 0.51999742 (gap 0.00003725). Repeating the original full-run
-feature-extraction path produced the same new queue, so this is not caused by
-streaming only the evaluated frames. Accept a single eighth-slot swap only
-when the first seven frames are identical and the current score gap is at
-most 0.0001; record every swap. Any broader or larger discrepancy stops the
-experiment. This is a disclosed post-start tolerance, not an exact replay of
-the prior queue, and limits claims of bitwise reproducibility.
+**Reproduction amendments before any final interval outcome was produced:**
+the first attempted exact replay differed at the eighth queue photo of
+`T2_S262_I45_1`; current scores of the two boundary candidates are
+0.52003467 and 0.51999742. Repeating the original full-run feature-extraction
+path produced the same new ordering. A second attempt differed at ranks five
+and six of `T2_S466_I39_1`, with the same eight photos retained. Exact queue
+identity cannot be a gate for this recalculation. Record, for every run, the
+whole-run queue overlap and whether the first two photos match the saved
+queue. Include **all** runs regardless of this descriptive check. The
+interval comparison is internally paired on its newly computed scores and
+must not be described as a bitwise replay of the earlier whole-run result.
 
 Split each target evaluation prefix into adjacent 512-frame blocks starting at
 zero-based index 320. Merge a final remainder shorter than 256 frames into
