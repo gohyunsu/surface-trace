@@ -89,6 +89,7 @@
 .reference-audit-row small{display:block;margin-top:4px;color:#9aa5b7;font-size:9px}
 .reference-audit-note{margin:8px 0 0;color:#8d9ab0;font-size:9px;line-height:1.4}
 .evidence-link{display:inline-block;margin-top:18px;color:#586ca5;font-size:11px;text-decoration:underline;text-underline-offset:3px}
+.reference-display .evidence-link+.evidence-link{margin-left:16px}
 .change-display{padding:21px;background:#fff;border:1px solid #dce2ee;border-radius:8px;box-shadow:0 12px 35px #2b3b5c0b}
 .change-frames{display:grid;grid-template-columns:minmax(0,.62fr) 30px minmax(0,1.38fr);gap:10px;align-items:end}
 .change-frames>div{min-width:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}

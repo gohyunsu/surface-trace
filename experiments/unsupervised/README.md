@@ -27,12 +27,21 @@ normal-frame alerts in 15/16 extended runs and raised eight-review episode
 yield from 19 to 26, while reducing defect-frame flags from 851 to 313 at
 each bank's separately calibrated source threshold. The site presents both
 the benefit and the detection tradeoff. The active scorer is unchanged.
+The [source-alert limit audit](SOURCE_THRESHOLD_RESULTS.md) tested five
+source-calibrated quantiles. A 97.5% candidate chosen on the five development
+runs raised defect-frame flags from 313 to 505 on the 16 follow-up runs, but
+also raised normal-frame flags from 1,449 to 6,053. It was not adopted. The
+development-label choice of this candidate quantile is explicitly recorded in
+[the decision note](SOURCE_THRESHOLD_DECISION.md); the current 99.5% limit and
+rank-based eight-frame review queue remain unchanged.
 
 This directory is independent of the KolektorSDD browser prototype. Curated
 TSFabrics outputs from this experiment appear on the published site; the site
 does not run this model or accept new images. The target-domain method sees no
-defect labels when choosing its reference bank, review threshold, or change
-threshold. Public labels are read only by the audit and evaluation code. The `oracle_normal`
+defect labels when choosing its reference bank, active review threshold, or change
+threshold. Public labels are read only by the audit and evaluation code, except
+for the separately tested 97.5% threshold hyperparameter chosen on development
+runs and rejected after follow-up evaluation. The `oracle_normal`
 comparison deliberately uses labels and is reported separately.
 
 ## TSFabrics: continuous production and change
