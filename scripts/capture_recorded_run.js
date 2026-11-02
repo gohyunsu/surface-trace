@@ -52,6 +52,9 @@ const fps = 4;
     let index = 0;
     const hold = async frames => {
       for (let i = 0; i < frames; i++) {
+        // Fake-clock scene changes can outrun image loading; capture only decoded photos.
+        await page.locator('.demo-stage:not([hidden]) img:not([hidden])')
+          .evaluateAll(images => Promise.all(images.map(image => image.decode())));
         await page.screenshot({ path: path.join(frameDir, `frame-${String(index++).padStart(4, "0")}.png`), animations: "allow" });
         await page.clock.runFor(1000 / fps);
       }

@@ -9,8 +9,8 @@
 .demo-steps button{position:relative;display:flex;align-items:center;gap:11px;padding:13px 16px;border:1px solid #dbe1ec;border-radius:5px;background:#fff;color:#7888a2;text-align:left;font:inherit;font-size:12px;cursor:pointer;overflow:hidden;transition:background .2s,color .2s,border-color .2s}
 .demo-steps button span{color:#9dabc0;font-size:10px}
 .demo-steps button[aria-current=step]{background:#263957;border-color:#263957;color:#fff}
-.demo-steps button[aria-current=step] span{color:#a9d6d0}
-.demo-page.is-playing .demo-steps button[aria-current=step]:after{content:"";position:absolute;left:0;bottom:0;height:3px;width:100%;background:#a2d4cb;transform-origin:left;animation:demo-progress 7s linear forwards}
+.demo-steps button[aria-current=step] span{color:#c9c6ff}
+.demo-page.is-playing .demo-steps button[aria-current=step]:after{content:"";position:absolute;left:0;bottom:0;height:3px;width:100%;background:#b4afff;transform-origin:left;animation:demo-progress 7s linear forwards}
 .demo-page.is-playing .demo-steps button[data-step="1"][aria-current=step]:after{animation-duration:6.5s}
 .demo-page.is-playing .demo-steps button[data-step="3"][aria-current=step]:after{animation-duration:20s}
 .demo-page.is-playing .demo-steps button[data-step="4"][aria-current=step]:after{animation-duration:5.2s}
@@ -134,8 +134,8 @@
 .demo-controls{display:flex;align-items:center;gap:8px;margin-top:19px}
 .demo-controls button{min-width:44px;height:42px;border:1px solid #cfd9e7;border-radius:4px;background:#fff;color:#475d82;font:inherit;cursor:pointer}
 .demo-controls button:hover{background:#e6edf5}
-.demo-controls .demo-play{min-width:174px;padding:0 18px;background:#263957;border-color:#263957;color:#fff;font-size:12px}
-.demo-controls .demo-play:hover{background:#3a557d}
+.demo-controls .demo-play{min-width:174px;padding:0 18px;background:#4e4bca;border-color:#4e4bca;color:#fff;font-size:12px}
+.demo-controls .demo-play:hover{background:#3e3ab6}
 .demo-controls #demoStatus{margin-left:13px;color:#8494ac;font-size:11px}
 .demo-source{margin:23px 0 0;color:#8b98aa;font-size:11px;line-height:1.5}
 .demo-source a{color:#607ca3;text-underline-offset:2px}

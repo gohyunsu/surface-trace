@@ -73,6 +73,11 @@ selected and all-startup DINOv2 scores with a fixed source-calibrated rule.
 It failed its development normal-alert gate after three of five runs
 (31 → 1,979 normal alerts), so no final runs were tested and the active
 single-bank scorer is unchanged.
+An exploratory [appearance-based representation route](REPRESENTATION_ROUTING_AUDIT.md)
+used only unlabeled startup MMD scores to choose handcrafted or DINOv2 patch
+features per run. It raised macro frame AP but lost one development defect
+episode and found no additional final episodes in the same eight reviews.
+The active DINOv2 scorer remains unchanged.
 
 This directory is independent of the KolektorSDD browser prototype. Curated
 TSFabrics outputs from this experiment appear on the published site; the site
