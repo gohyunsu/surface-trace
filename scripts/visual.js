@@ -15,7 +15,7 @@ const { chromium } = require("playwright");
       { width: 768, height: 900, label: "tablet" },
       { width: 390, height: 844, label: "mobile" },
       { width: 320, height: 740, label: "compact" },
-    ]) {
+    ].filter(item => !process.env.VISUAL_VIEWPORT || item.label === process.env.VISUAL_VIEWPORT)) {
       const page = await browser.newPage({ viewport });
       const pages = process.env.VISUAL_SCOPE === "summary"
         ? [["next-inspector", "next-inspect.html?sample=7"]]
@@ -108,6 +108,14 @@ const { chromium } = require("playwright");
             await page.screenshot({ path: path.join(out, `demo-${step}-${viewport.label}.png`), fullPage: true });
             if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)) throw new Error(`demo ${step} ${viewport.label}: horizontal overflow`);
           }
+          await page.locator('.demo-steps button[data-step="3"]').click();
+          for (let review = 0; review < 8; review++) {
+            await page.locator("#demoReveal").click();
+            if (review < 7) await page.locator("#demoReveal").click();
+          }
+          if (!(await page.locator("#demoCohort").isVisible())) throw new Error(`demo cohort ${viewport.label}: result is hidden`);
+          await page.screenshot({ path: path.join(out, `demo-cohort-${viewport.label}.png`), fullPage: true });
+          if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)) throw new Error(`demo cohort ${viewport.label}: horizontal overflow`);
         } else if (name === "review") {
           await page.getByRole("button", { name: "Review selected frames" }).click();
           await page.locator("#reviewPhoto").evaluate(image => image.decode());

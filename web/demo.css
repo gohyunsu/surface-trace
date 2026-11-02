@@ -85,6 +85,16 @@
 .demo-route:before{content:"";width:6px;height:6px;border-radius:50%;background:#a7b2c7}
 .demo-route.is-expanded{color:#a96e61}
 .demo-route.is-expanded:before{background:#cc8b7d;box-shadow:0 0 0 4px #efc8bd66}
+.demo-cohort{width:100%;margin-top:20px;padding:16px 17px;border:1px solid #d9e2ed;border-radius:8px;background:#f7f9fc}
+.demo-cohort p{margin:0 0 10px;color:#7183a0;font-size:11px;letter-spacing:.08em}
+.demo-cohort-values{display:flex;justify-content:space-between;gap:12px;color:#61738f;font-size:12px}
+.demo-cohort-values span{display:flex;align-items:baseline;gap:7px}
+.demo-cohort-values strong{color:#2e4a6a;font-size:23px;font-weight:500;font-variant-numeric:tabular-nums}
+.demo-cohort-values span+span strong{color:#42877f}
+.demo-cohort-bars{display:grid;gap:5px;margin:8px 0}
+.demo-cohort-bars i,.demo-cohort-bars b{display:block;height:5px;border-radius:5px;background:#8ba1bb}
+.demo-cohort-bars b{background:#75b6aa}
+.demo-cohort small{color:#8190a8;font-size:11px}
 .check-visual{padding:29px 40px}
 .demo-check-photo{position:relative;overflow:hidden;border-radius:5px;background:#52617a;aspect-ratio:1.75;max-height:295px}
 .demo-check-photo img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover}
@@ -129,6 +139,7 @@
 .demo-error{padding:15px;background:#fbecea;color:#a15550;border-radius:5px}
 @media(max-width:850px){.demo-main{width:calc(100% - 36px)}.demo-stage{grid-template-columns:1fr;min-height:0}.demo-copy{padding:28px 32px}.demo-kicker{margin-bottom:13px}.demo-copy>p:not(.demo-kicker){margin-top:10px}.demo-callout{margin-top:19px;padding-top:15px}.demo-visual{min-height:320px}.demo-steps button{padding:12px 10px;gap:7px}}
 @media(max-width:560px){.demo-main{width:calc(100% - 24px);padding:33px 0 60px}.demo-intro{display:block;margin-bottom:20px}.demo-intro h1{font-size:39px}.demo-run{display:block;margin-top:12px;padding:0;font-size:10px}.demo-steps{gap:4px}.demo-steps button{display:block;padding:9px 4px;text-align:center;font-size:8px}.demo-steps button span{display:block;margin-bottom:4px}.demo-copy{padding:27px 22px}.demo-copy h2{font-size:34px}.demo-copy>p:not(.demo-kicker){font-size:12px}.demo-visual{padding:20px;min-height:300px}.feature-pair{gap:8px}.feature-pair figcaption{display:grid;gap:3px;font-size:10px}.feature-pair figcaption strong{text-align:left}.shift-photos{gap:5px;grid-template-columns:minmax(0,1fr) 17px minmax(0,1fr)}.shift-photos figcaption{font-size:9px}.shift-photos>span{font-size:16px}.score-contrast-row{grid-template-columns:52px minmax(0,1fr);gap:7px;font-size:9px}.check-visual{padding:20px}.demo-outcome{font-size:16px}.decision-visual{padding:25px 20px}.decision-row strong{font-size:16px}.demo-controls #demoStatus{font-size:10px}}
+@media(max-width:560px){.demo-cohort{margin-top:15px;padding:13px}.demo-cohort-values strong{font-size:18px}}
 @media(max-width:390px){.demo-page .main-nav a:not(:first-child){display:none}.demo-controls #demoStatus{display:none}.demo-controls .demo-play{min-width:0;flex:1}}
 @media(prefers-reduced-motion:reduce){.demo-steps button,.decision-row{transition:none}.demo-stage:not([hidden]) .demo-copy,.demo-stage:not([hidden]) .demo-visual,.demo-stage:not([hidden]) .demo-chart-line,.demo-page.is-playing .demo-steps button[aria-current=step]:after,.shift-photos img.is-advancing,.decision-row.is-focus .decision-track i,.decision-row.is-focus .decision-track b,.demo-stage:not([hidden]) .score-contrast-track i{animation:none!important}.demo-stage:not([hidden]) .demo-chart-line{stroke-dashoffset:0}}
 

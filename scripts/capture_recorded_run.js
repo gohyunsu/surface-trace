@@ -21,7 +21,7 @@ const fps = 4;
     await page.goto(new URL("demo.html", base).href, { waitUntil: "networkidle" });
     await page.waitForFunction(() => document.querySelector("#demoScoreChart polyline") !== null);
     await page.addStyleTag({ content: `
-      .site-header,.site-footer,.demo-source{display:none!important}
+      .site-header,.site-footer,.demo-source,.demo-controls{display:none!important}
       .demo-main{width:min(1680px,calc(100% - 120px));padding:52px 0 0}
       .demo-intro{margin-bottom:24px}
       .demo-intro h1{font-size:66px}
@@ -38,6 +38,11 @@ const fps = 4;
       .check-visual{padding:40px 60px}
       .demo-check-photo{max-height:380px}
       .demo-outcome{font-size:25px}
+      .demo-cohort{padding:20px}
+      .demo-cohort p,.demo-cohort small{font-size:14px}
+      .demo-cohort-values{font-size:16px}
+      .demo-cohort-values strong{font-size:28px}
+      .demo-cohort-bars i,.demo-cohort-bars b{height:8px}
       .decision-visual{padding:55px}
       .decision-row>span{font-size:17px}
       .decision-row strong{font-size:27px}
@@ -80,7 +85,7 @@ const fps = 4;
       if (reviewIndex === 1 && !(await page.locator("#demoRoute").textContent()).includes("six more checks opened")) {
         throw new Error("The recorded two-check decision did not open the remaining queue");
       }
-      await hold(2);
+      await hold(reviewIndex === 7 ? fps * 3 : 2);
       if (reviewIndex < 7) await page.locator("#demoReveal").click();
     }
     if (await page.locator("#demoCheckCount").textContent() !== "6 vs 5") {
@@ -93,7 +98,7 @@ const fps = 4;
       height: innerHeight,
       error: document.querySelector("#demoError")?.textContent,
     }));
-    if (final.scene !== "4" || final.width !== 1920 || final.height !== 1080 || final.error || index !== 116) {
+    if (final.scene !== "4" || final.width !== 1920 || final.height !== 1080 || final.error || index !== 126) {
       throw new Error(`Capture stopped in an unexpected state: ${JSON.stringify(final)}`);
     }
     console.log(JSON.stringify({ frames: index, fps, resolution: "1920x1080", directory: frameDir }));

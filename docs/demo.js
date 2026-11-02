@@ -152,6 +152,7 @@ function updateReview() {
   $("demoReviewScore").textContent = `Score ${item.score.toFixed(3)}`;
   const pilotDone = state.reviewIndex + Number(state.revealed) >= 2;
   const allDone = state.reviewIndex === state.manifest.review.length - 1 && state.revealed;
+  $("demoCohort").hidden = !allDone;
   $("demoCheckCount").textContent = allDone
     ? `${state.evaluation.episodes_found} vs ${state.evaluation.top8_episodes_found}`
     : `${state.reviewIndex + Number(state.revealed)} / ${state.manifest.review.length}`;
@@ -297,7 +298,7 @@ function schedule() {
   state.timer = setTimeout(async () => {
     try { await advance(); schedule(); }
     catch (error) { stop(); $("demoError").textContent = error.message; $("demoError").hidden = false; }
-  }, state.scene === 3 ? state.revealed ? 1100 : 1400 : state.scene === 0 ? 7000 : state.scene === 1 ? 6500 : 7000);
+  }, state.scene === 3 ? state.revealed ? state.reviewIndex === state.manifest.review.length - 1 ? 3500 : 1100 : 1400 : state.scene === 0 ? 7000 : state.scene === 1 ? 6500 : 7000);
 }
 
 async function main() {

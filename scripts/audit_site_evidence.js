@@ -182,6 +182,8 @@ assert(spaced > adjacent);
 const topEpisodes = defectRuns.reduce((total, run) => total + run.methods.source_knn.queues.top8.new_episodes, 0);
 const spacedEpisodes = defectRuns.reduce((total, run) => total + run.methods.source_knn.queues.spaced8.new_episodes, 0);
 assert(site.includes(`<small>Top 8</small><strong>${topEpisodes}</strong><i aria-hidden="true">→</i><small>Spaced 8</small><strong>${spacedEpisodes}</strong>`));
+assert(demo.includes(`Top 8 <strong>${topEpisodes}</strong>`) && demo.includes(`Spaced 8 <strong>${spacedEpisodes}</strong>`));
+assert(demo.includes(`Distinct new defect episodes found / ${referenceCounts.episodes}`));
 assert(site.includes(`of ${referenceCounts.episodes} episodes · same scores and eight checks per run`));
 const coverageRows = [...site.matchAll(/class="review-coverage-row" data-run="([^"]+)" style="--top:([\d.]+)%;--spaced:([\d.]+)%"/g)];
 assert.equal(coverageRows.length, defectRuns.length);
