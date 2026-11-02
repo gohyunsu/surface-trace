@@ -51,6 +51,20 @@ simultaneously or that a real operator can inspect the entire batch instantly.
 4. **Feedback allocation without audit:** same rule without the independent
    random photo. This control isolates its workload and discovery effect.
 
+**Exploratory follow-up after both phases of the first allocator were read:**
+the initial feedback allocator increased total discoveries but displaced
+episodes previously found by fixed eight on two development runs. Add a
+baseline-reserving allocator as a separate, explicitly post-hoc method. It
+uses the same first two and a seeded-random audit photo for initially quiet
+runs, chosen at least 16 frames away from *all eight* baseline photos. For
+every active run, request the other six baseline photos first, in baseline
+rank order across active runs. Only then spend any remaining batch budget on
+the same round-robin, time-balanced block stream. If many audit photos reveal
+defects and the global cap prevents completing all baseline queues, stop at
+the cap and report losses; never silently exceed the cap. This refinement is
+tested on data already seen in earlier comparisons and cannot serve as a
+fresh confirmation of its benefit.
+
 The random audit is deliberately separate from score ranking. One such photo
 cannot certify that a quiet run is defect-free. The feedback rules change
 only **which photos are requested**, not the anomaly model, threshold, or

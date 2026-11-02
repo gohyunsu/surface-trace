@@ -70,6 +70,11 @@ def feedback_queues(runs: dict[str, dict], rows: dict[str, list[dict]],
             if decision(rows[name][audit - 1]) != "normal":
                 active.add(name)
 
+    return allocate_remaining(runs, selected, active)
+
+
+def allocate_remaining(runs: dict[str, dict], selected: dict[str, list[int]],
+                       active: set[str]) -> dict[str, list[int]]:
     budget = REVIEW_BUDGET * len(runs)
     cursors = {name: 0 for name in runs}
     while sum(map(len, selected.values())) < budget:
@@ -88,6 +93,34 @@ def feedback_queues(runs: dict[str, dict], rows: dict[str, list[dict]],
         if not progress:
             break
     return selected
+
+
+def baseline_reserving_queues(runs: dict[str, dict],
+                              rows: dict[str, list[dict]]) -> dict[str, list[int]]:
+    selected = {name: item["whole"][:2].copy() for name, item in runs.items()}
+    active = {name for name, frames in selected.items()
+              if any(decision(rows[name][frame - 1]) != "normal" for frame in frames)}
+    for name in sorted(runs):
+        if name in active:
+            continue
+        audit = next((frame for frame in runs[name]["random"]
+                      if separated(frame, runs[name]["whole"])), None)
+        if audit is None:
+            raise ValueError(f"no audit away from the baseline queue: {name}")
+        selected[name].append(audit)
+        if decision(rows[name][audit - 1]) != "normal":
+            active.add(name)
+
+    budget = REVIEW_BUDGET * len(runs)
+    for rank in range(2, REVIEW_BUDGET):
+        for name in sorted(active):
+            if sum(map(len, selected.values())) >= budget:
+                return selected
+            frame = runs[name]["whole"][rank]
+            if not separated(frame, selected[name]):
+                raise ValueError("audit photo conflicts with reserved baseline")
+            selected[name].append(frame)
+    return allocate_remaining(runs, selected, active)
 
 
 def audit(runs: dict[str, dict], rows: dict[str, list[dict]],
@@ -174,6 +207,7 @@ def main() -> None:
     queues = baseline_queues(runs, rows)
     queues["feedback_audit"] = feedback_queues(runs, rows, random_audit=True)
     queues["feedback_no_audit"] = feedback_queues(runs, rows, random_audit=False)
+    queues["baseline_reserving_audit"] = baseline_reserving_queues(runs, rows)
     methods = {name: audit(runs, rows, selected) for name, selected in queues.items()}
     output = {
         "protocol": {"phase": args.phase, "per_run_baseline": REVIEW_BUDGET,
