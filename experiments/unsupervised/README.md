@@ -32,6 +32,11 @@ crosses both choices at equal bank size and eight-check budget: all/top 8,
 all/spaced 19, selected/top 15, and selected/spaced 26 new episodes found out
 of 90. The earlier two arrows start in different cells; the full table shows
 how both choices combine from a common baseline.
+The [full source-continuation audit](SOURCE_CONTINUATION_FULL_RESULTS.md) extends
+the visual-change negative control from 1,984 to 16,518 later frames in the
+same recorded scenario. None of its 513 score windows crosses the frozen MMD
+limit. This is a one-run continuity check, not an estimated false-alert rate
+or a test against annotated within-run process-change times.
 The [source-alert limit audit](SOURCE_THRESHOLD_RESULTS.md) tested five
 source-calibrated quantiles. A 97.5% candidate chosen on the five development
 runs raised defect-frame flags from 313 to 505 on the 16 follow-up runs, but

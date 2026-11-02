@@ -16,6 +16,7 @@ const inspector = fs.readFileSync(path.join(root, "web", "next-inspector.html"),
 const final = read("experiments/unsupervised/results/unlabeled_review_final.json");
 const referenceFinal = read("experiments/unsupervised/results/reference_selection_final_verified.json");
 const factorialFinal = read("experiments/unsupervised/results/reference_review_factorial_final.json");
+const fullContinuation = read("experiments/unsupervised/results/source_continuation_full.json");
 const earlier = readEarlier("experiments/unsupervised/results/tsfabrics.json");
 const feedback = read("experiments/unsupervised/results/feedback_validation_final.json");
 const siteCatalog = read("web/next-samples/catalog.json");
@@ -183,7 +184,20 @@ const changedRuns = Object.values(final.runs).filter(run => run.operational_summ
 assert.equal(changedRuns, 15);
 assert(site.includes(`${changedRuns} / ${Object.keys(final.runs).length}`));
 assert.equal(final.protocol.source_continuation_alarm, null);
-assert(site.includes("No alert on the 1,984-frame source continuation."));
+assert.equal(fullContinuation.source, final.protocol.source);
+assert.deepEqual(fullContinuation.prior_test_frames, final.protocol.source_continuation);
+assert.equal(fullContinuation.test_frames[0], fullContinuation.prior_test_frames[0]);
+assert.equal(fullContinuation.test_frames[1], fullContinuation.source_frames);
+assert.equal(fullContinuation.window_scores.length, fullContinuation.window_count);
+assert.equal(fullContinuation.window_end_frames.length, fullContinuation.window_count);
+assert(fullContinuation.window_end_frames.every((end, i, ends) => i === 0 || end - ends[i - 1] === 32));
+assert.equal(fullContinuation.windows_above_limit,
+  fullContinuation.window_scores.filter(score => score > fullContinuation.threshold).length);
+assert.equal(fullContinuation.windows_above_limit, 0);
+assert.equal(fullContinuation.first_confirmed_alert_frame, null);
+const sourceLaterFrames = fullContinuation.test_frames[1] - fullContinuation.test_frames[0];
+assert(site.includes(`No alert across ${sourceLaterFrames.toLocaleString("en-US")} later frames of the same reference recording.`));
+assert(site.includes("/SOURCE_CONTINUATION_FULL_RESULTS.md"));
 
 const selected = Object.values(feedback.runs).filter(run => run.status === "evaluated");
 assert.equal(selected.length, 15);
