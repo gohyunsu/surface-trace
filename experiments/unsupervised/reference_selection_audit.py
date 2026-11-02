@@ -116,8 +116,8 @@ def main() -> None:
     source, scorers = build_source(args.cache, archive)
     protocol = {"phase": args.phase, "source": SOURCE, "targets": targets,
                 "source_startup": [0, SOURCE_STARTUP],
-                "source_calibration": SOURCE_CAL,
-                "source_continuation": SOURCE_CONTINUATION,
+                "source_calibration": list(SOURCE_CAL),
+                "source_continuation": list(SOURCE_CONTINUATION),
                 "target_evaluation_start": STARTUP + GAP,
                 "target_cap": MAX_FRAMES,
                 "equal_bank_vectors": source["bank_vectors"],
