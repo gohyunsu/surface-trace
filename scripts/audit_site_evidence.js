@@ -444,9 +444,13 @@ assert.deepEqual(routing.runs, Object.entries(sequentialFinal.runs)
   .map(([run, result]) => ({ run, requests: result.pilot2.requests })));
 assert.equal(routing.runs.filter(run => run.requests === 2).length, 12);
 assert.equal(routing.runs.filter(run => run.requests === 8).length, 4);
+const defectRunsWithReview = Object.values(sequentialFinal.runs)
+  .filter(run => run.total_new_episodes > 0);
+assert.equal(defectRunsWithReview.length, 4);
+assert(defectRunsWithReview.every(run => run.pilot2.requests === 8 && run.pilot2.uncertain_reviews === 0));
 assert(site.includes("<strong>128</strong>") && site.includes("<strong>56</strong>"));
 assert(site.includes("12 stopped at 2") && site.includes("4 continued to 8"));
-assert(site.includes("26 / 90 in both"));
+assert(site.includes("All four defect runs opened six more checks. Both rules found 26 / 90 episodes."));
 
 const fixedAllocation = adaptiveFinal.methods.fixed8;
 const earlyStopAllocation = adaptiveFinal.methods.two_first;

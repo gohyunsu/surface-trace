@@ -52,7 +52,9 @@ DINOv2 MMD limit to 75% of its source value, chosen on a missed development
 join. It alerts on 16/16 extended joins with the same 96-frame median delay
 and no confirmed alert on the long source continuation, although two
 isolated windows cross the lower limit. It is shown separately from the
-current 15/16 source-calibrated result pending broader stable-run controls.
+current 15/16 source-calibrated result. An [additional continuity protocol](CHANGE_STABILITY_PROTOCOL.md)
+tests the fixed factor on two longer defect-free recordings; their lack of
+defect labels does not establish that no within-run process change occurred.
 The [source-alert limit audit](SOURCE_THRESHOLD_RESULTS.md) tested five
 source-calibrated quantiles. A 97.5% candidate chosen on the five development
 runs raised defect-frame flags from 313 to 505 on the 16 follow-up runs, but
