@@ -42,9 +42,14 @@ normal changed run as typical.
 ## Reproduce
 
 On the authorized RTX 3090 server, from the repository root, run
-`bash experiments/unsupervised/run_reference_selection_audit.sh`.
-The script uses the repository-local model/temp caches and checks the actual
-NumPy, Pillow, PyTorch, and CUDA prerequisites. Scikit-learn is not needed.
+`PYTHON="$PWD/.venv-dino-audit/bin/python" bash experiments/unsupervised/run_reference_selection_audit.sh`
+when using the repository-local audit virtual environment. Without `PYTHON`,
+the script uses `python3`. It uses repository-local model/temp caches and
+checks NumPy, Pillow, PyTorch 2+, and CUDA before scoring. DINOv2's cached
+attention implementation calls `scaled_dot_product_attention`, which is
+absent from the server's system PyTorch 1.13.1; the pinned PyTorch 2.2.2 CUDA
+11.8 environment is isolated under `.venv-dino-audit`. Scikit-learn is not
+needed.
 It writes `_verified` outputs so an older partial checkpoint is not accepted
 without the expanded per-run reproduction checks.
 The three commands it runs are:
