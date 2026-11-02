@@ -34,6 +34,12 @@ also raised normal-frame flags from 1,449 to 6,053. It was not adopted. The
 development-label choice of this candidate quantile is explicitly recorded in
 [the decision note](SOURCE_THRESHOLD_DECISION.md); the current 99.5% limit and
 rank-based eight-frame review queue remain unchanged.
+The [reviewed-normal limit shadow audit](REVIEWED_THRESHOLD_RESULTS.md) tests a
+second calibration option without changing the DINOv2 bank. It met the
+prespecified five-run development screen, but in 15 eligible follow-up runs
+normal flags fell from 1,049 to 48 while defect flags fell from 202 to 156
+and newly flagged episodes from 48 to 43. The trial was rejected; even a
+guard based on reviewed defects did not protect later unreviewed defects.
 
 This directory is independent of the KolektorSDD browser prototype. Curated
 TSFabrics outputs from this experiment appear on the published site; the site
