@@ -1,6 +1,8 @@
 "use strict";
 
 const $ = id => document.getElementById(id);
+const dataVersion = new URL(document.currentScript.src).searchParams.get("v");
+const dataPath = path => dataVersion ? `${path}?v=${dataVersion}` : path;
 const svgNS = "http://www.w3.org/2000/svg";
 const state = { manifest: null, evaluation: null, featureCases: [], featureIndex: 0, featureTimer: null, shiftIndex: 0, shiftTimer: null, decisionTimers: [], decisionPhase: 3, scene: 0, reviewIndex: 0, revealed: false, playing: false, timer: null };
 const shiftFrames = [1, 32, 64, 96, 192];
@@ -11,7 +13,7 @@ function renderFeature(index) {
   const defect = sample.label === "Defect";
   const dinoAlert = sample.current.score >= sample.current.threshold;
   const verdict = alert => defect ? alert ? "Defect flagged" : "Defect missed" : alert ? "False alarm" : "Normal retained";
-  $("demoFeatureContext").textContent = `${phase} · ${sample.label} · frame ${sample.frame.toLocaleString()}`;
+  $("demoFeatureContext").textContent = `${phase} · ${sample.label} · frame ${(sample.frame + 1).toLocaleString()}`;
   $("demoFeatureCounter").textContent = `${String(state.featureIndex + 1).padStart(2, "0")} / ${String(state.featureCases.length).padStart(2, "0")}`;
   $("demoClassicPhoto").src = sample.image;
   $("demoDinoPhoto").src = sample.image;
@@ -113,19 +115,29 @@ function drawScores(manifest) {
   svg(chart, "text", { x: 620, y: 192, "text-anchor": "end" }, last.toLocaleString());
 }
 
-function drawQueue(review) {
-  const queue = $("demoQueue");
-  queue.replaceChildren();
-  for (const item of review) {
-    const cell = document.createElement("div");
-    if (item.rank > 2) cell.classList.add("is-conditional");
-    const image = document.createElement("img");
-    image.src = item.image;
-    image.alt = `Review request ${item.rank}, recorded frame ${item.frame}`;
-    const rank = document.createElement("span");
-    rank.textContent = `#${String(item.rank).padStart(2, "0")}`;
-    cell.append(image, rank);
-    queue.append(cell);
+function drawQueueContrast(manifest) {
+  const [first, last] = manifest.evaluation_frames;
+  for (const [id, frames, label] of [
+    ["demoTop8Track", manifest.top8_frames, "Top eight scores"],
+    ["demoSpaced8Track", manifest.review.map(item => item.frame), "Time-spaced eight"],
+  ]) {
+    if (frames.length !== 8 || frames.some(frame => frame < first || frame > last)) {
+      throw new Error(`Invalid ${label.toLowerCase()} in recorded run.`);
+    }
+    const track = $(id);
+    const ordered = frames.slice().sort((a, b) => a - b);
+    track.setAttribute("aria-label", `${label}: frames ${ordered.join(", ")}`);
+    track.replaceChildren();
+    ordered.forEach((frame, index) => {
+      const marker = document.createElement("i");
+      marker.style.left = `${((frame - first) / (last - first) * 100).toFixed(3)}%`;
+      const closeBefore = index > 0 && frame - ordered[index - 1] < 16;
+      const closeAfter = index + 1 < ordered.length && ordered[index + 1] - frame < 16;
+      marker.style.setProperty("--offset", `${closeBefore ? 5 : closeAfter ? -5 : 0}px`);
+      marker.style.setProperty("--order", index);
+      marker.title = `Frame ${frame.toLocaleString()}`;
+      track.append(marker);
+    });
   }
 }
 
@@ -138,11 +150,18 @@ function updateReview() {
   $("demoReviewRank").textContent = `#${String(item.rank).padStart(2, "0")}`;
   $("demoReviewFrame").textContent = `Frame ${item.frame.toLocaleString()}`;
   $("demoReviewScore").textContent = `Score ${item.score.toFixed(3)}`;
-  $("demoCheckCount").textContent = `${state.reviewIndex + Number(state.revealed)} / ${state.manifest.review.length}`;
   const pilotDone = state.reviewIndex + Number(state.revealed) >= 2;
+  const allDone = state.reviewIndex === state.manifest.review.length - 1 && state.revealed;
+  $("demoCheckCount").textContent = allDone
+    ? `${state.evaluation.episodes_found} vs ${state.evaluation.top8_episodes_found}`
+    : `${state.reviewIndex + Number(state.revealed)} / ${state.manifest.review.length}`;
+  $("demoCheckLabel").textContent = allDone
+    ? "New defect episodes · spaced vs top 8"
+    : "Photos checked";
   const route = $("demoRoute");
   route.classList.toggle("is-expanded", pilotDone);
-  route.textContent = pilotDone ? "Defect found in first two · six more checks opened" : "Two checks first";
+  route.textContent = allDone ? "Eight photos checked · recorded result"
+    : pilotDone ? "Defect found in first two · six more checks opened" : "Two checks first";
   const dots = $("demoCheckDots");
   dots.replaceChildren();
   state.manifest.review.forEach((_, index) => {
@@ -247,10 +266,13 @@ function stop() {
 
 async function revealReview() {
   if (!state.evaluation) {
-    const response = await fetch("./unlabeled-demo/evaluation.json");
+    const response = await fetch(dataPath("./unlabeled-demo/evaluation.json"));
     if (!response.ok) throw new Error("Recorded review outcomes could not be loaded.");
     const data = await response.json();
-    if (data.run !== state.manifest.run || data.review.length !== state.manifest.review.length) throw new Error("Review outcomes do not match the recorded run.");
+    if (data.run !== state.manifest.run || data.review.length !== state.manifest.review.length ||
+        !Number.isInteger(data.episodes_found) || !Number.isInteger(data.top8_episodes_found)) {
+      throw new Error("Review outcomes do not match the recorded run.");
+    }
     state.evaluation = data;
   }
   state.revealed = true;
@@ -280,7 +302,7 @@ function schedule() {
 
 async function main() {
   try {
-    const responses = await Promise.all(["./unlabeled-demo/manifest.json", "./next-samples/catalog.json", "./ablation/catalog.json"].map(path => fetch(path)));
+    const responses = await Promise.all(["./unlabeled-demo/manifest.json", "./next-samples/catalog.json", "./ablation/catalog.json"].map(path => fetch(dataPath(path))));
     if (responses.some(response => !response.ok)) throw new Error("Recorded comparison could not be loaded.");
     const [manifest, nextCatalog, classicCatalog] = await Promise.all(responses.map(response => response.json()));
     if (manifest.run !== "T1_S478_I118_2" || manifest.frame_count !== 2884 || manifest.review.length !== 8) throw new Error("Recorded run data do not match this replay.");
@@ -294,7 +316,7 @@ async function main() {
     renderFeature(0);
     shiftFrames.forEach(frame => { const image = new Image(); image.src = `./scenario/demo-${String(frame).padStart(3, "0")}.jpg`; });
     drawScores(manifest);
-    drawQueue(manifest.review);
+    drawQueueContrast(manifest);
     showScene(0);
     $("demoPlay").addEventListener("click", () => {
       if (state.playing) { stop(); return; }

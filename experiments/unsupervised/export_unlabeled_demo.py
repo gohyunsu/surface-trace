@@ -51,10 +51,14 @@ def main() -> None:
     scorer = PatchScorer(build_reference_bank(source_startup, reference))
     first = STARTUP + GAP
     scores, maps = scorer.score(target[first:])
-    selected = review_queues(scores)["spaced8"]
+    queues = review_queues(scores)
+    selected = queues["spaced8"]
     expected = audit["methods"]["source_knn"]["queues"]["spaced8"]["frames"]
     if [first + i + 1 for i in selected] != expected:
         raise ValueError("packaged review queue differs from locked final result")
+    expected_top = audit["methods"]["source_knn"]["queues"]["top8"]["frames"]
+    if [first + i + 1 for i in queues["top8"]] != expected_top:
+        raise ValueError("packaged top-eight queue differs from locked final result")
     drift = DriftDetector(np.asarray(source_globals[:SOURCE_CAL[1]]))
     prelude = np.asarray(source_globals[slice(*SPLICE_PRELUDE)])
     sequence = np.concatenate((prelude, np.asarray(target_globals[:1024])))
@@ -92,6 +96,7 @@ def main() -> None:
                    "window_ends": ends.tolist(),
                    "window_scores": [round(float(v), 6) for v in change_scores],
                    "limit": float(drift.threshold)},
+        "top8_frames": expected_top,
         "review": review,
     }
     evaluation = {
@@ -99,6 +104,7 @@ def main() -> None:
         "run": TARGET, "review": offline,
         "new_defect_episodes": audit["new_defect_episodes"],
         "episodes_found": audit["methods"]["source_knn"]["queues"]["spaced8"]["new_episodes"],
+        "top8_episodes_found": audit["methods"]["source_knn"]["queues"]["top8"]["new_episodes"],
         "local_candidate_episodes_found": audit["methods"]["local_selected_knn"]["queues"]["spaced8"]["new_episodes"],
         "random_expected_episodes": audit["random_100"]["mean_episodes"],
     }

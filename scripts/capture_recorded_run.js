@@ -83,6 +83,9 @@ const fps = 4;
       await hold(2);
       if (reviewIndex < 7) await page.locator("#demoReveal").click();
     }
+    if (await page.locator("#demoCheckCount").textContent() !== "6 vs 5") {
+      throw new Error("Recorded review comparison is missing after eight checks");
+    }
     await chapter(4); await hold(fps * 5);
     const final = await page.evaluate(() => ({
       scene: document.querySelector('.demo-steps button[aria-current="step"]')?.dataset.step,

@@ -310,6 +310,9 @@ for (const [index, key] of ["p50", "p90", "p99"].entries()) {
 assert.equal(manifest.scores.filter(score => score >= earlier.methods.mutual.threshold).length,
   final.runs[manifest.run].methods.source_knn.source_threshold_exceedances);
 assert.deepEqual(manifest.review.map(item => item.frame), final.runs[manifest.run].methods.source_knn.queues.spaced8.frames);
+assert.deepEqual(manifest.top8_frames, final.runs[manifest.run].methods.source_knn.queues.top8.frames);
+assert.equal(evaluation.episodes_found, final.runs[manifest.run].methods.source_knn.queues.spaced8.new_episodes);
+assert.equal(evaluation.top8_episodes_found, final.runs[manifest.run].methods.source_knn.queues.top8.new_episodes);
 assert.deepEqual(evaluation.review.map(item => item.frame), manifest.review.map(item => item.frame));
 assert(manifest.review.slice(0, 2).every(item => {
   const outcome = evaluation.review.find(row => row.frame === item.frame);

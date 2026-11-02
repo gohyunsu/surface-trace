@@ -90,7 +90,7 @@ const { chromium } = require("playwright");
                 for (const image of images) await image.decode();
               });
             }
-            if (step === 2) await page.waitForFunction(() => [...document.querySelectorAll("#demoQueue img")].length === 8 && [...document.querySelectorAll("#demoQueue img")].every(image => image.complete && image.naturalWidth > 0));
+            if (step === 2) await page.waitForFunction(() => document.querySelectorAll("#demoTop8Track i").length === 8 && document.querySelectorAll("#demoSpaced8Track i").length === 8);
             if (step === 3) await page.waitForFunction(() => document.querySelector("#demoReviewPhoto").complete && document.querySelector("#demoReviewPhoto").naturalWidth > 0);
             if (step === 4) await page.waitForFunction(() => document.querySelector("#decisionTitle").textContent === "Hold the candidate.");
             await page.screenshot({ path: path.join(out, `demo-${step}-${viewport.label}.png`), fullPage: true });

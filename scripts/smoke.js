@@ -88,11 +88,11 @@ const { chromium } = require("playwright");
 
     await page.goto(new URL("demo.html", base).href, { waitUntil: "networkidle" });
     const evaluationRequests = [];
-    page.on("request", request => { if (request.url().endsWith("/unlabeled-demo/evaluation.json")) evaluationRequests.push(request.url()); });
+    page.on("request", request => { if (new URL(request.url()).pathname.endsWith("/unlabeled-demo/evaluation.json")) evaluationRequests.push(request.url()); });
     assert.strictEqual(await page.locator(".demo-steps button").count(), 5);
     assert.strictEqual(await page.locator("#demoScope").textContent(), "THREE RUNS · EXAMPLES");
     assert(await page.getByRole("heading", { name: "See what the patches reveal." }).isVisible());
-    assert((await page.locator("#demoFeatureContext").textContent()).startsWith("Development · Normal"));
+    assert.strictEqual(await page.locator("#demoFeatureContext").textContent(), "Development · Normal · frame 1,264");
     assert.strictEqual(await page.locator("#demoClassicVerdict").textContent(), "False alarm");
     assert.strictEqual(await page.locator("#demoDinoVerdict").textContent(), "Normal retained");
     await page.getByRole("button", { name: "Next chapter" }).click();
@@ -102,12 +102,17 @@ const { chromium } = require("playwright");
     await page.waitForFunction(() => document.querySelector("#demoShiftFrame").textContent.includes("frame 96"));
     assert.strictEqual(await page.locator("#demoChangeChart .demo-chart-alert").count(), 1);
     await page.getByRole("button", { name: "Next chapter" }).click();
-    assert(await page.getByRole("heading", { name: "Inspect the unusual frames." }).isVisible());
-    assert.strictEqual(await page.locator("#demoQueue img").count(), 8);
-    assert.strictEqual(await page.locator("#demoQueue .is-conditional").count(), 6);
+    assert(await page.getByRole("heading", { name: "Spread checks across the run." }).isVisible());
+    assert.strictEqual(await page.locator("#demoTop8Track i").count(), 8);
+    assert.strictEqual(await page.locator("#demoSpaced8Track i").count(), 8);
     assert.strictEqual(await page.locator("#demoScoreChart .demo-score-marker").count(), 8);
     assert.strictEqual(await page.locator("#demoScoreChart .demo-score-marker.is-conditional").count(), 6);
     const recordedRun = await (await page.request.get(new URL("unlabeled-demo/manifest.json", base).href)).json();
+    for (const [track, frames] of [["demoTop8Track", recordedRun.top8_frames], ["demoSpaced8Track", recordedRun.review.map(item => item.frame)]]) {
+      const lefts = await page.locator(`#${track} i`).evaluateAll(nodes => nodes.map(node => parseFloat(node.style.left)));
+      const expected = frames.slice().sort((a, b) => a - b).map(frame => (frame - recordedRun.evaluation_frames[0]) / (recordedRun.evaluation_frames[1] - recordedRun.evaluation_frames[0]) * 100);
+      expected.forEach((position, index) => assert(Math.abs(lefts[index] - position) < .001, `${track} marker ${index} must match its recorded frame`));
+    }
     const scorePoints = (await page.locator("#demoScoreChart polyline").getAttribute("points"))
       .split(" ").map(point => point.split(",").map(Number));
     const scoreMarkers = await page.locator("#demoScoreChart .demo-score-marker")
@@ -138,7 +143,9 @@ const { chromium } = require("playwright");
         assert.strictEqual(await page.locator("#demoCheckDots .is-conditional").count(), 0);
       }
     }
-    assert.strictEqual(await page.locator("#demoCheckCount").textContent(), "8 / 8");
+    assert.strictEqual(await page.locator("#demoCheckCount").textContent(), "6 vs 5");
+    assert.strictEqual(await page.locator("#demoCheckLabel").textContent(), "New defect episodes · spaced vs top 8");
+    assert.strictEqual(await page.locator("#demoRoute").textContent(), "Eight photos checked · recorded result");
     await page.clock.install();
     await page.getByRole("button", { name: "View update decision" }).click();
     assert(await page.getByRole("heading", { name: "First, fewer false alarms." }).isVisible());
@@ -155,7 +162,7 @@ const { chromium } = require("playwright");
     await page.clock.runFor(7100);
     assert(await page.getByRole("heading", { name: "The appearance changes." }).isVisible());
     await page.clock.runFor(6600);
-    assert(await page.getByRole("heading", { name: "Inspect the unusual frames." }).isVisible());
+    assert(await page.getByRole("heading", { name: "Spread checks across the run." }).isVisible());
     await page.clock.runFor(7100);
     assert(await page.getByRole("heading", { name: "Check the selected photos." }).isVisible());
     for (let i = 0; i < 8; i++) {
