@@ -28,6 +28,22 @@ The candidate was applied to all sixteen extended recordings; none was
 discarded for a late or missing alert. Machine-readable windows and scores
 are in [`results/change_limit_final.json`](results/change_limit_final.json).
 
+### Why a shorter source-only sequence limit is insufficient
+
+As a post-hoc diagnostic, split the 513 saved source-continuation score windows
+into the first 256 and last 257. The highest *minimum of three consecutive
+scores* in the first part is 0.026023; a strict `score > limit` rule at that
+value has no three-window alert there by construction. In the later part of
+the **same recording**, the corresponding maximum is 0.041361, and the
+early-part limit would first confirm an alert at absolute frame 10,496
+(72 later windows exceed it). The 75% trial limit is 0.047945 and does not
+confirm an alert in this recording. These figures come from
+[`results/source_continuation_full.json`](results/source_continuation_full.json)
+using windows `[0:256]` for the probe limit and `[256:513]` for the later
+check. There are no annotated within-recording change times, so the
+10,496-frame signal is an **unexplained within-run alert**, not a verified
+false alarm. This probe did not set or revise the 75% factor.
+
 **Interpretation.** This fixed rule improves sensitivity on the measured
 joins between existing recordings without increasing *confirmed* alerts on
 the one long source continuation. It does not identify the true time of an
