@@ -25,8 +25,9 @@ final recordings into an independent test.
 
 Raw scores have different units across the two methods. Within each recording
 and method, rank **all** evaluated scores before reading labels and divide the
-ranks into 20 fixed percentile bins. After scoring, count normal and defect
-frames in each bin and normalize each class by its own frame count. The figure
+ranks into 20 fixed percentile bins, giving tied scores the same midrank.
+After scoring, count normal and defect frames in each bin and normalize each
+class by its own frame count. The figure
 should show two overlaid class distributions for each method and let the viewer
 switch among the four recordings. Always display each class count and that
 recording's AP; keep the four-run AP chart beside it. Do not pool all frames

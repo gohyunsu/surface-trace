@@ -25,9 +25,14 @@ BINS = np.linspace(0.0, 1.0, 21)
 
 
 def score_percentiles(values: np.ndarray) -> np.ndarray:
+    if len(values) == 0:
+        raise ValueError("cannot rank empty scores")
     order = np.argsort(values, kind="stable")
+    sorted_values = values[order]
+    starts = np.r_[0, np.flatnonzero(sorted_values[1:] != sorted_values[:-1]) + 1]
+    ends = np.r_[starts[1:], len(values)]
     result = np.empty(len(values), dtype=np.float64)
-    result[order] = (np.arange(len(values)) + 0.5) / len(values)
+    result[order] = np.repeat((starts + ends) / (2 * len(values)), ends - starts)
     return result
 
 
