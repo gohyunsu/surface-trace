@@ -312,6 +312,16 @@ function schedule() {
   }, state.scene === 3 ? state.revealed ? state.reviewIndex === state.manifest.review.length - 1 ? 3500 : 1100 : 1400 : state.scene === 0 ? 7000 : state.scene === 1 ? 6500 : 7000);
 }
 
+function startPlayback() {
+  if (state.scene === 4) showScene(0);
+  state.playing = true;
+  document.body.classList.add("is-playing");
+  $("demoPlay").textContent = "Pause replay";
+  rotateFeatures();
+  if (state.scene === 1) rotateShift();
+  schedule();
+}
+
 async function main() {
   try {
     const responses = await Promise.all(["./unlabeled-demo/manifest.json", "./next-samples/catalog.json", "./ablation/catalog.json"].map(path => fetch(dataPath(path))));
@@ -332,13 +342,7 @@ async function main() {
     showScene(0);
     $("demoPlay").addEventListener("click", () => {
       if (state.playing) { stop(); return; }
-      if (state.scene === 4) showScene(0);
-      state.playing = true;
-      document.body.classList.add("is-playing");
-      $("demoPlay").textContent = "Pause replay";
-      rotateFeatures();
-      if (state.scene === 1) rotateShift();
-      schedule();
+      startPlayback();
     });
     $("demoNext").addEventListener("click", async () => { stop(); try { await advance(); } catch (error) { $("demoError").textContent = error.message; $("demoError").hidden = false; } });
     $("demoBack").addEventListener("click", () => {
@@ -353,6 +357,12 @@ async function main() {
       if (event.key === "ArrowRight") $("demoNext").click();
       if (event.key === "ArrowLeft") $("demoBack").click();
     });
+    if (new URLSearchParams(location.search).get("play") === "1" &&
+        !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      await Promise.all(["demoClassicPhoto", "demoClassicMap", "demoDinoMap"]
+        .map(id => $(id).decode().catch(() => {})));
+      startPlayback();
+    }
   } catch (error) {
     $("demoError").textContent = error.message;
     $("demoError").hidden = false;

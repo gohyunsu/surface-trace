@@ -82,7 +82,7 @@ const { chromium } = require("playwright");
       assert.deepStrictEqual(failures, [], "Each paired photo and heatmap should load");
       await page.getByRole("button", { name: "Next photo" }).click();
     }
-    for (const [selector, destination] of [["#baseline .method-foot a", "inspect.html"], ["#next .improvement-links .button", "demo.html"], ["#review .improvement-action", "interval.html"]]) {
+    for (const [selector, destination] of [["#baseline .method-foot a", "inspect.html"], ["#next .improvement-links .button", "demo.html?play=1"], ["#review .improvement-action", "interval.html"]]) {
       const link = page.locator(selector);
       assert((await link.getAttribute("href")).endsWith(destination));
       assert.strictEqual(await link.getAttribute("target"), null);
@@ -186,6 +186,18 @@ const { chromium } = require("playwright");
     }
     await page.clock.runFor(4000);
     assert(await page.getByRole("heading", { name: "Hold the candidate." }).isVisible());
+
+    const autoPage = await browser.newPage();
+    autoPage.on("pageerror", error => errors.push(error.message));
+    await autoPage.clock.install();
+    await autoPage.goto(new URL("demo.html?play=1", base).href, { waitUntil: "networkidle" });
+    await autoPage.waitForFunction(() => document.body.classList.contains("is-playing"));
+    assert.strictEqual(await autoPage.locator("#demoPlay").textContent(), "Pause replay");
+    await autoPage.clock.runFor(7100);
+    assert(await autoPage.getByRole("heading", { name: "The appearance changes." }).isVisible());
+    await autoPage.locator("#demoPlay").click();
+    assert.strictEqual(await autoPage.locator("#demoPlay").textContent(), "Play replay");
+    await autoPage.close();
 
     await page.goto(new URL("interval.html", base).href, { waitUntil: "networkidle" });
     assert.strictEqual(await page.locator(".request-card").count(), 8);
