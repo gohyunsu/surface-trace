@@ -40,7 +40,8 @@ def histograms(archive: zipfile.ZipFile, names: list[str], scenario: str) -> np.
     features = np.empty((len(names), BINS), dtype=np.float32)
     for i, name in enumerate(names):
         with Image.open(io.BytesIO(archive.read(name))) as photo:
-            resized = photo.convert("RGB").resize(IMAGE_SIZE, Image.Resampling.BILINEAR)
+            resized = photo.convert("RGB").resize(
+                IMAGE_SIZE, getattr(Image, "Resampling", Image).BILINEAR)
             histogram = np.asarray(resized.convert("L").histogram(), dtype=np.float32)
         bins = histogram.reshape(BINS, 256 // BINS).sum(axis=1)
         features[i] = np.sqrt(bins / bins.sum())
