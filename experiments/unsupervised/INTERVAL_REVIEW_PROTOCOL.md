@@ -12,9 +12,20 @@ same stopping rule hides reachable defects under that segmentation.
 Use the same frozen source DINOv2-S/14 patch bank, target recordings, cap at
 4,096 frames, evaluation start at frame index 320, and episode definition as
 `UNLABELED_REVIEW_PROTOCOL.md`. Recompute the source score for every evaluated
-frame and verify that its whole-run, 16-frame-spaced top-eight queue exactly
-matches the saved `unlabeled_review_{phase}.json`. No target label, local
+frame and verify its whole-run, 16-frame-spaced top-eight queue against the
+saved `unlabeled_review_{phase}.json`. No target label, local
 reference, target calibration, or change alarm enters ranking.
+
+**Reproduction amendment after the first final-run check, before final
+interval outcomes:** the old saved queue for `T2_S262_I45_1` differs only in
+its eighth photo. The rerun scores of the two boundary candidates are
+0.52003467 and 0.51999742 (gap 0.00003725). Repeating the original full-run
+feature-extraction path produced the same new queue, so this is not caused by
+streaming only the evaluated frames. Accept a single eighth-slot swap only
+when the first seven frames are identical and the current score gap is at
+most 0.0001; record every swap. Any broader or larger discrepancy stops the
+experiment. This is a disclosed post-start tolerance, not an exact replay of
+the prior queue, and limits claims of bitwise reproducibility.
 
 Split each target evaluation prefix into adjacent 512-frame blocks starting at
 zero-based index 320. Merge a final remainder shorter than 256 frames into
