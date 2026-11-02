@@ -7,6 +7,8 @@ images have a label file, containing 1,865 boxes in total. The excluded
 zero-byte TIFF has none. No image or model output was rerun for this geometry
 audit.
 
+![Observed DINOv2 box-hit rates compared with exact random-position expectations, separately for a single hottest patch and any of the top 1%](figures/lusitano_box_hit_control.svg)
+
 | Input | Patch positions | Top 1% positions | Random hottest | DINOv2 hottest, all startup | DINOv2 hottest, selected | Random any top 1% | DINOv2 any top 1%, all startup | DINOv2 any top 1%, selected |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Global letterbox | 333 | 4 | 9.0% | 62.4% | 67.5% | 26.3% | 74.8% | 76.5% |
@@ -50,6 +52,7 @@ into the Git-ignored `experiments/unsupervised/data/lusitano-label-audit/`:
 
 ```text
 python experiments/unsupervised/audit_lusitano_box_hit.py
+python experiments/unsupervised/plot_lusitano_box_hit.py
 ```
 
 Machine-readable result: [lusitano_box_hit_control.json](results/lusitano_box_hit_control.json).
