@@ -71,7 +71,7 @@ def summary(runs: dict) -> dict:
         "runs": len(runs),
         "defect_runs": len(defects),
         "macro_ap": {key: float(np.mean([run["methods"][key]["average_precision"]
-                                          for run in defects]))
+                                          for run in defects])) if defects else None
                      for key in ("selected", "all", "dual")},
         "normal_flags": {key: sum(run["methods"][key]["fp"] for run in runs.values())
                          for key in ("selected", "all", "dual")},
