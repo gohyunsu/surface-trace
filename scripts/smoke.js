@@ -19,11 +19,11 @@ const { chromium } = require("playwright");
     assert(await page.getByRole("heading", { name: "Find unusual areas. Track change." }).isVisible());
     assert.strictEqual(await page.locator(".hero .hero-visual-grid").count(), 0);
     assert.strictEqual(await page.locator(".pipeline-hero-motion img").evaluate(image => image.complete && image.naturalWidth > 0), true);
-    assert.strictEqual(await page.locator(".feedback-photo img").evaluate(async image => {
-      image.loading = "eager";
-      await image.decode();
-      return image.naturalWidth > 0;
-    }), true);
+    await page.locator(".feedback-photo img").scrollIntoViewIfNeeded();
+    await page.waitForFunction(() => {
+      const image = document.querySelector(".feedback-photo img");
+      return image.complete && image.naturalWidth > 0;
+    });
     const heroImage = page.locator(".pipeline-hero-motion img");
     const firstFrame = await heroImage.screenshot();
     await page.waitForTimeout(3100);
@@ -360,6 +360,12 @@ const { chromium } = require("playwright");
       await mobile.goto(new URL(route, base).href, { waitUntil: "domcontentloaded" });
       await mobile.locator('.main-nav [aria-current="page"]').waitFor({ state: "visible" });
     }
+    await mobile.goto(new URL("demo.html", base).href, { waitUntil: "networkidle" });
+    await mobile.waitForFunction(() => document.querySelector("#demoScoreChart polyline") !== null);
+    assert(await mobile.locator("#demoChapters").evaluate(node => node.scrollWidth > node.clientWidth));
+    await mobile.evaluate(() => document.querySelector('#demoChapters button[data-step="4"]').click());
+    await mobile.waitForFunction(() => document.querySelector("#demoChapters").scrollLeft > 100);
+    assert.strictEqual(await mobile.locator('#demoChapters button[aria-current="step"]').getAttribute("data-step"), "4");
     await mobile.goto(base, { waitUntil: "domcontentloaded" });
     assert(await mobile.locator('.main-nav a[href="#feedback"]').isVisible());
     await mobile.close();

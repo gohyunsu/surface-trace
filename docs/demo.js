@@ -250,10 +250,18 @@ function showScene(index) {
   state.revealed = false;
   if (index === 3) state.reviewIndex = 0;
   document.querySelectorAll(".demo-stage").forEach((stage, i) => { stage.hidden = i !== index; });
-  document.querySelectorAll(".demo-steps button").forEach((button, i) => {
+  const chapters = $("demoChapters");
+  const chapterButtons = [...chapters.querySelectorAll("button")];
+  chapterButtons.forEach((button, i) => {
     if (i === index) button.setAttribute("aria-current", "step");
     else button.removeAttribute("aria-current");
   });
+  if (chapters.scrollWidth > chapters.clientWidth) {
+    const active = chapterButtons[index];
+    const left = active.getBoundingClientRect().left - chapters.getBoundingClientRect().left
+      + chapters.scrollLeft - (chapters.clientWidth - active.clientWidth) / 2;
+    chapters.scrollTo({ left, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  }
   if (index === 3) updateReview();
   if (index === 1) {
     renderShift(window.matchMedia("(prefers-reduced-motion: reduce)").matches ? shiftFrames.length - 1 : 0);
