@@ -19,8 +19,8 @@ function renderFeature(index) {
   $("demoDinoPhoto").src = sample.image;
   $("demoClassicMap").src = `./ablation/${classic.overlay}`;
   $("demoDinoMap").src = sample.current.heatmap;
-  $("demoClassicPhoto").alt = `${sample.label} textile photo, frame ${sample.frame}`;
-  $("demoDinoPhoto").alt = `Same ${sample.label.toLowerCase()} textile photo, frame ${sample.frame}`;
+  $("demoClassicPhoto").alt = `${sample.label} textile photo, frame ${(sample.frame + 1).toLocaleString()}`;
+  $("demoDinoPhoto").alt = `Same ${sample.label.toLowerCase()} textile photo, frame ${(sample.frame + 1).toLocaleString()}`;
   for (const [id, alert] of [["demoClassicVerdict", classic.alert], ["demoDinoVerdict", dinoAlert]]) {
     const node = $(id);
     node.textContent = verdict(alert);
