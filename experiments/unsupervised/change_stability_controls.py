@@ -1,4 +1,4 @@
-"""Frozen change-limit comparison on two additional normal-only recordings."""
+"""Frozen change-limit comparison on two recordings without defect labels."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from pathlib import Path
 import numpy as np
 
 from change_limit_trial import FACTOR, first_alarm, longest_streak
-from core import DINOFeatures
+from core import DINOFeatures, IMAGE_SIZE
 from drift import DriftDetector
 from tsfabrics import TSFabricsArchive
 
@@ -19,6 +19,7 @@ RUNS = ("T1_S177_I108_1", "T2_S466_I39_1")
 PREFIX = 4096
 CAL_END = 2048
 TEST_START = 2112
+CACHE_SCHEMA = "dinov2_vits14/normalized-patch-mean/imagenet-bilinear/fp16/v1"
 
 
 def global_features(archive: TSFabricsArchive, name: str, cache: Path,
@@ -33,15 +34,24 @@ def global_features(archive: TSFabricsArchive, name: str, cache: Path,
     metadata_file = cache / f"{name}.json"
     progress_file = cache / f"{name}.progress"
     image_names = [row["image"] for row in rows]
+    image_info = [archive.zip.getinfo(image) for image in image_names]
+    expected_metadata = {
+        "archive": archive.path.name,
+        "feature_schema": CACHE_SCHEMA,
+        "image_size": list(IMAGE_SIZE),
+        "images": [[image, info.CRC, info.file_size]
+                   for image, info in zip(image_names, image_info)],
+    }
     if metadata_file.exists():
         metadata = json.loads(metadata_file.read_text())
-        if metadata != {"images": image_names, "archive": archive.path.name}:
+        if metadata != expected_metadata:
             raise ValueError(f"{name}: global-feature cache does not match the archive")
     elif array_file.exists() or partial_file.exists() or progress_file.exists():
         raise ValueError(f"{name}: cache data exists without metadata")
     else:
-        metadata_file.write_text(json.dumps({"images": image_names,
-                                             "archive": archive.path.name}, separators=(",", ":")))
+        metadata_temp = metadata_file.with_suffix(".json.tmp")
+        metadata_temp.write_text(json.dumps(expected_metadata, separators=(",", ":")))
+        os.replace(metadata_temp, metadata_file)
     if array_file.exists() and not progress_file.exists() and not partial_file.exists():
         array = np.load(array_file, mmap_mode="r")
         if array.shape != (PREFIX, 384) or array.dtype != np.float16:
@@ -87,6 +97,7 @@ def main() -> None:
         "protocol": {"runs": list(RUNS), "calibration": [0, CAL_END],
                      "continuation": [TEST_START, PREFIX], "factor": FACTOR,
                      "window": 128, "step": 32, "consecutive": 3,
+                     "reference": "independently calibrated from each recording; diagnostic reset",
                      "label_use": "audit-only control selection and outcome interpretation"},
         "runs": {},
     }

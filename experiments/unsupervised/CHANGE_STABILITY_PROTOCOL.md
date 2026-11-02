@@ -15,8 +15,9 @@ prove that a recording contains no genuine process or appearance change.
   recordings with at least 4,096 total frames. Published labels select these
   recordings for the *audit*; the detector never receives them.
 - Encode each run's first 4,096 frames with the same frozen DINOv2-S/14 global
-  features and preprocessing as the current change experiment. Validate a
-  cached feature array against the archive image names before reuse.
+  features and preprocessing as the current change experiment. A resumable
+  feature cache records the encoder specification and each image's ZIP name,
+  CRC, and size; reuse it only when those records match.
 - Fit an independent `DriftDetector` on frames `[0,2048)` of each run, as for
   the original source. Skip `[2048,2112)`. Score the ordered continuation
   `[2112,4096)` with 128-frame windows and 32-frame steps.
@@ -27,6 +28,13 @@ prove that a recording contains no genuine process or appearance change.
   the last flushed batch if interrupted.
 - Do not change the 75% factor, run list, calibration length, windowing, or
   confirmation rule after seeing either control's scores. Report both runs.
+
+Independent calibration is a **diagnostic reset** on each recording. The
+active pipeline retains its original source reference; this test therefore
+measures within-recording stability after a hypothetical accepted new
+reference, not the active detector's behavior after an unannounced switch.
+The active detector is expected to signal a sustained difference from its
+source after a genuinely different run begins.
 
 If the 75% limit adds any confirmed alert in either continuation, do not
 promote it without an annotated explanation of that change. Call it an
