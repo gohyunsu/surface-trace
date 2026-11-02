@@ -215,6 +215,11 @@ const { chromium } = require("playwright");
     assert.strictEqual(await page.locator("#reviewProgress").textContent(), "2 / 2 checked");
     assert.strictEqual(await page.locator(".request-card:visible").count(), 2);
     assert((await page.locator("#reviewGate").textContent()).includes("Both initial photos were confirmed normal"));
+    assert(await page.locator("#reviewOverride").isVisible());
+    await page.locator("#reviewOverride").click();
+    assert.strictEqual(await page.locator("#reviewProgress").textContent(), "2 / 8 checked");
+    assert.strictEqual(await page.locator(".request-card:visible").count(), 8);
+    assert((await page.locator("#reviewGate").textContent()).includes("opened for review"));
     await page.unroute("**/unlabeled-demo/evaluation.json");
 
     await page.goto(new URL("inspect.html?sample=1", base).href, { waitUntil: "networkidle" });

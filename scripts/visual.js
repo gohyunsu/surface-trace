@@ -66,6 +66,20 @@ const { chromium } = require("playwright");
         } else if (name === "interval") {
           await page.locator(".request-card").first().getByRole("button", { name: "Show heatmap" }).click();
           await page.locator(".request-card").first().screenshot({ path: path.join(out, `interval-heat-${viewport.label}.png`) });
+          await page.route("**/unlabeled-demo/evaluation.json", async route => {
+            const response = await route.fetch();
+            const replay = await response.json();
+            replay.review.slice(0, 2).forEach(result => { result.dataset_label = "Normal"; result.ambiguous = false; });
+            await route.fulfill({ response, json: replay });
+          });
+          await page.reload({ waitUntil: "networkidle" });
+          for (let i = 0; i < 2; i++) {
+            await page.locator(".request-card").nth(i).getByRole("button", { name: "Check result" }).click();
+            await page.locator(".request-card").nth(i).locator(".request-result").waitFor();
+          }
+          await page.locator(".request-panel").screenshot({ path: path.join(out, `interval-override-${viewport.label}.png`) });
+          if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)) throw new Error(`interval override ${viewport.label}: horizontal overflow`);
+          await page.unroute("**/unlabeled-demo/evaluation.json");
         } else if (name === "demo") {
           for (let step = 1; step < 5; step++) {
             await page.locator(`.demo-steps button[data-step="${step}"]`).click();

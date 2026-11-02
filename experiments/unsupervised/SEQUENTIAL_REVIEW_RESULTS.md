@@ -34,6 +34,10 @@ candidate until a prospective run-disjoint test, ideally with periodic audit
 reviews after a stop. It does not change the anomaly detector, threshold, or
 reference.
 
+The site replay lets a reviewer open the remaining six photos even after two
+normal confirmations. That manual choice is outside the fixed 56-request
+evaluation above; no measured workload or discovery gain is attributed to it.
+
 Saved per-run outputs: [`results/sequential_review_development.json`](results/sequential_review_development.json)
 and [`results/sequential_review_final.json`](results/sequential_review_final.json).
 Reproduce with `sequential_review.py` and the downloaded TSFabrics ZIP; the

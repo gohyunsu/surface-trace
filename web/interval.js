@@ -63,17 +63,25 @@ function renderRequests(manifest) {
   const grid = document.getElementById("requestGrid");
   const checked = {};
   let evaluationPromise;
+  let additionalRequested = false;
   const pilot = manifest.review.slice(0, 2);
+  const overrideButton = document.getElementById("reviewOverride");
   function updateGate() {
     const decisions = pilot.map(item => checked[item.frame]).filter(Boolean);
     const pilotComplete = decisions.length === pilot.length;
-    const continueReview = pilotComplete && decisions.some(value => value !== "Normal");
+    const needsReview = pilotComplete && decisions.some(value => value !== "Normal");
+    const continueReview = needsReview || additionalRequested;
     const complete = pilotComplete && !continueReview;
     [...grid.children].forEach((card, index) => { card.hidden = index >= 2 && !continueReview; });
-    document.getElementById("requestsTitle").textContent = continueReview ? "Continue through eight frames" : complete ? "Review complete" : "Start with two frames";
-    document.getElementById("reviewGate").textContent = continueReview ? "A defect or uncertain result opened six more checks." : complete ? "Both initial photos were confirmed normal." : "Highest scores, at least 16 frames apart.";
+    overrideButton.hidden = !complete;
+    document.getElementById("requestsTitle").textContent = continueReview ? "Continue through eight frames" : complete ? "Two checks complete" : "Start with two frames";
+    document.getElementById("reviewGate").textContent = needsReview ? "A defect or uncertain result opened six more checks." : additionalRequested ? "Six additional frames opened for review." : complete ? "Both initial photos were confirmed normal." : "Highest scores, at least 16 frames apart.";
     updateProgress(checked, continueReview ? manifest.review.length : pilot.length);
   }
+  overrideButton.addEventListener("click", () => {
+    additionalRequested = true;
+    updateGate();
+  });
   for (const [index, item] of manifest.review.entries()) {
     const card = document.createElement("article");
     card.className = "request-card";
