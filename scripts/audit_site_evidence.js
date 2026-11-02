@@ -245,6 +245,17 @@ for (const [before, after] of [[counts.frozenFP, counts.candidateFP], [counts.fr
   const phaseValue = `${before.toLocaleString("en-US")} → ${after.toLocaleString("en-US")}`;
   assert(demoScript.includes(phaseValue), `Demo reveal missing validated pair: ${phaseValue}`);
 }
+const demoDecisionRows = [...demo.matchAll(/<div class="decision-row"[^>]*><span>([^<]+)<\/span><strong>[^<]+<em>→<\/em>[^<]+<\/strong><div class="decision-track" aria-hidden="true"><i style="width:100%"><\/i><b style="width:([\d.]+)%"><\/b>/g)];
+assert.equal(demoDecisionRows.length, 3);
+for (const [label, before, after] of [
+  ["Normal frames flagged", counts.frozenFP, counts.candidateFP],
+  ["Defect frames flagged", counts.frozenTP, counts.candidateTP],
+  ["New defect episodes found", counts.frozenEpisodes, counts.candidateEpisodes],
+]) {
+  const row = demoDecisionRows.find(([, rowLabel]) => rowLabel === label);
+  assert(row, `Missing demo comparison: ${label}`);
+  assert(Math.abs(Number(row[2]) - after / before * 100) < .06, `Incorrect demo candidate bar: ${label}`);
+}
 const decisionRows = [...site.matchAll(/<div class="decision-metric"><div><span>([^<]+)<\/span><strong>([\s\S]*?)<\/strong><\/div><div class="decision-pair"[^>]*><span><i style="width:100%"><\/i><\/span><span><i style="width:([\d.]+)%"><\/i><\/span><\/div><\/div>/g)];
 assert.equal(decisionRows.length, 3);
 for (const [label, before, after] of [
