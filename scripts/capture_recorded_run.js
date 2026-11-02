@@ -35,6 +35,10 @@ const fps = 4;
       .demo-callout strong{font-size:50px}
       .demo-callout span,.demo-visual-note,.shift-photos figcaption{font-size:15px}
       .demo-visual{padding:45px}
+      .context-visual{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:30px}
+      .context-meeting figcaption{font-size:14px}
+      .context-responses span,.context-responses strong{font-size:17px}
+      .context-responses>div{padding:20px 0}
       .check-visual{padding:40px 60px}
       .demo-check-photo{max-height:380px}
       .demo-outcome{font-size:25px}
@@ -61,25 +65,28 @@ const fps = 4;
     };
     const chapter = async step => {
       await page.locator(`.demo-steps button[data-step="${step}"]`).click();
-      const expectedScope = step === 0 ? "THREE RUNS · EXAMPLES"
-        : step === 4 ? "15 RUNS · UPDATE TEST" : "RUN · T1_S478_I118_2";
+      const expectedScope = step === 0 ? "FIELD FEEDBACK · DESIGN BRIEF"
+        : step === 1 ? "THREE RUNS · EXAMPLES"
+          : step === 5 ? "15 RUNS · UPDATE TEST" : "RUN · T1_S478_I118_2";
       if (await page.locator("#demoScope").textContent() !== expectedScope) {
         throw new Error(`Unexpected replay scope in chapter ${step + 1}`);
       }
       await page.evaluate(() => { document.querySelector("#demoPlay").textContent = "Recorded replay"; });
     };
-    if (await page.locator("#demoScope").textContent() !== "THREE RUNS · EXAMPLES") {
-      throw new Error("Feature examples are missing their three-run scope");
+    if (await page.locator("#demoScope").textContent() !== "FIELD FEEDBACK · DESIGN BRIEF") {
+      throw new Error("Feedback context is missing its scope");
     }
+    await hold(fps * 4);
+    await chapter(1);
     for (let caseIndex = 0; caseIndex < 3; caseIndex++) {
       await page.evaluate(i => renderFeature(i), caseIndex);
       await page.locator("#demoClassicMap").evaluate(image => image.decode());
       await page.locator("#demoDinoMap").evaluate(image => image.decode());
       await hold(fps * 2);
     }
-    await chapter(1); await hold(fps * 5);
     await chapter(2); await hold(fps * 5);
-    await chapter(3);
+    await chapter(3); await hold(fps * 5);
+    await chapter(4);
     for (let reviewIndex = 0; reviewIndex < 8; reviewIndex++) {
       await page.locator("#demoReviewPhoto").evaluate(image => image.decode());
       await hold(2);
@@ -94,14 +101,14 @@ const fps = 4;
     if (await page.locator("#demoCheckCount").textContent() !== "6 vs 5") {
       throw new Error("Recorded review comparison is missing after eight checks");
     }
-    await chapter(4); await hold(fps * 5);
+    await chapter(5); await hold(fps * 5);
     const final = await page.evaluate(() => ({
       scene: document.querySelector('.demo-steps button[aria-current="step"]')?.dataset.step,
       width: innerWidth,
       height: innerHeight,
       error: document.querySelector("#demoError")?.textContent,
     }));
-    if (final.scene !== "4" || final.width !== 1920 || final.height !== 1080 || final.error || index !== 126) {
+    if (final.scene !== "5" || final.width !== 1920 || final.height !== 1080 || final.error || index !== 142) {
       throw new Error(`Capture stopped in an unexpected state: ${JSON.stringify(final)}`);
     }
     console.log(JSON.stringify({ frames: index, fps, resolution: "1920x1080", directory: frameDir }));

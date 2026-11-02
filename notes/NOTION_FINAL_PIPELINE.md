@@ -2,7 +2,7 @@
 
 SurfaceTrace는 생산 이미지에서 눈에 띄는 영역을 찾고, **외관 변화와 검수 결과를 일정 구간 단위로 정리해 현장과 AI 개발팀이 같은 사례를 보며 판단하도록 돕는** 프로토타입이다. 초기 버전은 단일 사진의 이상 영역 표시를 검증했다. 개선 버전은 시간 순서가 있는 생산 이미지를 대상으로 변화 신호, 제한된 검수 요청, 기준 갱신 후보의 검증까지 다룬다.
 
-**시연 GIF (1920×1080, 29초):** https://gohyunsu.github.io/surface-trace/media/recorded-run-1080p.gif
+**시연 GIF (1920×1080, 35.5초):** https://gohyunsu.github.io/surface-trace/media/recorded-run-1080p.gif
 
 **직접 시연:** https://gohyunsu.github.io/surface-trace/demo.html
 

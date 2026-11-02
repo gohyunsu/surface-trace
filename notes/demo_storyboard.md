@@ -1,76 +1,27 @@
-# Recorded-run presentation
+# Recorded-run replay · 발표 시나리오
 
-Open [the replay](../web/demo.html) and press **Play replay**. The five
-chapters take about 32 seconds in the GIF; the arrow buttons and chapter tabs let a
-presenter pause at any result. Use the [interval summary](../web/interval.html)
-for a longer inspection demonstration.
+[시연 페이지](../web/demo.html)는 약 53초 동안 여섯 장면을 자동 재생한다. [1080p GIF](../web/media/recorded-run-1080p.gif)는 같은 화면을 35.5초로 압축한 발표자료용 영상이다. 현장 설명에서는 장면 탭으로 멈추고 필요한 사진을 직접 넘긴다.
 
-| Chapter | What appears | What to say |
+| 장면 | 화면에 보이는 근거 | 발표에서 전달할 말 |
 | --- | --- | --- |
-| Patch features | Three curated paired photos rotate: a changed-run normal where handcrafted falsely alerts, a defect where DINOv2 succeeds, and a defect where DINOv2 misses. The complete handcrafted and DINOv2-plus-selection methods have macro frame AP 66.4%→85.4% over four defect-bearing runs, with the latter ahead on two. | “The combined method ranks frames better on average, but neither method wins every run. Here is a counterexample.” |
-| Visual shift | Source frame 3136 appears beside real frames 1, 32, 64, 96, and 192 of `T1_S478_I118_2`. The global-feature trace extends with each frame; three windows cross the limit by frame 96 and the signal remains high at frame 192. The two recordings are joined at a known boundary. | “The image distribution changed. Three consecutive windows confirmed an alert at frame 96. The signal still held after the early defect episode; it does not tell us what caused the shift.” |
-| Interval scores | The frozen DINOv2 score trace for 2,884 later frames. Two aligned timelines show the eight highest scores clustering and eight requests spaced by at least 16 frames. Only the spaced queue proceeds to review. | “Both rules request eight photos. Spacing avoids using several checks on neighboring frames.” |
-| Eight checks | The first two reviewed photos are recorded defects, so the remaining six open. Each selected photo is marked at its actual position in the run; the outcome appears only after it is checked. Once all eight are checked, the recorded result shows six distinct defect episodes versus five for the unspaced top-eight rule. A separately labeled four-run result then shows 15 versus 26 of 90 new episodes; spacing leads in all four defect runs. | “Two checks come first. Because these reveal defects, we continue to eight. Spacing found one more event in this run. Across four defect runs, it found 26 instead of 15 with the same eight checks per run.” |
-| Update decision | A **separate** 15-run, later-frame validation reveals each tradeoff in sequence. Normal alerts fall 1,050→0, then flagged defect frames fall 202→153 and detected new episodes 48→40. The final decision keeps the frozen reference. | “We keep the frozen reference. Fewer false alarms alone are not enough to approve a model update.” |
+| Field feedback | 자문 회의 일러스트와 세 가지 피드백 → 설계 선택. TSFabrics 93,196장·22구간. | “라벨이 있는 단일 사진 프로토타입에서, 공정 변화와 제한된 검수 시간을 고려한 생산 구간 실험으로 바꿨습니다.” |
+| Patch features | 동일 사진의 수작업 특징·DINOv2 히트맵 3쌍. 마지막 쌍은 새 방법이 놓친 결함이다. | “사전학습 DINOv2와 라벨 없는 시작 사진 선별을 함께 도입했습니다. 결함이 있는 네 구간의 평균 frame AP는 66.4%에서 85.4%로 올랐지만, 새 방법이 앞선 구간은 네 개 중 두 개입니다.” |
+| Visual shift | 실제 서로 다른 두 TSFabrics 촬영 구간의 사진. 전역 특징 변화 점수가 시간순으로 나타나며 새 구간의 96번째 프레임에서 경보가 확정된다. | “개별 결함 점수와 별도로 전체 외관의 변화를 봅니다. 세 개의 연속 창이 기준을 넘어 이 구간에서는 96번째 프레임에 경보가 확정됐습니다.” |
+| Interval scores | 한 구간의 평가 프레임 2,884장에 대한 점수선과 Top 8·Spaced 8 요청 위치. | “점수가 높은 사진만 연속해서 고르면 같은 사건을 반복 확인합니다. 두 규칙 모두 여덟 장을 요청하되 새 규칙은 최소 16프레임 간격을 둡니다.” |
+| Limited review | 첫 두 장의 확인 결과를 공개한 뒤 나머지 여섯 장이 열린다. 사진 위치와 히트맵, 기록된 판정이 순서대로 나타난다. | “이 구간에서는 처음 두 장이 결함으로 확인돼 여덟 장까지 검수를 이어갑니다. 서로 다른 결함 사건은 Top 8에서 다섯 개, Spaced 8에서 여섯 개를 찾았습니다. 네 결함 구간 전체에서는 15개에서 26개로 늘었습니다.” |
+| Update decision | **별도의 15구간 사후 검증**에서 정상 프레임 경보 1,050→0, 결함 프레임 경보 202→153, 새 결함 사건 48→40을 순서대로 제시. | “검수된 정상 사진으로 후보 기준을 만들었지만 결함 탐지까지 줄었습니다. 그래서 기준 갱신은 승인하지 않고 기존 기준을 유지합니다.” |
 
-The first chapter is a curated comparison, drawn from two development runs and
-one final run. Its AP caption comes from the four defect-bearing final runs.
-Chapters two through four use the same recorded TSFabrics run and the saved
-`web/unlabeled-demo/manifest.json` queue. The fifth chapter uses
-`experiments/unsupervised/results/feedback_validation_final.json`, a distinct
-eight-review protocol across 15 runs. The two review queues must not be
-presented as one continuous model update. The first four chapters replay
-saved model outputs; they do not run DINOv2 in the browser. The final chapter
-uses public labels only for retrospective evaluation.
+## 약 2분 한국어 진행 순서
 
-The scope badge above the stage follows this distinction: three selected runs
-for the feature examples, one named run for the change and review sequence,
-and a separate 15-run update test for the decision.
-
-## Two-minute live presentation
-
-Use the chapter buttons to pause at the evidence. The 32-second GIF is the
-uninterrupted fallback for a slide deck; the site provides the slower live
-version. Keep the run scope visible while moving between chapters.
-
-| Time | Screen action | Point to make |
+| 시간 | 화면 조작 | 설명의 초점 |
 | --- | --- | --- |
-| 0:00–0:25 | Open `demo.html`, play the three paired photos, then pause on the counterexample. | The DINOv2-plus-selection method has four-run average frame AP of 85.4% versus 66.4% for the handcrafted method, but misses remain. The paired heatmaps are examples; the AP comes from the four final defect runs. |
-| 0:25–0:45 | Select **Visual shift** and let the changed-run photos reach frame 96. | The overall appearance changed across two recordings. Three score windows confirm an alert; this does not identify the physical cause. |
-| 0:45–1:05 | Select **Interval scores**. Point to the score trace and the two aligned eight-dot timelines. | Every plotted point is a recorded frame score. The upper row clusters around adjacent frames; the lower row spreads eight checks across the run. No defect labels enter this selection. |
-| 1:05–1:35 | Select **Limited review** and reveal the first two outcomes, then advance through the remaining six. | Confirmed defects open the rest of this queue and stay out of the normal reference. After all eight checks, the recorded comparison reveals six distinct episodes versus five for Top 8. |
-| 1:35–2:00 | Select **Update decision** and allow its three measures to appear in order. | This is a separate 15-run later-frame test. False alerts disappear, but detected defect frames and episodes fall, so the candidate is held. |
+| 0:00–0:18 | **Field feedback**에서 시작. 사진 옆 세 대응 관계가 나타날 때까지 기다린다. | 기업 미팅에서 들은 데이터·소통·검수 제약이 설계 변경으로 이어졌다는 점. |
+| 0:18–0:38 | **Patch features**로 이동. 정상 오경보가 줄어든 사례와 새 방법의 결함 누락 사례를 모두 보여준다. | 66.4%→85.4%는 특징 추출기만의 효과가 아니라 기준 사진 선별까지 포함한 완성 방법 비교. |
+| 0:38–0:55 | **Visual shift**에서 사진이 새 구간의 96번째 프레임까지 진행하게 둔다. | 경보 시점과 실제 물리적 공정 변경 시점은 다르다. 두 실제 촬영 구간을 이은 실험에서 15/16개의 알려진 경계를 감지했다. |
+| 0:55–1:13 | **Interval scores**의 두 점 배열을 가리킨다. | 동일한 여덟 번의 확인으로 중복을 줄이는 이유. |
+| 1:13–1:42 | **Limited review**에서 처음 두 결과를 클릭하고 여섯 장을 이어서 확인한다. | 실제 라벨은 요청된 사진에서만 공개된다. 네 결함 구간의 15→26/90 사건 발견은 이 장면의 한 구간 사례와 구분한다. |
+| 1:42–2:05 | **Update decision**의 세 결과가 순서대로 나타나게 둔다. | 오경보 감소만으로 기준 갱신을 승인하지 않는다. 동일한 나중 프레임에서 결함 탐지 손실을 확인한 결정이다. |
 
-If discussion continues, open `interval.html` to show the actual interval
-summary and individual review cards. The review outcomes there remain hidden
-until a card is checked. Do not describe the five screens as one continuous
-model-training run: the last screen uses a separate fixed-budget experiment.
-If asked why reviews are 16 frames apart, open **Spacing sensitivity** in the
-landing page's review section. The five equal-budget settings found 15, 24,
-25, 26, and 26 of 90 new episodes across the final runs; 12 and 16 frames
-also tied on development. This is a robustness check on review scheduling,
-not a change to the detector.
+첫 장면의 회의 그림은 일러스트다. 사진·점수·히트맵·검수 순서는 저장된 공개 TSFabrics 실험 결과를 재생한다. 첫 특징 비교의 사진 세 장은 개발 구간 두 개와 최종 구간 한 개에서 선택한 사례이고, AP는 별도의 최종 결함 구간 네 개를 집계한 값이다. 변화·점수·검수 장면은 `T1_S478_I118_2` 한 구간을 따라간다. 갱신 결정은 같은 구간의 연속 실행 결과가 아니라 별도의 15구간 실험이다.
 
-The landing page shows the four defect-run results directly. Open **Why spacing
-helps** only when explaining the adjacent-frame example.
-
-## Evidence and next model gate
-
-The landing page shows a four-cell reference-choice × review-spacing comparison.
-With the selected reference, eight highest-score reviews found 15 of 90 new
-defect episodes across four defect-bearing final runs; spacing the same eight
-requests by at least 16 frames found 26. The four-cell table distinguishes
-this from the all-startup reference comparison. The complete DINOv2-plus-selection
-method raised macro frame AP from 66.4% to 85.4% over the handcrafted method, while
-leading on only two of four runs. This comparison does not isolate the feature
-extractor. These figures come from
-`results/unlabeled_review_final.json` and
-`results/reference_review_factorial_final.json`, and are checked by
-`scripts/audit_site_evidence.js`.
-
-The current update test shows that a candidate can remove false alerts by
-suppressing defect signals. Keep it in shadow mode. The next experiment should
-lock a rule on development runs, then test it on runs absent from all earlier
-method choices. An approval gate needs independent later-frame checks for
-normal alerts, defect-frame recall, new-episode recall, and change-alert delay.
-None of the current public-data results establish rubber-belt performance.
+시연은 브라우저에서 모델을 새로 실행하지 않는다. 새 촬영 사진의 성능과 실제 고무벨트 공정의 정확도는 아직 검증되지 않았다. 질문이 나오면 [실험 결과](../experiments/unsupervised/README.md)의 구간별 수치와 [현장 적용 범위](NOTION_FINAL_PIPELINE.md)를 함께 보여준다.

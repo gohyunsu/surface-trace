@@ -122,7 +122,8 @@ const verdicts = new Set(illustrated.map(sample => {
   return `${sample.label}:${classic.alert}:${sample.current.score >= sample.current.threshold}`;
 }));
 assert.equal(verdicts.size, 8, "Gallery no longer shows every normal/defect outcome pair");
-assert(demo.includes('id="demoScope">THREE RUNS · EXAMPLES'));
+assert(demo.includes('id="demoScope">FIELD FEEDBACK · DESIGN BRIEF'));
+assert(demo.includes('class="context-responses"'));
 assert(demoScript.includes('15 RUNS · UPDATE TEST'));
 const normalShift = "T1_S164_I36_1";
 const selectedSource = earlier.methods.mutual.targets[normalShift].frozen;

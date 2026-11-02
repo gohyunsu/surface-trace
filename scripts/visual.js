@@ -114,22 +114,22 @@ const { chromium } = require("playwright");
           if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)) throw new Error(`interval override ${viewport.label}: horizontal overflow`);
           await page.unroute("**/unlabeled-demo/evaluation.json");
         } else if (name === "demo") {
-          for (let step = 1; step < 5; step++) {
+          for (let step = 1; step < 6; step++) {
             await page.locator(`.demo-steps button[data-step="${step}"]`).click();
-            await page.waitForTimeout(step === 1 ? 4350 : step === 4 ? 4500 : 1550);
-            if (step === 1) {
+            await page.waitForTimeout(step === 2 ? 4350 : step === 5 ? 4500 : 1550);
+            if (step === 2) {
               await page.waitForFunction(() => document.querySelector("#demoShiftFrame").textContent.includes("frame 192") && document.querySelector("#demoShiftPhoto").naturalWidth > 0);
               await page.locator(".shift-photos img").evaluateAll(async images => {
                 for (const image of images) await image.decode();
               });
             }
-            if (step === 2) await page.waitForFunction(() => document.querySelectorAll("#demoTop8Track i").length === 8 && document.querySelectorAll("#demoSpaced8Track i").length === 8);
-            if (step === 3) await page.waitForFunction(() => document.querySelector("#demoReviewPhoto").complete && document.querySelector("#demoReviewPhoto").naturalWidth > 0);
-            if (step === 4) await page.waitForFunction(() => document.querySelector("#decisionTitle").textContent === "Hold the candidate.");
+            if (step === 3) await page.waitForFunction(() => document.querySelectorAll("#demoTop8Track i").length === 8 && document.querySelectorAll("#demoSpaced8Track i").length === 8);
+            if (step === 4) await page.waitForFunction(() => document.querySelector("#demoReviewPhoto").complete && document.querySelector("#demoReviewPhoto").naturalWidth > 0);
+            if (step === 5) await page.waitForFunction(() => document.querySelector("#decisionTitle").textContent === "Hold the candidate.");
             await page.screenshot({ path: path.join(out, `demo-${step}-${viewport.label}.png`), fullPage: true });
             if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)) throw new Error(`demo ${step} ${viewport.label}: horizontal overflow`);
           }
-          await page.locator('.demo-steps button[data-step="3"]').click();
+          await page.locator('.demo-steps button[data-step="4"]').click();
           for (let review = 0; review < 8; review++) {
             await page.locator("#demoReveal").click();
             if (review < 7) await page.locator("#demoReveal").click();

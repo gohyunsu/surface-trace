@@ -4,6 +4,7 @@ const $ = id => document.getElementById(id);
 const dataVersion = new URL(document.currentScript.src).searchParams.get("v");
 const dataPath = path => dataVersion ? `${path}?v=${dataVersion}` : path;
 const svgNS = "http://www.w3.org/2000/svg";
+const SCENE = Object.freeze({ context: 0, feature: 1, shift: 2, scores: 3, review: 4, decision: 5 });
 const state = { manifest: null, evaluation: null, featureCases: [], featureIndex: 0, featureTimer: null, shiftIndex: 0, shiftTimer: null, decisionTimers: [], decisionPhase: 3, scene: 0, reviewIndex: 0, revealed: false, playing: false, timer: null };
 const shiftFrames = [1, 32, 64, 96, 192];
 
@@ -30,7 +31,7 @@ function renderFeature(index) {
 
 function rotateFeatures() {
   clearTimeout(state.featureTimer);
-  if (!state.playing || state.scene !== 0) return;
+  if (!state.playing || state.scene !== SCENE.feature) return;
   state.featureTimer = setTimeout(() => { renderFeature(state.featureIndex + 1); rotateFeatures(); }, 2050);
 }
 
@@ -89,7 +90,7 @@ function renderShift(index) {
 
 function rotateShift() {
   clearTimeout(state.shiftTimer);
-  if (state.scene !== 1 || state.shiftIndex === shiftFrames.length - 1) return;
+  if (state.scene !== SCENE.shift || state.shiftIndex === shiftFrames.length - 1) return;
   state.shiftTimer = setTimeout(() => { renderShift(state.shiftIndex + 1); rotateShift(); }, 1000);
 }
 
@@ -235,7 +236,7 @@ function startDecision() {
   renderDecision(0);
   for (const [phase, delay] of [[1, 1400], [2, 2700], [3, 4000]]) {
     state.decisionTimers.push(setTimeout(() => {
-      if (state.scene === 4) renderDecision(phase);
+      if (state.scene === SCENE.decision) renderDecision(phase);
     }, delay));
   }
 }
@@ -245,10 +246,11 @@ function showScene(index) {
   clearTimeout(state.shiftTimer);
   clearDecisionTimers();
   state.scene = index;
-  $("demoScope").textContent = index === 0 ? "THREE RUNS · EXAMPLES"
-    : index === 4 ? "15 RUNS · UPDATE TEST" : `RUN · ${state.manifest.run}`;
+  $("demoScope").textContent = index === SCENE.context ? "FIELD FEEDBACK · DESIGN BRIEF"
+    : index === SCENE.feature ? "THREE RUNS · EXAMPLES"
+      : index === SCENE.decision ? "15 RUNS · UPDATE TEST" : `RUN · ${state.manifest.run}`;
   state.revealed = false;
-  if (index === 3) state.reviewIndex = 0;
+  if (index === SCENE.review) state.reviewIndex = 0;
   document.querySelectorAll(".demo-stage").forEach((stage, i) => { stage.hidden = i !== index; });
   const chapters = $("demoChapters");
   const chapterButtons = [...chapters.querySelectorAll("button")];
@@ -262,14 +264,14 @@ function showScene(index) {
       + chapters.scrollLeft - (chapters.clientWidth - active.clientWidth) / 2;
     chapters.scrollTo({ left, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   }
-  if (index === 3) updateReview();
-  if (index === 1) {
+  if (index === SCENE.review) updateReview();
+  if (index === SCENE.shift) {
     renderShift(window.matchMedia("(prefers-reduced-motion: reduce)").matches ? shiftFrames.length - 1 : 0);
     rotateShift();
   }
-  if (index === 4) startDecision();
-  $("demoStatus").textContent = ["Patch features", "Visual shift", "Interval scores", "Recorded checks", "Separate validation"][index];
-  if (!state.playing) $("demoPlay").textContent = index === 4 ? "Replay" : "Play replay";
+  if (index === SCENE.decision) startDecision();
+  $("demoStatus").textContent = ["Field feedback", "Patch features", "Visual shift", "Interval scores", "Recorded checks", "Separate validation"][index];
+  if (!state.playing) $("demoPlay").textContent = index === SCENE.decision ? "Replay" : "Play replay";
   rotateFeatures();
 }
 
@@ -278,10 +280,10 @@ function stop() {
   clearTimeout(state.featureTimer);
   clearTimeout(state.shiftTimer);
   clearDecisionTimers();
-  if (state.scene === 4 && state.decisionPhase < 3) renderDecision(3);
+  if (state.scene === SCENE.decision && state.decisionPhase < 3) renderDecision(3);
   state.playing = false;
   document.body.classList.remove("is-playing");
-  $("demoPlay").textContent = state.scene === 4 ? "Replay" : "Play replay";
+  $("demoPlay").textContent = state.scene === SCENE.decision ? "Replay" : "Play replay";
 }
 
 async function revealReview() {
@@ -300,33 +302,34 @@ async function revealReview() {
 }
 
 async function advance() {
-  if (state.scene < 3) showScene(state.scene + 1);
-  else if (state.scene === 3) {
+  if (state.scene < SCENE.review) showScene(state.scene + 1);
+  else if (state.scene === SCENE.review) {
     if (!state.revealed) await revealReview();
     else if (state.reviewIndex < state.manifest.review.length - 1) {
       state.reviewIndex++;
       state.revealed = false;
       updateReview();
-    } else showScene(4);
+    } else showScene(SCENE.decision);
   } else showScene(0);
 }
 
 function schedule() {
   if (!state.playing) return;
-  if (state.scene === 4) { state.timer = setTimeout(stop, 5200); return; }
+  if (state.scene === SCENE.decision) { state.timer = setTimeout(stop, 5200); return; }
   state.timer = setTimeout(async () => {
     try { await advance(); schedule(); }
     catch (error) { stop(); $("demoError").textContent = error.message; $("demoError").hidden = false; }
-  }, state.scene === 3 ? state.revealed ? state.reviewIndex === state.manifest.review.length - 1 ? 3500 : 1100 : 1400 : state.scene === 0 ? 7000 : state.scene === 1 ? 6500 : 7000);
+  }, state.scene === SCENE.review ? state.revealed ? state.reviewIndex === state.manifest.review.length - 1 ? 3500 : 1100 : 1400
+    : state.scene === SCENE.context ? 4800 : state.scene === SCENE.feature ? 7000 : state.scene === SCENE.shift ? 6500 : 7000);
 }
 
 function startPlayback() {
-  if (state.scene === 4) showScene(0);
+  if (state.scene === SCENE.decision) showScene(SCENE.context);
   state.playing = true;
   document.body.classList.add("is-playing");
   $("demoPlay").textContent = "Pause replay";
   rotateFeatures();
-  if (state.scene === 1) rotateShift();
+  if (state.scene === SCENE.shift) rotateShift();
   schedule();
 }
 
@@ -347,7 +350,7 @@ async function main() {
     shiftFrames.forEach(frame => { const image = new Image(); image.src = `./scenario/demo-${String(frame).padStart(3, "0")}.jpg`; });
     drawScores(manifest);
     drawQueueContrast(manifest);
-    showScene(0);
+    showScene(SCENE.context);
     $("demoPlay").addEventListener("click", () => {
       if (state.playing) { stop(); return; }
       startPlayback();
@@ -355,7 +358,7 @@ async function main() {
     $("demoNext").addEventListener("click", async () => { stop(); try { await advance(); } catch (error) { $("demoError").textContent = error.message; $("demoError").hidden = false; } });
     $("demoBack").addEventListener("click", () => {
       stop();
-      if (state.scene === 3 && state.reviewIndex > 0) { state.reviewIndex--; state.revealed = false; updateReview(); }
+      if (state.scene === SCENE.review && state.reviewIndex > 0) { state.reviewIndex--; state.revealed = false; updateReview(); }
       else showScene(Math.max(0, state.scene - 1));
     });
     $("demoReveal").addEventListener("click", async () => { stop(); try { await advance(); } catch (error) { $("demoError").textContent = error.message; $("demoError").hidden = false; } });
