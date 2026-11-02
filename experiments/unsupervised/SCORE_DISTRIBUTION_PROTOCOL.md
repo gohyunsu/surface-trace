@@ -54,3 +54,17 @@ From `/home/hyunsu/hyunsu/surface-trace`, keep all paths inside this directory:
 
 Publish a chart only after the exporter succeeds on all four recordings and
 the source archive, evaluated frame counts, and saved metrics agree.
+
+After transferring the compact verified JSON, generate one side-by-side SVG
+per recording. Each panel shows the fraction of its own class in each score
+percentile bin, with a shared vertical scale for the two methods:
+
+```text
+python experiments/unsupervised/plot_score_distribution.py \
+  --result experiments/unsupervised/results/score_distribution_final.json \
+  --out-dir experiments/unsupervised/figures
+```
+
+The plotter checks all four runs, bin edges, class counts, and normalized
+histograms before writing figures. The SVGs are presentation artifacts; the
+JSON and fixed exporter remain the evidence for the measured values.
