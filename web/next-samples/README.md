@@ -8,7 +8,7 @@ DINOv2 model outputs; it does not run that model in the browser.
 
 The page groups examples by production run and orders frames within each run.
 “Handcrafted” is the eight-feature baseline. “Frozen DINOv2” uses the
-selected source-run reference and source threshold. “Run-local trial” uses a
+selected source-run reference and source threshold. “New-run trial” uses a
 new reference and threshold from earlier unlabeled frames of the selected test
 run. It is separate from the reviewed-normal candidate shown on the Review &
 update page, and neither trial is adopted automatically. The first 12 sample IDs

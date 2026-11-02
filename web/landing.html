@@ -101,13 +101,13 @@
             <div><span>CHANGED RUN</span><figure><img src="./scenario/target-001.jpg" alt="Changed run frame 1" loading="lazy"><figcaption>1</figcaption></figure><figure><img src="./scenario/target-064.jpg" alt="Changed run frame 64" loading="lazy"><figcaption>64</figcaption></figure><figure><img src="./scenario/target-128.jpg" alt="Changed run frame 128" loading="lazy"><figcaption>128</figcaption></figure><figure><img src="./scenario/target-192.jpg" alt="Changed run frame 192, first sustained alert" loading="lazy"><figcaption>192 <em>ALERT</em></figcaption></figure></div>
           </div>
           <figure class="change-graph"><picture><source media="(max-width:700px)" srcset="./ablation/change-figure-mobile.svg"><img src="./ablation/change-figure.svg" alt="Global-feature change scores stay low on the reference run and cross the alert limit after the switch, with a sustained alert at target frame 192" width="600" height="238" loading="lazy"></picture><figcaption>Development example · alert at new-run frame 192.</figcaption></figure>
-          <div class="change-control" aria-label="Visual-change comparison with a brightness histogram">
+          <details class="evidence-details"><summary>Compare change signals</summary><div class="change-control" aria-label="Visual-change comparison with a brightness histogram">
             <div class="change-control-head"><span>CHANGE SIGNAL</span><span>KNOWN SWITCHES <small>/ 16 runs</small></span><span>SAME RECORDING <small>/ 513 windows above limit</small></span></div>
             <div class="change-control-row"><span>Brightness histogram</span><strong>16 / 16</strong><div><i style="--extent:65.5%" aria-hidden="true"></i><strong>336 / 513</strong></div></div>
             <div class="change-control-row is-dino"><span>DINOv2</span><strong>15 / 16</strong><div><i style="--extent:0%" aria-hidden="true"></i><strong>0 / 513</strong></div></div>
           </div>
+          <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/CHANGE_REPRESENTATION_RESULTS.md">Change-signal results ↗</a></details>
           <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/SOURCE_CONTINUATION_FULL_RESULTS.md">Full source-run audit ↗</a>
-          <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/CHANGE_REPRESENTATION_RESULTS.md">Change-signal comparison ↗</a>
         </div>
       </article>
 
@@ -127,29 +127,26 @@
             <div class="review-timeline-row"><span>Spaced 8</span><div class="review-timeline-track is-spaced" data-queue="spaced8" role="img" aria-label="Eight time-spaced reviews at frames 405, 538, 1026, 1380, 1506, 1984, 2473, and 2967"><i data-frame="405" style="left:2.9%"></i><i data-frame="538" style="left:7.5%"></i><i data-frame="1026" style="left:24.5%"></i><i data-frame="1380" style="left:36.7%"></i><i data-frame="1506" style="left:41.1%"></i><i data-frame="1984" style="left:57.7%"></i><i data-frame="2473" style="left:74.6%"></i><i data-frame="2967" style="left:91.8%"></i></div><strong>6 found</strong></div>
             <div class="review-timeline-ends"><span>START</span><span>END</span></div>
           </div>
-          <div class="review-coverage" aria-label="New defect episodes found with eight checks in each final defect run">
+          <details class="evidence-details"><summary>Results by run</summary><div class="review-coverage" aria-label="New defect episodes found with eight checks in each final defect run">
             <div class="review-coverage-head"><span>EPISODES FOUND / RUN TOTAL · 8 CHECKS PER RUN</span><div><span><i class="is-top"></i>Top 8</span><span><i class="is-spaced"></i>Spaced 8</span></div></div>
             <div class="review-coverage-row" data-run="T1_S148_I108_1" style="--top:4.3%;--spaced:11.6%"><div><span>T1_S148_I108_1</span><small>69 episodes</small></div><div class="review-coverage-bars"><span><i class="is-top"></i></span><span><i class="is-spaced"></i></span></div><strong>3 <small>→</small> 8</strong></div>
             <div class="review-coverage-row" data-run="T1_S174_I108_1" style="--top:54.5%;--spaced:72.7%"><div><span>T1_S174_I108_1</span><small>11 episodes</small></div><div class="review-coverage-bars"><span><i class="is-top"></i></span><span><i class="is-spaced"></i></span></div><strong>6 <small>→</small> 8</strong></div>
             <div class="review-coverage-row" data-run="T1_S478_I118_2" style="--top:83.3%;--spaced:100%"><div><span>T1_S478_I118_2</span><small>6 episodes</small></div><div class="review-coverage-bars"><span><i class="is-top"></i></span><span><i class="is-spaced"></i></span></div><strong>5 <small>→</small> 6</strong></div>
             <div class="review-coverage-row" data-run="T2_S287_I185_1" style="--top:25%;--spaced:100%"><div><span>T2_S287_I185_1</span><small>4 episodes</small></div><div class="review-coverage-bars"><span><i class="is-top"></i></span><span><i class="is-spaced"></i></span></div><strong>1 <small>→</small> 4</strong></div>
-          </div>
+          </div></details>
         </div>
       </article>
 
       <article class="improvement" id="handoff" aria-labelledby="handoff-title">
         <div class="improvement-copy">
           <p class="improvement-kicker">REVIEW WORKLOAD</p>
-          <p class="improvement-input">Do not request eight checks by default</p>
+          <p class="improvement-input">Individual alerts burden staff</p>
           <h3 id="handoff-title">Start with two checks.</h3>
-          <p>Check two high-ranked spaced photos first. A defect or uncertain result opens six more; reviewers can also request them. Across a completed batch, spare checks can move to runs with confirmed issues.</p>
+          <p>Check two high-ranked, time-spaced photos first. A defect or uncertain result opens six more; reviewers can request them too.</p>
           <div class="improvement-measure"><span>FINAL 16 RUNS · REVIEW REQUESTS</span><div><small>Fixed eight</small><strong>128</strong><i aria-hidden="true">→</i><small>Two first</small><strong>56</strong></div><p>New defect episodes: 26 / 90 in both.</p></div>
           <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/SEQUENTIAL_REVIEW_RESULTS.md">Review-budget results ↗</a>
         </div>
         <div class="improvement-display handoff-display">
-          <div class="handoff-head"><span>16 RECORDED RUNS</span><strong>12 stopped at 2 <i>·</i> 4 continued to 8</strong></div>
-          <div id="reviewRouting" class="handoff-bars" role="group" aria-label="Requests by recorded run"></div>
-          <div class="handoff-key"><span><i class="is-first"></i>First two checks</span><span><i class="is-extra"></i>Additional checks</span><span><i class="is-idle"></i>Not requested</span></div>
           <div class="allocation-panel" id="reviewAllocation" aria-label="Three review schedules within a 128-check budget">
             <div class="allocation-head"><span>128-CHECK BUDGET</span><span>EPISODES / 90</span></div>
             <div class="allocation-row">
@@ -162,15 +159,18 @@
               <div class="allocation-track" role="img" aria-label="24 checks in runs with no issue in the first two reviews, 32 in runs with an early issue, 72 checks unused"><i class="is-quiet" style="width:18.75%"></i><i class="is-active" style="width:25%"></i><i class="is-unspent" style="width:56.25%"></i></div>
               <strong>26</strong>
             </div>
-            <div class="allocation-row is-guided">
+            <div class="allocation-key"><span><i class="is-quiet"></i>No issue in first two</span><span><i class="is-active"></i>Issue in first two</span><span><i class="is-unspent"></i>Unused</span></div>
+            <details class="evidence-details allocation-trial"><summary>Explore budget reallocation</summary><div class="allocation-row is-guided">
               <span>Reallocated<small>128 checks</small></span>
               <div class="allocation-track" role="img" aria-label="36 checks in runs with no issue in the first two reviews, 92 in runs with an early issue"><i class="is-quiet" style="width:28.125%"></i><i class="is-active" style="width:71.875%"></i></div>
               <strong>50</strong>
             </div>
-            <div class="allocation-key"><span><i class="is-quiet"></i>No issue in first two</span><span><i class="is-active"></i>Issue in first two</span><span><i class="is-unspent"></i>Unused</span></div>
             <p>Post-hoc exploratory replay · 12 quiet runs received one audit check each. All 24 additional episodes came from one run.</p>
-            <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/ADAPTIVE_BUDGET_RESULTS.md">Review-allocation results ↗</a>
+            <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/ADAPTIVE_BUDGET_RESULTS.md">Review-allocation results ↗</a></details>
           </div>
+          <details class="evidence-details"><summary>Requests by run</summary><div class="handoff-head"><span>16 RECORDED RUNS</span><strong>12 stopped at 2 <i>·</i> 4 continued to 8</strong></div>
+          <div id="reviewRouting" class="handoff-bars" role="group" aria-label="Requests by recorded run"></div>
+          <div class="handoff-key"><span><i class="is-first"></i>First two checks</span><span><i class="is-extra"></i>Additional checks</span><span><i class="is-idle"></i>Not requested</span></div></details>
         </div>
       </article>
 
@@ -179,7 +179,7 @@
           <p class="improvement-kicker">REFERENCE CHOICE + UPDATE</p>
           <p class="improvement-input">A new appearance can trigger false alerts</p>
           <h3 id="reference-title">Choose the reference. Test updates.</h3>
-          <p>We selected less unusual startup photos without labels. Normal alerts fell in 15 of 16 runs, while fewer defect frames crossed the alert limit. Reviewed-photo updates remained on hold.</p>
+          <p>Select less unusual startup photos without labels. This cuts normal alerts but also misses more defect frames; reviewed-photo updates remain on hold.</p>
           <div class="reference-factorial"><p>REFERENCE × REVIEW RULE · 16 RECORDED RUNS</p><span>New defect episodes found / 90 · eight checks per run</span><table aria-label="New defect episodes found by source reference and review rule"><thead><tr><th scope="col">Reference</th><th scope="col">Top 8</th><th scope="col">Spaced 8</th></tr></thead><tbody><tr><th scope="row">All startup</th><td data-reference="all" data-queue="top8">8</td><td data-reference="all" data-queue="spaced8">19</td></tr><tr><th scope="row">Selected</th><td data-reference="selected" data-queue="top8">15</td><td class="is-current" data-reference="selected" data-queue="spaced8">26</td></tr></tbody></table></div>
         </div>
         <div class="improvement-display reference-display">

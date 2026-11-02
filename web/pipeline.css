@@ -95,6 +95,13 @@
   .pipeline-landing .main-nav{gap:13px;font-size:11px}
   .pipeline-landing .hero-inner{padding:54px 20px 66px}
   .pipeline-hero-motion{padding:8px;box-shadow:9px 10px 0 #101726}
+  .pipeline-landing .method-animation-grid{grid-template-columns:1fr;gap:10px}
+  .pipeline-landing .method-card{display:grid;grid-template-columns:minmax(112px,38%) minmax(0,1fr)}
+  .pipeline-landing .method-animation{height:100%;min-height:124px;aspect-ratio:auto}
+  .pipeline-landing .method-card-copy{display:block;min-height:0;padding:14px 12px}
+  .pipeline-landing .method-card-copy>span{display:block;padding:0;margin-bottom:8px;font-size:10px}
+  .pipeline-landing .method-card-copy h3{margin:0 0 5px;font-size:14px;line-height:1.25}
+  .pipeline-landing .method-card-copy p{font-size:11px;line-height:1.4}
   .pipeline-landing .method-heading{display:block}
   .pipeline-landing .method-heading>p:last-child{text-align:left;max-width:none;margin:10px 0 0}
   .dataset-note{display:block;margin-bottom:20px;padding:12px 15px}

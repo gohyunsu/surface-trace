@@ -165,7 +165,7 @@ for (const [metric, before, after, population] of [
   assert(Math.abs(widths[1] - after / Math.max(before, after) * 100) < .06);
 }
 assert(referencePanel.includes("REFERENCE_SELECTION_RESULTS_VERIFIED.md"));
-assert(inspector.includes("Frozen DINOv2") && inspector.includes("Run-local trial"));
+assert(inspector.includes("Frozen DINOv2") && inspector.includes("New-run trial"));
 assert(!inspector.includes("trial update on the same photo"));
 
 const coverage = queue => average(defectRuns.map(run => run.methods.source_knn.queues[queue].new_episodes / run.new_defect_episodes));
