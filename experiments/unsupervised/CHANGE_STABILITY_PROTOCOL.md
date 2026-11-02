@@ -19,9 +19,11 @@ an annotated within-run change benchmark.
 - Fit an independent `DriftDetector` on frames `[0,2048)` of each run, as for
   the original source. Skip `[2048,2112)`. Score the ordered continuation
   `[2112,4096)` with 128-frame windows and 32-frame steps.
-- Compare the source-calibrated limit and **0.75 × that limit**. Require three
+- Compare each run's own calibrated limit and **0.75 × that limit**. Require three
   consecutive over-limit windows for an alert. Record thresholds, each window
-  score, over-limit counts, longest streak, and first confirmed alert.
+  score, over-limit counts, longest streak, and first confirmed alert as an
+  absolute frame number within its recording. Feature extraction resumes from
+  the last flushed batch if interrupted.
 - Do not change the 75% factor, run list, calibration length, windowing, or
   confirmation rule after seeing either control's scores. Report both runs.
 
