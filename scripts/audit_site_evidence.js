@@ -245,13 +245,20 @@ assert(manifest.review.slice(0, 2).every(item => {
   return outcome && !outcome.ambiguous && outcome.dataset_label === "Defect";
 }));
 assert(demoScript.includes("Defect found in first two · six more checks opened"));
-const timeline = site.match(/class="review-timeline-track"[^>]*>(.*?)<\/div>/s)?.[1];
-assert(timeline, "Landing page is missing the review timeline");
-const timelinePositions = [...timeline.matchAll(/left:([\d.]+)%/g)].map(match => Number(match[1]));
+const timelines = [...site.matchAll(/class="review-timeline-track is-(top|spaced)" data-queue="(top8|spaced8)"[^>]*>(.*?)<\/div>/gs)];
+assert.equal(timelines.length, 2, "Landing page needs both review timelines");
 const [firstFrame, lastFrame] = manifest.evaluation_frames;
-const expectedPositions = manifest.review.map(item => item.frame).sort((a, b) => a - b)
-  .map(frame => Math.round((frame - firstFrame) / (lastFrame - firstFrame) * 1000) / 10);
-assert.deepEqual(timelinePositions, expectedPositions);
+for (const [, style, queue, markup] of timelines) {
+  assert.equal(style === "top" ? "top8" : "spaced8", queue);
+  const markers = [...markup.matchAll(/data-frame="(\d+)" style="left:([\d.]+)%/g)];
+  const expectedFrames = final.runs[manifest.run].methods.source_knn.queues[queue].frames.slice().sort((a, b) => a - b);
+  assert.deepEqual(markers.map(match => Number(match[1])), expectedFrames);
+  const expectedPositions = expectedFrames.map(frame =>
+    Math.round((frame - firstFrame) / (lastFrame - firstFrame) * 1000) / 10);
+  assert.deepEqual(markers.map(match => Number(match[2])), expectedPositions);
+  const discovered = final.runs[manifest.run].methods.source_knn.queues[queue].new_episodes;
+  assert(site.includes(`</div><strong>${discovered} found</strong></div>`));
+}
 assert.equal(manifest.change.alert - manifest.change.splice_boundary, 96);
 const sceneFrame = (file, run, frame, label = "Normal") => {
   const entry = scenarioFrames.find(item => item.file === file);
