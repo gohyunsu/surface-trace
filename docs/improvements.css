@@ -187,20 +187,30 @@
 .allocation-head{margin-bottom:11px;color:#8390ab;font-size:9px;letter-spacing:.075em}
 .allocation-head span:first-child{grid-column:1/3}
 .allocation-head span:last-child{grid-column:3;justify-self:end;white-space:nowrap;font-size:8px}
-.allocation-row{min-height:36px;color:#52617c;font-size:11px}
-.allocation-row>span{white-space:nowrap}
+.allocation-row{min-height:43px;color:#52617c;font-size:11px}
+.allocation-row>span{display:flex;flex-direction:column;gap:2px;white-space:nowrap}
+.allocation-row>span small{color:#9aa6b9;font-size:9px}
 .allocation-row strong{color:#334668;text-align:right;font-size:19px;font-weight:500;font-variant-numeric:tabular-nums}
 .allocation-row.is-guided strong{color:#258879}
 .allocation-track{display:flex;overflow:hidden;height:13px;border-radius:3px;background:#e3e9f2}
 .allocation-track i{display:block;height:100%;font-style:normal}
 .allocation-track .is-quiet{flex:none;background:#dfe6ef}
-.allocation-track .is-active{flex:1;background:#61b4a5}
-.allocation-panel.is-revealed .allocation-row.is-guided .is-quiet{animation:allocation-shift 1.25s cubic-bezier(.2,.7,.2,1) both}
+.allocation-track .is-active,.allocation-track .is-unspent{flex:none}
+.allocation-track .is-active{background:#61b4a5}
+.allocation-track .is-unspent{background:repeating-linear-gradient(135deg,#f5f7fa 0,#f5f7fa 4px,#e6ebf2 4px,#e6ebf2 5px)}
+.allocation-panel.is-revealed .allocation-row.is-stop .is-quiet{animation:allocation-stop 1.2s cubic-bezier(.2,.7,.2,1) both}
+.allocation-panel.is-revealed .allocation-row.is-stop .is-unspent{animation:allocation-release 1.2s cubic-bezier(.2,.7,.2,1) both}
+.allocation-panel.is-revealed .allocation-row.is-guided .is-quiet{animation:allocation-shift 1.2s .25s cubic-bezier(.2,.7,.2,1) both}
+.allocation-panel.is-revealed .allocation-row.is-guided .is-active{animation:allocation-grow 1.2s .25s cubic-bezier(.2,.7,.2,1) both}
+@keyframes allocation-stop{from{width:75%}to{width:18.75%}}
+@keyframes allocation-release{from{width:0}to{width:56.25%}}
 @keyframes allocation-shift{from{width:75%}to{width:28.125%}}
+@keyframes allocation-grow{from{width:25%}to{width:71.875%}}
 .allocation-key{display:flex;flex-wrap:wrap;gap:7px 15px;margin-top:12px;color:#8190a8;font-size:10px}
 .allocation-key span{display:inline-flex;align-items:center;gap:6px}
 .allocation-key i{width:9px;height:9px;border-radius:2px;background:#dfe6ef}
 .allocation-key .is-active{background:#61b4a5}
+.allocation-key .is-unspent{background:repeating-linear-gradient(135deg,#f5f7fa 0,#f5f7fa 4px,#dfe6ef 4px,#dfe6ef 5px)}
 .allocation-panel>p{margin:13px 0 0;color:#8390a6;font-size:10px;line-height:1.5}
 .allocation-panel .evidence-link{display:inline-block;margin-top:10px}
 .improvement-adaptation{align-items:start}
@@ -274,7 +284,7 @@
   .improvement-links{display:block}
   .improvement-links>a:not(.button){display:block;margin-top:19px}
 }
-@media(prefers-reduced-motion:reduce){.handoff-bars.is-revealed .handoff-run,.allocation-panel.is-revealed .allocation-row.is-guided .is-quiet{animation:none}}
+@media(prefers-reduced-motion:reduce){.handoff-bars.is-revealed .handoff-run,.allocation-panel.is-revealed .allocation-row.is-stop .is-quiet,.allocation-panel.is-revealed .allocation-row.is-stop .is-unspent,.allocation-panel.is-revealed .allocation-row.is-guided .is-quiet,.allocation-panel.is-revealed .allocation-row.is-guided .is-active{animation:none}}
 @media(max-width:390px){
   .improvement-measure>div{gap:5px}
   .improvement-measure strong{font-size:25px}

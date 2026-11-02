@@ -150,19 +150,24 @@
           <div class="handoff-head"><span>16 RECORDED RUNS</span><strong>12 stopped at 2 <i>·</i> 4 continued to 8</strong></div>
           <div id="reviewRouting" class="handoff-bars" role="group" aria-label="Requests by recorded run"></div>
           <div class="handoff-key"><span><i class="is-first"></i>First two checks</span><span><i class="is-extra"></i>Additional checks</span><span><i class="is-idle"></i>Not requested</span></div>
-          <div class="allocation-panel" id="reviewAllocation" aria-label="Exploratory batch allocation with the same 128 review requests">
-            <div class="allocation-head"><span>SAME BUDGET · 128 CHECKS</span><span>FOUND / 90</span></div>
+          <div class="allocation-panel" id="reviewAllocation" aria-label="Three review schedules within a 128-check budget">
+            <div class="allocation-head"><span>128-CHECK BUDGET</span><span>EPISODES / 90</span></div>
             <div class="allocation-row">
-              <span>Fixed 8 per run</span>
-              <div class="allocation-track" role="img" aria-label="96 checks in quiet runs and 32 checks in runs with an early confirmed issue"><i class="is-quiet" style="width:75%"></i><i class="is-active"></i></div>
+              <span>Fixed eight<small>128 checks</small></span>
+              <div class="allocation-track" role="img" aria-label="96 checks in runs with no issue in the first two reviews, 32 in runs with an early issue"><i class="is-quiet" style="width:75%"></i><i class="is-active" style="width:25%"></i></div>
+              <strong>26</strong>
+            </div>
+            <div class="allocation-row is-stop">
+              <span>Two first<small>56 checks</small></span>
+              <div class="allocation-track" role="img" aria-label="24 checks in runs with no issue in the first two reviews, 32 in runs with an early issue, 72 checks unused"><i class="is-quiet" style="width:18.75%"></i><i class="is-active" style="width:25%"></i><i class="is-unspent" style="width:56.25%"></i></div>
               <strong>26</strong>
             </div>
             <div class="allocation-row is-guided">
-              <span>Feedback allocation</span>
-              <div class="allocation-track" role="img" aria-label="36 checks in quiet runs and 92 checks in runs with an early confirmed issue"><i class="is-quiet" style="width:28.125%"></i><i class="is-active"></i></div>
+              <span>Reallocated<small>128 checks</small></span>
+              <div class="allocation-track" role="img" aria-label="36 checks in runs with no issue in the first two reviews, 92 in runs with an early issue"><i class="is-quiet" style="width:28.125%"></i><i class="is-active" style="width:71.875%"></i></div>
               <strong>50</strong>
             </div>
-            <div class="allocation-key"><span><i class="is-quiet"></i>No issue in first two</span><span><i class="is-active"></i>Issue in first two</span></div>
+            <div class="allocation-key"><span><i class="is-quiet"></i>No issue in first two</span><span><i class="is-active"></i>Issue in first two</span><span><i class="is-unspent"></i>Unused</span></div>
             <p>Post-hoc exploratory replay · 12 quiet runs received one audit check each. All 24 additional episodes came from one run.</p>
             <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/ADAPTIVE_BUDGET_RESULTS.md">Review-allocation results ↗</a>
           </div>
