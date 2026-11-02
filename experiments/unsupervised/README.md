@@ -166,6 +166,13 @@ production, so it cannot establish field performance on the partner's process.
 Dataset: <https://doi.org/10.5281/zenodo.22150068>.
 Dataset paper: <https://doi.org/10.3390/electronics15194403>.
 
+The [box-hit geometry audit](LUSITANO_BOX_HIT_RESULTS.md) uses only the official
+test annotations to quantify how often the reported localization rule would
+hit a box by chance. Tiling improves the single-hottest-patch box hit, but its
+top-1%-any-hit metric benefits strongly from having 69 opportunities rather
+than four. Global preprocessing remains better for image detection in this
+experiment. A global-alert-plus-tiled-location trial is not yet validated.
+
 ## Reproduce on the server
 
 Run from the repository root. Keep `TORCH_HOME`, `XDG_CACHE_HOME`, `HF_HOME`,
