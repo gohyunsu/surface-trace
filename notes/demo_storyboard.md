@@ -27,6 +27,25 @@ The scope badge above the stage follows this distinction: three selected runs
 for the feature examples, one named run for the change and review sequence,
 and a separate 15-run update test for the decision.
 
+## Two-minute live presentation
+
+Use the chapter buttons to pause at the evidence. The 29-second GIF is the
+uninterrupted fallback for a slide deck; the site provides the slower live
+version. Keep the run scope visible while moving between chapters.
+
+| Time | Screen action | Point to make |
+| --- | --- | --- |
+| 0:00–0:25 | Open `demo.html`, play the three paired photos, then pause on the counterexample. | DINOv2 improves four-run average frame AP from 66.4% to 85.4%, but misses remain. The paired heatmaps are examples; the AP comes from the four final defect runs. |
+| 0:25–0:45 | Select **Visual shift** and let the changed-run photos reach frame 96. | The overall appearance changed across two recordings. Three score windows confirm an alert; this does not identify the physical cause. |
+| 0:45–1:05 | Select **Interval scores**. Point to the score trace, the first two bright photos, and six dim photos. | Every plotted point is a recorded frame score. The eight candidate markers match their actual frames; only two checks are requested first. |
+| 1:05–1:35 | Select **Limited review** and reveal the first two outcomes. The remaining six become available. | Confirmed defects open the rest of this queue and stay out of the normal reference. No dataset label is shown before a requested check. |
+| 1:35–2:00 | Select **Update decision** and allow its three measures to appear in order. | This is a separate 15-run later-frame test. False alerts disappear, but detected defect frames and episodes fall, so the candidate is held. |
+
+If discussion continues, open `interval.html` to show the actual interval
+summary and individual review cards. The review outcomes there remain hidden
+until a card is checked. Do not describe the five screens as one continuous
+model-training run: the last screen uses a separate fixed-budget experiment.
+
 ## Evidence and next model gate
 
 The landing page uses one-factor comparisons where possible. For the active
