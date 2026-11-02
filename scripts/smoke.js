@@ -29,6 +29,13 @@ const { chromium } = require("playwright");
     await page.waitForTimeout(3100);
     assert.notDeepStrictEqual(await heroImage.screenshot(), firstFrame, "Hero animation should advance automatically");
     assert.strictEqual(await page.locator("#baseline .method-card").count(), 6);
+    for (const section of ["baseline", "feedback", "next"]) {
+      await page.evaluate(id => window.scrollTo({ top: document.getElementById(id).offsetTop - 70, behavior: "instant" }), section);
+      await page.waitForFunction(id => document.querySelector(`.main-nav a[href="#${id}"]`).getAttribute("aria-current") === "location", section);
+      assert.strictEqual(await page.locator(".main-nav a.nav-current").count(), 1);
+    }
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+    await page.waitForFunction(() => document.querySelector(".main-nav a.nav-current") === null);
     assert.strictEqual(await page.locator("#next .method-card").count(), 0);
     assert.strictEqual(await page.locator("#next .improvement").count(), 5);
     assert.strictEqual(await page.locator(".feedback-grid, .scenario, .ablation-chart, .trial-evaluation, .limited-review").count(), 0);

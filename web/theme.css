@@ -27,6 +27,9 @@ html{scroll-padding-top:76px}
 .main-nav a{color:#c9cdd8}
 .main-nav a:hover,.main-nav .nav-current{color:#fff}
 .main-nav .nav-current{border-bottom-color:#adc0ff}
+.pipeline-landing .main-nav a{position:relative}
+.pipeline-landing .main-nav a::after{content:"";position:absolute;right:0;bottom:-8px;left:0;height:2px;border-radius:2px;background:#aeb6ff;transform:scaleX(0);transform-origin:left;transition:transform .22s ease}
+.pipeline-landing .main-nav a.nav-current::after{transform:scaleX(1)}
 .site-footer{padding-top:38px;padding-bottom:34px}
 .footer-brand{font-size:20px}
 .footer-bottom,.footer-bottom a{color:#b8c4dc}
@@ -77,7 +80,7 @@ button:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visi
 .feedback-points a:hover{color:#334db8;background:#eef1ff;border-radius:8px}
 .feedback-points .feedback-index{color:#7184d1;font-size:11px}
 .feedback-points .feedback-arrow{color:#778bd2}
-.improvement{gap:clamp(32px,5vw,70px);padding:72px 0;border-top-color:var(--line)}
+.improvement{gap:clamp(32px,5vw,70px);padding:60px 0;border-top-color:var(--line)}
 .improvement-kicker{color:#536ac3;font-size:11px;letter-spacing:.14em}
 .improvement-input{padding:2px 0 2px 10px;border:0;border-left:2px solid #d69682;border-radius:0;background:transparent;color:#886a60}
 .improvement-copy h3{color:var(--ink);font-size:clamp(31px,3vw,43px)}
@@ -115,6 +118,19 @@ button:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visi
 .change-control-row.is-trial>div>i::before{min-width:2px;background:#6a75df}
 .change-control-note{margin:11px 1px 1px;color:#647087;font-size:11px;line-height:1.55}
 .change-display .evidence-link+.evidence-link{margin-left:15px}
+
+/* Keep the explanation beside the result while reading a long comparison. */
+@media(min-width:1001px){
+  .pipeline-landing .improvement{align-items:start}
+  .pipeline-landing .improvement-copy{position:sticky;top:105px;align-self:start}
+}
+
+/* Compact labels must remain legible at normal browser zoom. */
+.run-ap-head,.run-ap-head>div,.reference-audit-head,.change-control-head{font-size:10px}
+.run-ap-row,.reference-audit-row>div:first-child{font-size:11px}
+.run-ap-row strong,.reference-audit-row strong{font-size:12px}
+.reference-audit-row small,.reference-audit-note,.change-frames figcaption{font-size:10px}
+.change-frames span{font-size:10px}
 
 /* Recorded samples, replay, and review all use the same canvas and panel shape. */
 .inspector-page .inspect-main,.demo-main,.interval-main,.review-main{padding-top:52px}
@@ -173,6 +189,7 @@ button:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visi
   .improvement-copy h3{font-size:clamp(30px,8vw,37px)}
   .review-coverage-row{grid-template-columns:70px minmax(0,1fr) 50px;gap:9px;padding:11px 0}
   .inspector-page .inspect-main,.demo-main,.interval-main,.review-main{padding-top:34px}
+  .pipeline-landing .main-nav a::after{bottom:0}
 }
 @media(max-width:390px){
   #foundation .improvement-measure>div{display:grid;grid-template-columns:1fr 14px 1fr;grid-template-rows:auto auto;align-items:end;gap:3px 6px}
@@ -189,5 +206,5 @@ button:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visi
   .change-control-row>div::before{content:"Same recording";color:#7a879a;font-size:9px;white-space:nowrap}
 }
 @media(prefers-reduced-motion:reduce){
-  .feedback-points a,.button{transition:none}
+  .feedback-points a,.button,.pipeline-landing .main-nav a::after{transition:none}
 }

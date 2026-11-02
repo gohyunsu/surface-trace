@@ -59,6 +59,7 @@ def build(out: Path) -> tuple[int, int]:
         ("improvements.css", "improvements.css"),
         ("theme.css", "theme.css"),
         ("ablation.js", "ablation.js"),
+        ("landing-nav.js", "landing-nav.js"),
         ("review-routing.js", "review-routing.js"),
         ("next-app.js", "next-app.js"),
         ("review.js", "review.js"),
