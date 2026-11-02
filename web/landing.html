@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="./site.css">
   <link rel="stylesheet" href="./pipeline.css">
   <link rel="stylesheet" href="./improvements.css">
+  <link rel="stylesheet" href="./theme.css">
   <script src="./ablation.js" defer></script>
   <script src="./review-routing.js" defer></script>
 </head>
@@ -223,6 +224,7 @@
       </article>
 
       <div class="improvement-links"><a class="button button-dark" href="./demo.html">Watch the replay <span aria-hidden="true">→</span></a><a href="./next-inspect.html">Explore recorded samples →</a><a href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/UNLABELED_REVIEW_RESULTS.md">Experiment results ↗</a></div>
+      <details class="evidence-details split-audit"><summary>Check the experiment split</summary><p>Two final defect recordings repeat the fabric, speed, and lighting settings of development recordings. On the other 14 runs (2 with defects), macro frame AP is 54.8% → 84.1% for handcrafted vs DINOv2 + selection. Reference selection lowers AP from 89.0% to 84.1%; spaced review finds 12 rather than 7 of 15 new defect episodes at eight checks per run. This is a post-hoc sensitivity check.</p><a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/SETTING_DISJOINT_RESULTS.md">Setting-split audit ↗</a></details>
     </div></section>
   </main>
   <footer class="site-footer"><div class="footer-top"><a class="footer-brand" href="./index.html">SurfaceTrace</a><span>ISM × RIKU</span></div><div class="footer-bottom"><p>© 2026 Hyunsu Go · <a href="https://github.com/gohyunsu/surface-trace" target="_blank" rel="noopener noreferrer">GitHub</a></p><p>Images: <a href="https://www.vicos.si/resources/kolektorsdd/" target="_blank" rel="noopener noreferrer">KolektorSDD</a> · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a> / <a href="https://doi.org/10.6084/m9.figshare.29573381" target="_blank" rel="noopener noreferrer">TSFabrics</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a></p></div></footer>

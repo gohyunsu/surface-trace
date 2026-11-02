@@ -45,8 +45,19 @@ const routing = read("web/ablation/review-routing.json");
 const scenarioFrames = read("web/scenario/manifest.json");
 const changeFigure = read("web/ablation/change-figure.json");
 const development = read("experiments/unsupervised/results/unlabeled_review_development.json");
+const settingAudit = read("experiments/unsupervised/results/setting_disjoint_audit.json");
 const average = values => values.reduce((sum, value) => sum + value, 0) / values.length;
 const percent = value => `${(value * 100).toFixed(1)}%`;
+
+const distinct = settingAudit.different_setting_subset;
+assert.deepEqual(settingAudit.repeated_setting_runs, ["T1_S148_I108_1", "T1_S478_I118_2"]);
+assert.equal(distinct.runs.length, 14);
+assert.equal(distinct.defect_runs.length, 2);
+assert.equal(distinct.new_episodes, 15);
+assert(site.includes(`${percent(distinct.methods.handcrafted_source.macro_ap)} → ${percent(distinct.methods.source_knn.macro_ap)}`));
+assert(site.includes(`${percent(distinct.reference.all.macro_ap)} to ${percent(distinct.reference.selected.macro_ap)}`));
+assert(site.includes(`${distinct.review_episodes.spaced8} rather than ${distinct.review_episodes.top8} of ${distinct.new_episodes}`));
+assert(site.includes("SETTING_DISJOINT_RESULTS.md"));
 
 const defectRuns = Object.values(final.runs).filter(run => run.new_defect_episodes > 0);
 assert.equal(defectRuns.length, 4);

@@ -44,6 +44,11 @@ the final set is a run-disjoint test of **this locked comparison**, not a
 preregistered or untouched benchmark. The test was chosen to include every
 remaining run, avoiding selective reporting.
 
+The split is recording-disjoint but not fully production-setting-disjoint:
+two final defect recordings share texture, speed, and illumination settings
+with development recordings. The post-hoc, different-setting sensitivity
+check is reported in [SETTING_DISJOINT_RESULTS.md](SETTING_DISJOINT_RESULTS.md).
+
 ## Methods and ablations
 
 All deep variants share the same frozen DINOv2-S/14 features and input resize.

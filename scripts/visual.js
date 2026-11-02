@@ -59,6 +59,18 @@ const { chromium } = require("playwright");
           return failures;
         }) : [];
         if (decodeFailures.length) throw new Error(`${name} ${viewport.label}: image decode failed: ${decodeFailures.join(", ")}`);
+        if (name === "next-inspector") {
+          const sampleFailures = await page.locator(".stream-sample img").evaluateAll(async images => {
+            const failed = [];
+            for (const image of images) {
+              image.loading = "eager";
+              try { await image.decode(); }
+              catch { failed.push(image.src); }
+            }
+            return failed;
+          });
+          if (sampleFailures.length) throw new Error(`${name} ${viewport.label}: sample image decode failed: ${sampleFailures.join(", ")}`);
+        }
         const audit = await page.evaluate(async () => {
           const broken = () => [...document.images].filter(img => img.currentSrc && img.loading !== "lazy" && img.complete && !img.naturalWidth);
           for (const image of broken()) {
