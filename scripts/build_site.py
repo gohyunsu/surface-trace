@@ -26,7 +26,7 @@ ASSET_REF = re.compile(r'(?P<prefix>\b(?:href|src)="\./)(?P<name>[a-zA-Z0-9-]+\.
 def fingerprint_page_assets(out: Path) -> None:
     """Force browsers to fetch new CSS and JS after each Pages deployment."""
     versions = {
-        asset.name: hashlib.sha256(asset.read_bytes()).hexdigest()[:12]
+        asset.name: hashlib.sha256(asset.read_bytes().replace(b"\r\n", b"\n")).hexdigest()[:12]
         for asset in out.iterdir()
         if asset.suffix in {".css", ".js"}
     }

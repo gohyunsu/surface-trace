@@ -11,7 +11,7 @@ for (const page of fs.readdirSync(path.join(root, "docs")).filter(name => name.e
   const markup = fs.readFileSync(path.join(root, "docs", page), "utf8");
   assert(!/(?:href|src)="\.\/[a-zA-Z0-9-]+\.(?:css|js)"/.test(markup), `Unversioned asset in ${page}`);
   for (const match of markup.matchAll(/(?:href|src)="\.\/([a-zA-Z0-9-]+\.(?:css|js))\?v=([0-9a-f]{12})"/g)) {
-    const asset = fs.readFileSync(path.join(root, "docs", match[1]));
+    const asset = fs.readFileSync(path.join(root, "docs", match[1]), "utf8").replace(/\r\n/g, "\n");
     assert.equal(match[2], crypto.createHash("sha256").update(asset).digest("hex").slice(0, 12));
     versionedAssetRefs++;
   }
