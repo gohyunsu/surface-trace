@@ -18,6 +18,16 @@
 .improvement-measure strong{font-size:clamp(27px,2.4vw,34px);font-weight:500;letter-spacing:-.055em;line-height:1.1}
 .improvement-measure i{padding:0 6px;color:#9ba9c3;font-size:16px;font-style:normal}
 .improvement-measure p{margin:6px 0 0;color:#8995aa;font-size:11px}
+.reference-factorial{margin-top:29px;padding-top:17px;border-top:1px solid #d5ddeb}
+.reference-factorial>p{margin:0;color:#7786a6;font-size:10px;letter-spacing:.08em;line-height:1.45}
+.reference-factorial>span{display:block;margin-top:5px;color:#8995aa;font-size:11px}
+.reference-factorial table{width:100%;margin-top:10px;border-collapse:separate;border-spacing:5px;font-variant-numeric:tabular-nums}
+.reference-factorial th,.reference-factorial td{padding:8px 6px;text-align:center}
+.reference-factorial thead th{color:#7c89a5;font-size:10px;font-weight:400}
+.reference-factorial th:first-child{text-align:left;padding-left:0}
+.reference-factorial tbody th{color:#586885;font-size:11px;font-weight:400;white-space:nowrap}
+.reference-factorial td{min-width:60px;border:1px solid #dce3ef;border-radius:5px;background:#eef1f8;color:#3b4e74;font-size:20px;font-weight:500}
+.reference-factorial td.is-current{border-color:#8abbb3;background:#e0efeb;color:#22746e}
 .improvement-display{min-width:0}
 .ablation-gallery{background:#fff;border:1px solid #dce2ee;border-radius:8px}
 .ablation-gallery-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:15px}
@@ -77,8 +87,8 @@
 .reference-audit-head>div{display:flex;gap:13px;letter-spacing:0}
 .reference-audit-head>div span{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
 .reference-audit-head i{width:8px;height:8px;border-radius:2px}
-.reference-audit .is-all{background:#d88c88}
-.reference-audit .is-selected{background:#64afa3}
+.reference-audit .is-all{background:#929db4}
+.reference-audit .is-selected{background:#627bb1}
 .reference-audit-row{padding:9px 0;border-top:1px solid #edf0f6;font-variant-numeric:tabular-nums}
 .reference-audit-row>div:first-child{display:flex;justify-content:space-between;align-items:baseline;gap:10px;color:#64718a;font-size:10px}
 .reference-audit-row strong{color:#35496d;font-size:13px;font-weight:500;white-space:nowrap}
@@ -189,6 +199,7 @@
   .improvement-copy h3{font-size:32px}
   .improvement-copy>p:not(.improvement-kicker,.improvement-input){font-size:13px}
   .improvement-measure{margin-top:23px}
+  .reference-factorial{margin-top:23px}
   .improvement .ablation-gallery,.reference-display,.change-display,.review-display{padding:16px}
   .run-ap-panel{padding:15px 16px}
   .ablation-gallery-head{display:block}

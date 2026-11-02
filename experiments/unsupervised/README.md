@@ -27,6 +27,11 @@ normal-frame alerts in 15/16 extended runs and raised eight-review episode
 yield from 19 to 26, while reducing defect-frame flags from 851 to 313 at
 each bank's separately calibrated source threshold. The site presents both
 the benefit and the detection tradeoff. The active scorer is unchanged.
+The [four-cell reference × review-spacing audit](REFERENCE_REVIEW_FACTORIAL_RESULTS.md)
+crosses both choices at equal bank size and eight-check budget: all/top 8,
+all/spaced 19, selected/top 15, and selected/spaced 26 new episodes found out
+of 90. The earlier two arrows start in different cells; the full table shows
+how both choices combine from a common baseline.
 The [source-alert limit audit](SOURCE_THRESHOLD_RESULTS.md) tested five
 source-calibrated quantiles. A 97.5% candidate chosen on the five development
 runs raised defect-frame flags from 313 to 505 on the 16 follow-up runs, but

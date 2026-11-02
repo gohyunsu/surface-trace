@@ -48,13 +48,15 @@ model-training run: the last screen uses a separate fixed-budget experiment.
 
 ## Evidence and next model gate
 
-The landing page uses one-factor comparisons where possible. For the active
-frozen DINOv2 scorer, eight adjacent top-score reviews found 41.8% of new
-defect episodes on average across four defect-bearing final runs; adding the
-16-frame spacing rule found 71.1% with the same scorer and budget. DINOv2
+The landing page shows a four-cell reference-choice × review-spacing comparison.
+With the selected reference, eight highest-score reviews found 15 of 90 new
+defect episodes across four defect-bearing final runs; spacing the same eight
+requests by at least 16 frames found 26. The four-cell table distinguishes
+this from the all-startup reference comparison. DINOv2
 raised macro frame AP from 66.4% to 85.4% over handcrafted features, while
 leading on only two of four runs. These figures come from
-`results/unlabeled_review_final.json` and are checked by
+`results/unlabeled_review_final.json` and
+`results/reference_review_factorial_final.json`, and are checked by
 `scripts/audit_site_evidence.js`.
 
 The current update test shows that a candidate can remove false alerts by

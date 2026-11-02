@@ -15,6 +15,7 @@ const galleryScript = fs.readFileSync(path.join(root, "web", "ablation.js"), "ut
 const inspector = fs.readFileSync(path.join(root, "web", "next-inspector.html"), "utf8");
 const final = read("experiments/unsupervised/results/unlabeled_review_final.json");
 const referenceFinal = read("experiments/unsupervised/results/reference_selection_final_verified.json");
+const factorialFinal = read("experiments/unsupervised/results/reference_review_factorial_final.json");
 const earlier = readEarlier("experiments/unsupervised/results/tsfabrics.json");
 const feedback = read("experiments/unsupervised/results/feedback_validation_final.json");
 const siteCatalog = read("web/next-samples/catalog.json");
@@ -100,7 +101,7 @@ assert.equal(allHoldout.fp, 7);
 assert.equal(selectedHoldout.fp + selectedHoldout.tn, 1984);
 assert.equal(allHoldout.fp + allHoldout.tn, 1984);
 const referencePanel = site.match(/<article class="improvement improvement-adaptation"[\s\S]*?<\/article>/)?.[0];
-assert(referencePanel?.includes("SOURCE REFERENCE SELECTION · FINAL 16 RUNS"));
+assert(referencePanel?.includes("REFERENCE × REVIEW RULE · 16 RECORDED RUNS"));
 assert(referencePanel.includes("sample-06-all.png"));
 assert(referencePanel.includes("sample-06-current.png"));
 assert(!referencePanel.includes("sample-06-candidate.png"));
@@ -127,11 +128,16 @@ assert.equal(referenceWins, 1);
 assert.equal(referenceRuns.filter(run => run.methods.selected.fp < run.methods.all.fp).length, 15);
 assert.equal(percent(allAP), "70.3%");
 assert.equal(percent(selectedAP), "85.4%");
-assert(referencePanel.includes(`Mean frame AP: ${percent(allAP)} → ${percent(selectedAP)}; selected leads in ${referenceWins} of ${referenceDefectRuns.length} defect runs.`));
+assert.deepEqual(factorialFinal.protocol.targets, referenceFinal.protocol.targets);
+const factorialRuns = Object.values(factorialFinal.runs);
+assert.equal(factorialRuns.length, 16);
+for (const reference of ["all", "selected"]) for (const queue of ["top8", "spaced8"]) {
+  const count = factorialRuns.reduce((total, run) => total + run.methods[reference][queue].new_episodes, 0);
+  assert(referencePanel.includes(`data-reference="${reference}" data-queue="${queue}">${count}</td>`));
+}
 for (const [metric, before, after, population] of [
   ["normal", referenceCounts.allFP, referenceCounts.selectedFP, `${referenceCounts.normal.toLocaleString("en-US")} normal frames`],
   ["defect", referenceCounts.allTP, referenceCounts.selectedTP, `${referenceCounts.defect} defect frames`],
-  ["episodes", referenceCounts.allReviews, referenceCounts.selectedReviews, `${referenceCounts.episodes} new episodes`],
 ]) {
   const start = referencePanel.indexOf(`class="reference-audit-row" data-metric="${metric}"`);
   assert(start >= 0, `Missing source-reference audit row: ${metric}`);
@@ -149,8 +155,13 @@ assert(!inspector.includes("trial update on the same photo"));
 
 const coverage = queue => average(defectRuns.map(run => run.methods.source_knn.queues[queue].new_episodes / run.new_defect_episodes));
 const adjacent = coverage("top8"), spaced = coverage("spaced8");
-assert(site.includes(percent(adjacent)) && site.includes(percent(spaced)));
+assert.equal(percent(adjacent), "41.8%");
+assert.equal(percent(spaced), "71.1%");
 assert(spaced > adjacent);
+const topEpisodes = defectRuns.reduce((total, run) => total + run.methods.source_knn.queues.top8.new_episodes, 0);
+const spacedEpisodes = defectRuns.reduce((total, run) => total + run.methods.source_knn.queues.spaced8.new_episodes, 0);
+assert(site.includes(`<small>Top 8</small><strong>${topEpisodes}</strong><i aria-hidden="true">→</i><small>Spaced 8</small><strong>${spacedEpisodes}</strong>`));
+assert(site.includes(`of ${referenceCounts.episodes} episodes · same scores and eight checks per run`));
 const coverageRows = [...site.matchAll(/class="review-coverage-row" data-run="([^"]+)" style="--top:([\d.]+)%;--spaced:([\d.]+)%"/g)];
 assert.equal(coverageRows.length, defectRuns.length);
 for (const [, name, topWidth, spacedWidth] of coverageRows) {
@@ -158,8 +169,8 @@ for (const [, name, topWidth, spacedWidth] of coverageRows) {
   assert(run && run.new_defect_episodes > 0, `Unexpected review chart run: ${name}`);
   const topCount = run.methods.source_knn.queues.top8.new_episodes;
   const spacedCount = run.methods.source_knn.queues.spaced8.new_episodes;
-  assert.equal(Number(topWidth), topCount / 8 * 100);
-  assert.equal(Number(spacedWidth), spacedCount / 8 * 100);
+  assert(Math.abs(Number(topWidth) - topCount / run.new_defect_episodes * 100) < .06);
+  assert(Math.abs(Number(spacedWidth) - spacedCount / run.new_defect_episodes * 100) < .06);
   const rowStart = site.indexOf(`class="review-coverage-row" data-run="${name}"`);
   const rowEnd = site.indexOf('class="review-coverage-row"', rowStart + 1);
   const row = site.slice(rowStart, rowEnd < 0 ? undefined : rowEnd);
@@ -168,7 +179,6 @@ for (const [, name, topWidth, spacedWidth] of coverageRows) {
 }
 assert.equal(new Set(coverageRows.map(row => row[1])).size, defectRuns.length);
 assert(defectRuns.every(run => run.methods.source_knn.queues.spaced8.new_episodes > run.methods.source_knn.queues.top8.new_episodes));
-assert(site.includes("improved in all four runs"));
 const changedRuns = Object.values(final.runs).filter(run => run.operational_summary.change_alert != null).length;
 assert.equal(changedRuns, 15);
 assert(site.includes(`${changedRuns} / ${Object.keys(final.runs).length}`));
