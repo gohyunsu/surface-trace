@@ -38,6 +38,8 @@ const manifest = read("web/unlabeled-demo/manifest.json");
 const evaluation = read("web/unlabeled-demo/evaluation.json");
 const sequentialDevelopment = read("experiments/unsupervised/results/sequential_review_development.json");
 const sequentialFinal = read("experiments/unsupervised/results/sequential_review_final.json");
+const spacingDevelopment = read("experiments/unsupervised/results/review_spacing_development.json");
+const spacingFinal = read("experiments/unsupervised/results/review_spacing_final.json");
 const adaptiveFinal = read("experiments/unsupervised/results/adaptive_budget_final.json");
 const routing = read("web/ablation/review-routing.json");
 const scenarioFrames = read("web/scenario/manifest.json");
@@ -185,6 +187,26 @@ assert(site.includes(`<small>Top 8</small><strong>${topEpisodes}</strong><i aria
 assert(demo.includes(`Top 8 <strong>${topEpisodes}</strong>`) && demo.includes(`Spaced 8 <strong>${spacedEpisodes}</strong>`));
 assert(demo.includes(`Distinct new defect episodes found / ${referenceCounts.episodes}`));
 assert(site.includes(`of ${referenceCounts.episodes} episodes · same scores and eight checks per run`));
+assert(spacingDevelopment.complete && spacingFinal.complete);
+assert.deepEqual(spacingFinal.protocol.spacing_frames, [1, 4, 8, 12, 16]);
+assert.equal(Object.keys(spacingFinal.runs).length, Object.keys(final.runs).length);
+for (const [runName, run] of Object.entries(spacingFinal.runs)) {
+  assert.deepEqual(run.spacing["16"].fixed8.frames,
+    final.runs[runName].methods.source_knn.queues.spaced8.frames);
+}
+for (const spacing of spacingFinal.protocol.spacing_frames) {
+  const found = spacingFinal.summary[spacing].fixed8.episodes_found;
+  const maxFound = spacingFinal.summary["16"].fixed8.episodes_found;
+  const match = site.match(new RegExp(`class="spacing-row(?: is-current)?" data-spacing="${spacing}" data-episodes="(\\d+)" style="--extent:([\\d.]+)%"`));
+  assert(match, `Missing spacing sensitivity bar: ${spacing}`);
+  assert.equal(Number(match[1]), found);
+  assert(Math.abs(Number(match[2]) - found / maxFound * 100) < .06);
+  assert.equal(spacingFinal.summary[spacing].fixed8.requests, 128);
+}
+assert.equal(spacingDevelopment.summary["12"].fixed8.episodes_found, 20);
+assert.equal(spacingDevelopment.summary["16"].fixed8.episodes_found, 20);
+assert.equal(spacingFinal.summary["12"].fixed8.episodes_found, 26);
+assert.equal(spacingFinal.summary["16"].fixed8.episodes_found, 26);
 const coverageRows = [...site.matchAll(/class="review-coverage-row" data-run="([^"]+)" style="--top:([\d.]+)%;--spaced:([\d.]+)%"/g)];
 assert.equal(coverageRows.length, defectRuns.length);
 for (const [, name, topWidth, spacedWidth] of coverageRows) {

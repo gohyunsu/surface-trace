@@ -45,6 +45,11 @@ If discussion continues, open `interval.html` to show the actual interval
 summary and individual review cards. The review outcomes there remain hidden
 until a card is checked. Do not describe the five screens as one continuous
 model-training run: the last screen uses a separate fixed-budget experiment.
+If asked why reviews are 16 frames apart, open **Spacing sensitivity** in the
+landing page's review section. The five equal-budget settings found 15, 24,
+25, 26, and 26 of 90 new episodes across the final runs; 12 and 16 frames
+also tied on development. This is a robustness check on review scheduling,
+not a change to the detector.
 
 ## Evidence and next model gate
 

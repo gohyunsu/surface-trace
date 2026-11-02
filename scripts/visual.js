@@ -30,7 +30,7 @@ const { chromium } = require("playwright");
           : [["landing", ""], ...(viewport.label === "desktop" ? [["inspector", "inspect.html?sample=1"]] : []), ["demo", "demo.html"], ["next-inspector", "next-inspect.html?sample=7"], ["interval", "interval.html"], ["review", "review.html"]];
       for (const [name, suffix] of pages) {
         await page.goto(new URL(suffix, base).href, { waitUntil: "networkidle" });
-        if (name === "landing") await page.waitForFunction(() => document.querySelector("#reviewRouting").dataset.ready === "true");
+        if (name === "landing") await page.waitForFunction(() => document.querySelector("#reviewRouting").dataset.ready === "true", null, { timeout: 60000 });
         if (name === "inspector" && viewport.label === "desktop") await page.waitForFunction(() => document.querySelector("#score").textContent !== "—", null, { timeout: 60000 });
         if (name === "inspector") await page.waitForFunction(() => document.querySelector("#sourceImage").naturalWidth > 0, null, { timeout: 60000 });
         if (name === "next-inspector") await page.waitForFunction(() => document.querySelector("#streamScore").textContent !== "—");
@@ -75,6 +75,9 @@ const { chromium } = require("playwright");
           for (const section of ["feedback", "foundation", "change", "review", "handoff", "reference"]) {
             await page.locator(`#${section}`).screenshot({ path: path.join(out, `${section}-${viewport.label}.png`) });
           }
+          await page.locator("#review .spacing-details summary").click();
+          await page.locator("#review").screenshot({ path: path.join(out, `review-spacing-${viewport.label}.png`) });
+          if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)) throw new Error(`review spacing ${viewport.label}: horizontal overflow`);
         } else if (name === "interval") {
           await page.locator(".request-card").first().getByRole("button", { name: "Show heatmap" }).click();
           await page.locator(".request-card").first().screenshot({ path: path.join(out, `interval-heat-${viewport.label}.png`) });

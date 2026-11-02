@@ -32,6 +32,10 @@ crosses both choices at equal bank size and eight-check budget: all/top 8,
 all/spaced 19, selected/top 15, and selected/spaced 26 new episodes found out
 of 90. The earlier two arrows start in different cells; the full table shows
 how both choices combine from a common baseline.
+The [review-spacing sensitivity audit](REVIEW_SPACING_RESULTS.md) reruns the
+same frozen source score with minimum gaps of 1, 4, 8, 12, and 16 frames.
+The 12- and 16-frame rules tied at 20/43 development and 26/90 final new
+episodes; the existing 16-frame queue remains active.
 The [full source-continuation audit](SOURCE_CONTINUATION_FULL_RESULTS.md) extends
 the visual-change negative control from 1,984 to 16,518 later frames in the
 same recorded scenario. None of its 513 score windows crosses the frozen MMD
