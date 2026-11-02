@@ -142,17 +142,24 @@
           <p class="improvement-kicker">REFERENCE CHOICE + UPDATE</p>
           <p class="improvement-input">A new appearance can trigger false alerts</p>
           <h3 id="reference-title">Choose the reference. Test updates.</h3>
-          <p>We selected source-run startup frames without labels. Separately, we tested an update using reviewed normal patches.</p>
-          <div class="improvement-measure"><span>SOURCE REFERENCE SELECTION · DEVELOPMENT NORMAL RUN</span><div><small>All frames</small><strong>971</strong><i aria-hidden="true">→</i><small>Selected</small><strong>11</strong></div><p>False alerts / 975 normal frames</p><p>Source holdout: 7 → 20 false alerts / 1,984 normal frames.</p></div>
+          <p>We selected less unusual startup photos without labels. False alerts fell in 15 of 16 runs and eight-check discovery improved, but fewer defect frames crossed the source-calibrated alert limit. A separate reviewed-photo update remained on hold.</p>
+          <div class="improvement-measure"><span>SOURCE REFERENCE SELECTION · FINAL 16 RUNS</span><div><small>All startup</small><strong>19</strong><i aria-hidden="true">→</i><small>Selected</small><strong>26</strong></div><p>New defect episodes found in eight checks / 90</p><p>Mean frame AP: 70.3% → 85.4%; selected leads in 1 of 4 defect runs.</p></div>
         </div>
         <div class="improvement-display reference-display">
+          <p class="reference-example-label">DEVELOPMENT EXAMPLE · ONE NORMAL PHOTO</p>
           <div class="reference-maps">
             <figure><div class="reference-map"><img src="./next-samples/sample-06.jpg" alt="Normal textile frame from a changed run" loading="lazy"></div><figcaption>Recorded photo</figcaption></figure>
             <figure><div class="reference-map"><img src="./next-samples/sample-06.jpg" alt="" loading="lazy"><img src="./ablation/sample-06-all.png" alt="False alert heatmap with an all-frame DINOv2 reference" loading="lazy"></div><figcaption>All startup frames <span>Flagged</span></figcaption></figure>
             <figure><div class="reference-map"><img src="./next-samples/sample-06.jpg" alt="" loading="lazy"><img src="./next-samples/sample-06-current.png" alt="Heatmap with a selected DINOv2 reference" loading="lazy"></div><figcaption>Selected frames <span>Clear</span></figcaption></figure>
           </div>
-          <div class="reference-bars" aria-label="False alerts on the same 975 normal frames"><div><span>All frames</span><div class="bar-track"><i style="width:99.6%"></i></div><strong>971</strong></div><div><span>Selected</span><div class="bar-track"><i style="width:1.2%"></i></div><strong>11</strong></div></div>
-          <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/EXPERIMENT_RESULTS.md">Three-run comparison ↗</a>
+          <div class="reference-audit" aria-label="Reference selection comparison across 16 recorded runs">
+            <div class="reference-audit-head"><span>FINAL 16 RUNS · EQUAL-SIZE BANKS</span><div><span><i class="is-all"></i>All startup</span><span><i class="is-selected"></i>Selected</span></div></div>
+            <div class="reference-audit-row" data-metric="normal"><div><span>Normal frames flagged</span><strong>19,153 <i>→</i> 1,449</strong></div><div class="reference-audit-pair" aria-hidden="true"><span><i class="is-all" style="width:100%"></i></span><span><i class="is-selected" style="width:7.6%"></i></span></div><small>/ 26,088 normal frames</small></div>
+            <div class="reference-audit-row" data-metric="defect"><div><span>Defect frames flagged</span><strong>851 <i>→</i> 313</strong></div><div class="reference-audit-pair" aria-hidden="true"><span><i class="is-all" style="width:100%"></i></span><span><i class="is-selected" style="width:36.8%"></i></span></div><small>/ 883 defect frames</small></div>
+            <div class="reference-audit-row" data-metric="episodes"><div><span>New episodes in eight checks</span><strong>19 <i>→</i> 26</strong></div><div class="reference-audit-pair" aria-hidden="true"><span><i class="is-all" style="width:73.1%"></i></span><span><i class="is-selected" style="width:100%"></i></span></div><small>/ 90 new episodes</small></div>
+            <p class="reference-audit-note">Each bank has its own source-calibrated alert limit.</p>
+          </div>
+          <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/REFERENCE_SELECTION_RESULTS_VERIFIED.md">Full reference audit ↗</a>
         </div>
         <div class="adaptation-outcome">
           <div><span>REVIEWED-PATCH ADDITION · 15 RUNS</span><strong>Keep the frozen reference.</strong><p>Adding reviewed normal patches removed false alerts but also hid defects on later frames.</p></div>

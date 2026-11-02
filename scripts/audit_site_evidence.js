@@ -14,6 +14,7 @@ const demoScript = fs.readFileSync(path.join(root, "web", "demo.js"), "utf8");
 const galleryScript = fs.readFileSync(path.join(root, "web", "ablation.js"), "utf8");
 const inspector = fs.readFileSync(path.join(root, "web", "next-inspector.html"), "utf8");
 const final = read("experiments/unsupervised/results/unlabeled_review_final.json");
+const referenceFinal = read("experiments/unsupervised/results/reference_selection_final_verified.json");
 const earlier = readEarlier("experiments/unsupervised/results/tsfabrics.json");
 const feedback = read("experiments/unsupervised/results/feedback_validation_final.json");
 const siteCatalog = read("web/next-samples/catalog.json");
@@ -98,12 +99,51 @@ assert.equal(selectedHoldout.fp, 20);
 assert.equal(allHoldout.fp, 7);
 assert.equal(selectedHoldout.fp + selectedHoldout.tn, 1984);
 assert.equal(allHoldout.fp + allHoldout.tn, 1984);
-assert(site.includes("Source holdout: 7 → 20 false alerts / 1,984 normal frames."));
 const referencePanel = site.match(/<article class="improvement improvement-adaptation"[\s\S]*?<\/article>/)?.[0];
-assert(referencePanel?.includes("SOURCE REFERENCE SELECTION · DEVELOPMENT NORMAL RUN"));
+assert(referencePanel?.includes("SOURCE REFERENCE SELECTION · FINAL 16 RUNS"));
 assert(referencePanel.includes("sample-06-all.png"));
 assert(referencePanel.includes("sample-06-current.png"));
 assert(!referencePanel.includes("sample-06-candidate.png"));
+assert(referencePanel.includes("DEVELOPMENT EXAMPLE · ONE NORMAL PHOTO"));
+assert.deepEqual(referenceFinal.protocol.targets, final.protocol.targets);
+assert.equal(referenceFinal.protocol.equal_bank_vectors, referenceFinal.source.bank_vectors);
+const referenceRuns = Object.values(referenceFinal.runs);
+assert.equal(referenceRuns.length, 16);
+const referenceDefectRuns = referenceRuns.filter(run => run.methods.selected.defect_frames > 0);
+const referenceAP = method => average(referenceDefectRuns.map(run => run.methods[method].average_precision));
+const selectedAP = referenceAP("selected"), allAP = referenceAP("all");
+const referenceWins = referenceDefectRuns.filter(run => run.methods.selected.average_precision > run.methods.all.average_precision).length;
+const referenceSum = (method, field) => referenceRuns.reduce((value, run) => value + run.methods[method][field], 0);
+const referenceCounts = {
+  normal: referenceSum("selected", "normal_frames"), defect: referenceSum("selected", "defect_frames"),
+  allFP: referenceSum("all", "fp"), selectedFP: referenceSum("selected", "fp"),
+  allTP: referenceSum("all", "tp"), selectedTP: referenceSum("selected", "tp"),
+  allReviews: referenceSum("all", "review_episodes"), selectedReviews: referenceSum("selected", "review_episodes"),
+  episodes: referenceSum("selected", "new_episodes"),
+};
+assert.deepEqual(referenceCounts, { normal: 26088, defect: 883, allFP: 19153, selectedFP: 1449,
+  allTP: 851, selectedTP: 313, allReviews: 19, selectedReviews: 26, episodes: 90 });
+assert.equal(referenceWins, 1);
+assert.equal(referenceRuns.filter(run => run.methods.selected.fp < run.methods.all.fp).length, 15);
+assert.equal(percent(allAP), "70.3%");
+assert.equal(percent(selectedAP), "85.4%");
+assert(referencePanel.includes(`Mean frame AP: ${percent(allAP)} → ${percent(selectedAP)}; selected leads in ${referenceWins} of ${referenceDefectRuns.length} defect runs.`));
+for (const [metric, before, after, population] of [
+  ["normal", referenceCounts.allFP, referenceCounts.selectedFP, `${referenceCounts.normal.toLocaleString("en-US")} normal frames`],
+  ["defect", referenceCounts.allTP, referenceCounts.selectedTP, `${referenceCounts.defect} defect frames`],
+  ["episodes", referenceCounts.allReviews, referenceCounts.selectedReviews, `${referenceCounts.episodes} new episodes`],
+]) {
+  const start = referencePanel.indexOf(`class="reference-audit-row" data-metric="${metric}"`);
+  assert(start >= 0, `Missing source-reference audit row: ${metric}`);
+  const row = referencePanel.slice(start, referencePanel.indexOf("</small></div>", start) + 14);
+  assert(row.includes(`${before.toLocaleString("en-US")} <i>→</i> ${after.toLocaleString("en-US")}`));
+  assert(row.includes(`/ ${population}`));
+  const widths = [...row.matchAll(/style="width:([\d.]+)%"/g)].map(match => Number(match[1]));
+  assert.equal(widths.length, 2);
+  assert(Math.abs(widths[0] - before / Math.max(before, after) * 100) < .06);
+  assert(Math.abs(widths[1] - after / Math.max(before, after) * 100) < .06);
+}
+assert(referencePanel.includes("REFERENCE_SELECTION_RESULTS_VERIFIED.md"));
 assert(inspector.includes("Frozen DINOv2") && inspector.includes("Run-local trial"));
 assert(!inspector.includes("trial update on the same photo"));
 
@@ -260,6 +300,7 @@ assert(site.includes("12 stopped at 2") && site.includes("4 continued to 8"));
 assert(site.includes("26 / 90 in both"));
 
 console.log(JSON.stringify({ handcraftedAP: percent(handcraftedAP), frozenAP: percent(frozenAP), wins,
+  referenceCounts, referenceAP: [percent(allAP), percent(selectedAP)], referenceWins,
   adjacentCoverage: percent(adjacent), spacedCoverage: percent(spaced), changedRuns,
   feedbackRuns: selected.length, counts, replayFrames: manifest.frame_count, reviewRequests: manifest.review.length,
   sequentialRequests: [sequentialFinal.summary.methods.fixed8.requests, sequentialFinal.summary.methods.pilot2.requests] }));

@@ -20,9 +20,13 @@ score complements frozen DINOv2 in the same eight-review queue. A 75/25 rank
 mix gained on development runs but lost AP and two discovered episodes on the
 sixteen final runs, so the frozen DINOv2 queue also remains active.
 The [source-reference selection audit](REFERENCE_SELECTION_AUDIT.md) extends the
-equal-capacity all-startup-versus-selected comparison to every recorded run.
-It is a retrospective validation of the existing reference choice, with no
-change to the active scorer or site until the full results are checked.
+equal-capacity all-startup-versus-selected comparison to every recorded run;
+the per-run [verified results](REFERENCE_SELECTION_RESULTS_VERIFIED.md) cover
+five development and sixteen extended-evaluation runs. Selection reduced
+normal-frame alerts in 15/16 extended runs and raised eight-review episode
+yield from 19 to 26, while reducing defect-frame flags from 851 to 313 at
+each bank's separately calibrated source threshold. The site presents both
+the benefit and the detection tradeoff. The active scorer is unchanged.
 
 This directory is independent of the KolektorSDD browser prototype. Curated
 TSFabrics outputs from this experiment appear on the published site; the site
