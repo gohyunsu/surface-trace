@@ -72,6 +72,15 @@ Startup reference frames labeled defective in the offline audit: selected 0, tim
 | Source + local rank | 70.7% | 25/90 | 83.7% | 101 |
 | Source + local PCA rank | 71.1% | 26/90 | 83.9% | 101 |
 
+The frozen DINO source exceeds the handcrafted source by **19.0 percentage
+points in macro frame AP**, but wins on only two of the four defect-bearing
+runs. The paired run differences are −8.1, −12.7, +25.4, and +71.3 points.
+Enumerating all `4⁴ = 256` four-run bootstrap resamples with replacement gives
+a descriptive 95% percentile interval of **−10.4 to +51.4 points** for the
+mean difference. The few reused recordings and shared acquisition settings
+make this interval unsuitable as a field-performance guarantee. The site
+therefore shows the four paired run results alongside the macro figure.
+
 ### Fixed review budget, different queue rules
 
 | Queue on selected scorer | Macro episode coverage @8 | Defect reviews | Normal reviews |
