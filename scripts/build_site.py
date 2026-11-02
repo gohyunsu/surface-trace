@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import json
+import hashlib
+import re
 import shutil
 import sys
 import tempfile
@@ -18,6 +20,26 @@ from sample_catalog import test_rows  # noqa: E402
 
 WEB = ROOT / "web"
 OUT = ROOT / "docs"
+ASSET_REF = re.compile(r'(?P<prefix>\b(?:href|src)="\./)(?P<name>[a-zA-Z0-9-]+\.(?:css|js))(?P<suffix>")')
+
+
+def fingerprint_page_assets(out: Path) -> None:
+    """Force browsers to fetch new CSS and JS after each Pages deployment."""
+    versions = {
+        asset.name: hashlib.sha256(asset.read_bytes()).hexdigest()[:12]
+        for asset in out.iterdir()
+        if asset.suffix in {".css", ".js"}
+    }
+    for page in out.glob("*.html"):
+        markup = page.read_text(encoding="utf-8")
+
+        def version_ref(match: re.Match[str]) -> str:
+            name = match.group("name")
+            if name not in versions:
+                raise SystemExit(f"Missing page asset: {name}")
+            return f'{match.group("prefix")}{name}?v={versions[name]}{match.group("suffix")}'
+
+        page.write_text(ASSET_REF.sub(version_ref, markup), encoding="utf-8")
 
 
 def build(out: Path) -> tuple[int, int]:
@@ -106,6 +128,7 @@ def build(out: Path) -> tuple[int, int]:
     (out / "samples.json").write_text(json.dumps(catalog, separators=(",", ":")), encoding="utf-8")
     for sample in ("01", "04"):
         shutil.copyfile(WEB / "demo_assets" / f"sample-{sample}-heat.png", out / "samples" / f"sample-{sample}-heat.png")
+    fingerprint_page_assets(out)
     return len(payload["bank"]), len(samples)
 
 

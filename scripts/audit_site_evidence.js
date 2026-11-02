@@ -1,10 +1,22 @@
 "use strict";
 
 const assert = require("node:assert/strict");
+const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 
 const root = path.resolve(__dirname, "..");
+let versionedAssetRefs = 0;
+for (const page of fs.readdirSync(path.join(root, "docs")).filter(name => name.endsWith(".html"))) {
+  const markup = fs.readFileSync(path.join(root, "docs", page), "utf8");
+  assert(!/(?:href|src)="\.\/[a-zA-Z0-9-]+\.(?:css|js)"/.test(markup), `Unversioned asset in ${page}`);
+  for (const match of markup.matchAll(/(?:href|src)="\.\/([a-zA-Z0-9-]+\.(?:css|js))\?v=([0-9a-f]{12})"/g)) {
+    const asset = fs.readFileSync(path.join(root, "docs", match[1]));
+    assert.equal(match[2], crypto.createHash("sha256").update(asset).digest("hex").slice(0, 12));
+    versionedAssetRefs++;
+  }
+}
+assert(versionedAssetRefs >= 10);
 const read = name => JSON.parse(fs.readFileSync(path.join(root, name), "utf8"));
 // The earlier Python experiment contains bare NaN values in unrelated recall fields.
 const readEarlier = name => JSON.parse(fs.readFileSync(path.join(root, name), "utf8").replace(/\bNaN\b|-?\bInfinity\b/g, "null"));
