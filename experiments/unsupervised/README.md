@@ -8,6 +8,10 @@ The latest label-free ranking and limited-review benchmark is documented in
 [UNLABELED_REVIEW_PROTOCOL.md](UNLABELED_REVIEW_PROTOCOL.md), with all-run
 [results](UNLABELED_REVIEW_RESULTS.md). Its fixed-run site replay is generated
 by `export_unlabeled_demo.py`.
+An [audit-only score-distribution export](SCORE_DISTRIBUTION_PROTOCOL.md) is
+prepared for all frames in the four final defect recordings. Its figure is
+withheld until recomputed AP and AUROC match the saved comparison; the curated
+photo gallery is not used as a distribution sample.
 The subsequent fixed eight-review update test is documented in
 [FEEDBACK_VALIDATION_PROTOCOL.md](FEEDBACK_VALIDATION_PROTOCOL.md) and
 [FEEDBACK_VALIDATION_RESULTS.md](FEEDBACK_VALIDATION_RESULTS.md). On 15 eligible
