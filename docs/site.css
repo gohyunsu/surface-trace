@@ -202,3 +202,36 @@ h1,h2,h3,h4{font-weight:500}
 @media(max-width:1000px){.landing-page .hero-team{margin-top:34px}}
 @media(max-width:700px){.main-nav{font-size:12px}.landing-page .hero-team{margin-top:31px;font-size:12px}.landing-page .demo-summary{font-size:11px}.method-card-copy{min-height:0;padding:16px 18px 18px}.method-card-copy h3{font-size:17px}.method-card-copy p{font-size:12.5px}.evaluation-metrics small{font-size:11px}.inspector-page .samples-section .sample-name{font-size:11px}.inspector-page .samples-section .sample-truth{font-size:10px}}
 @media(max-width:380px){.landing-page .hero-actions{row-gap:14px}.landing-page .section-heading{display:block}.landing-page .section-heading h2{font-size:29px;white-space:nowrap}.landing-page .section-link{display:inline-block;max-width:none;margin-top:12px;padding-bottom:0}.inspector-page .image-card .viewer-foot{display:grid;justify-content:start;gap:9px}.inspector-page .samples-section .inspect-card-head{flex-direction:column;align-items:flex-start;gap:9px}.inspector-page .samples-section .inspect-card-head h2{white-space:nowrap}}
+
+/* Shared visual system: quiet surfaces, strong type, and useful focus states. */
+:root{font-family:"Segoe UI Variable","Segoe UI",Inter,Arial,sans-serif;color:#232d46;background:#f6f7fb}
+html{scroll-padding-top:82px}
+.site-header{position:sticky;top:0;z-index:50;height:76px;background:#171d30f2;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom-color:#ffffff24}
+.logo{font-size:19px;letter-spacing:-.055em}
+.logo-mark{border-radius:10px}
+.main-nav{gap:clamp(17px,2.3vw,34px)}
+.main-nav a{transition:color .2s ease}
+.main-nav a:hover{text-decoration:none;color:#fff}
+.main-nav a:focus-visible,.logo:focus-visible,.button:focus-visible,.text-link:focus-visible{outline:2px solid #b9c5ff;outline-offset:5px}
+button:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #697ec7;outline-offset:3px}
+.main-nav .nav-current{color:#fff}
+.button{border-radius:9px;transition:transform .2s ease,background .2s ease,box-shadow .2s ease}
+.button-dark{box-shadow:0 8px 20px #28396624}
+.button-dark:hover{box-shadow:0 12px 25px #28396630}
+.section-kicker,.eyebrow{letter-spacing:.17em}
+.inspect-card{border-radius:13px;box-shadow:0 14px 40px #2534510a}
+.sample{border-radius:8px}
+.sample:hover,.sample:focus-visible{box-shadow:0 8px 20px #26365c14}
+.site-footer{background:#171d30}
+.footer-top{padding-bottom:22px}
+.footer-bottom{padding-top:18px}
+@media(max-width:700px){
+  html{scroll-padding-top:0}
+  .site-header,.site-header.inspect-header{position:relative;height:auto;min-height:0;display:grid;grid-template-columns:minmax(0,1fr);gap:11px;padding:14px 20px 0}
+  .main-nav{display:flex;width:100%;min-width:0;gap:22px;overflow-x:auto;scrollbar-width:none;border-top:1px solid #ffffff24;white-space:nowrap;font-size:12px}
+  .main-nav::-webkit-scrollbar{display:none}
+  .main-nav a,.main-nav .nav-current{flex:none;padding:11px 0 12px}
+  .main-nav>a:not(.nav-cta),.inspect-header .main-nav>a:not(.nav-cta){display:inline-flex}
+  .main-nav .nav-current{display:inline-flex;border-bottom:2px solid #b9c5ff}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.button,.main-nav a,.sample{transition:none}}

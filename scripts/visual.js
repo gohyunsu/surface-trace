@@ -36,6 +36,11 @@ const { chromium } = require("playwright");
         if (name === "next-inspector") await page.waitForFunction(() => document.querySelector("#streamScore").textContent !== "—");
         if (name === "interval") await page.waitForFunction(() => document.querySelector(".request-card") !== null);
         if (name === "demo") await page.waitForFunction(() => document.querySelector("#demoScoreChart polyline") !== null);
+        if (viewport.width <= 700) {
+          const current = page.locator('.main-nav [aria-current="page"]');
+          if (await current.count() && !(await current.isVisible())) throw new Error(`${name} ${viewport.label}: current navigation item is hidden`);
+          if (name === "landing" && await page.locator('.main-nav a[href="#feedback"]').isVisible() === false) throw new Error(`${name} ${viewport.label}: feedback navigation is hidden`);
+        }
         const imageSelector = name === "landing"
           ? ".pipeline-hero-motion img, .method-animation img, .feedback-photo img, .ablation-gallery img, .reference-maps img, .change-frames img, .change-graph img"
           : name === "demo" ? ".feature-pair img"
@@ -54,10 +59,17 @@ const { chromium } = require("playwright");
           return failures;
         }) : [];
         if (decodeFailures.length) throw new Error(`${name} ${viewport.label}: image decode failed: ${decodeFailures.join(", ")}`);
-        const audit = await page.evaluate(() => ({
-          overflow: document.documentElement.scrollWidth > innerWidth + 1,
-          brokenImages: [...document.images].filter(img => img.currentSrc && img.loading !== "lazy" && img.complete && !img.naturalWidth).map(img => img.src),
-        }));
+        const audit = await page.evaluate(async () => {
+          const broken = () => [...document.images].filter(img => img.currentSrc && img.loading !== "lazy" && img.complete && !img.naturalWidth);
+          for (const image of broken()) {
+            image.src = image.currentSrc;
+            try { await image.decode(); } catch { /* A missing or corrupt asset remains broken. */ }
+          }
+          return {
+            overflow: document.documentElement.scrollWidth > innerWidth + 1,
+            brokenImages: broken().map(img => img.src),
+          };
+        });
         await page.screenshot({ path: path.join(out, `${name}-${viewport.label}.png`), fullPage: true });
         if (name === "landing") {
           for (const section of ["feedback", "foundation", "change", "review", "handoff", "reference"]) {

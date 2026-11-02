@@ -325,6 +325,14 @@ const { chromium } = require("playwright");
     await page.getByRole("button", { name: "Check remaining" }).click();
     await page.getByRole("button", { name: "Compare results" }).click();
     assert((await page.locator("#reviewConclusion").textContent()).includes("No confirmed false alerts"));
+    const mobile = await browser.newPage({ viewport: { width: 390, height: 844 } });
+    for (const route of ["inspect.html", "next-inspect.html", "interval.html", "review.html"]) {
+      await mobile.goto(new URL(route, base).href, { waitUntil: "domcontentloaded" });
+      await mobile.locator('.main-nav [aria-current="page"]').waitFor({ state: "visible" });
+    }
+    await mobile.goto(base, { waitUntil: "domcontentloaded" });
+    assert(await mobile.locator('.main-nav a[href="#feedback"]').isVisible());
+    await mobile.close();
     assert.deepStrictEqual(errors, []);
     console.log(JSON.stringify({ baselineSamples: 64, newSamples: 24, pairedFrames: 16, candidateMiss: true, pageErrors: errors }));
   } finally {

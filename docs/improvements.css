@@ -305,3 +305,27 @@
   .change-frames>div{gap:3px}
   .adaptation-outcome .decision-metrics strong{font-size:18px}
 }
+
+/* Keep the tested changes visually connected without crowding the evidence. */
+.improvement{gap:clamp(30px,4.4vw,66px);padding:68px 0;border-top-color:#cfd8e8}
+.improvement-kicker{margin-bottom:18px;color:#536aa4;font-size:11px;letter-spacing:.14em}
+.improvement-input{padding:6px 10px;margin-bottom:16px;border:1px solid #e8d6c8;border-radius:999px;background:#fff4ed;color:#93664e;font-size:11px}
+.improvement-input:before{display:none}
+.improvement-copy h3{font-size:clamp(30px,2.85vw,42px);line-height:1.1}
+.improvement-copy>p:not(.improvement-kicker,.improvement-input){font-size:15px;line-height:1.65}
+.improvement-measure{margin-top:26px}
+.improvement-measure>span{font-size:11px}
+.improvement-measure p{font-size:12px;line-height:1.5}
+.improvement .ablation-gallery,.run-ap-panel,.reference-display,.change-display,.review-display,.handoff-display{border-radius:14px;box-shadow:0 15px 38px #2534510d}
+.evidence-details summary,.evidence-link{font-size:12px}
+.run-ap-row{font-size:11px}
+.run-ap-row strong{font-size:12px}
+.run-ap-panel .evidence-details p{font-size:11px}
+@media(max-width:700px){
+  .improvement{gap:24px;padding:48px 0}
+  .improvement:first-of-type{padding-top:20px}
+  .improvement-copy h3{font-size:clamp(30px,8vw,36px)}
+  .improvement-copy>p:not(.improvement-kicker,.improvement-input){font-size:14px}
+  .improvement-measure>span{font-size:10px}
+  .improvement-measure p{font-size:11px}
+}
