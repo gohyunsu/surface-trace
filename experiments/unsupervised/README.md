@@ -47,6 +47,12 @@ sixteen known extended run joins versus fifteen for DINOv2, but crosses its
 own source-calibrated limit on 336/513 later windows of the same source
 recording versus zero for DINOv2. DINOv2 remains the current change signal;
 the result shows a sensitivity versus same-recording stability tradeoff.
+The [fixed lower-limit trial](CHANGE_LIMIT_RESULTS.md) changes only the
+DINOv2 MMD limit to 75% of its source value, chosen on a missed development
+join. It alerts on 16/16 extended joins with the same 96-frame median delay
+and no confirmed alert on the long source continuation, although two
+isolated windows cross the lower limit. It is shown separately from the
+current 15/16 source-calibrated result pending broader stable-run controls.
 The [source-alert limit audit](SOURCE_THRESHOLD_RESULTS.md) tested five
 source-calibrated quantiles. A 97.5% candidate chosen on the five development
 runs raised defect-frame flags from 313 to 505 on the 16 follow-up runs, but

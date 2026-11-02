@@ -24,7 +24,7 @@
       <div class="hero-copy">
         <p class="eyebrow"><span class="eyebrow-line"></span> TWO INSPECTION APPROACHES</p>
         <h1>Find unusual areas.<br><em>Track change.</em></h1>
-        <p class="hero-description">A single-photo baseline and a change-aware experiment on production streams.</p>
+        <p class="hero-description">From a single-photo baseline to change-aware inspection of recorded runs.</p>
         <a class="text-link hero-scroll" href="#baseline">Explore the project ↓</a>
       </div>
       <picture class="pipeline-hero-motion">
@@ -34,7 +34,7 @@
     </div></section>
 
     <section class="method-section baseline-section" id="baseline"><div class="section method-inner">
-      <div class="method-heading"><div><p class="section-kicker">01 / WORKING MVP</p><h2>Compare with normal.</h2></div></div>
+      <div class="method-heading"><div><p class="section-kicker">01 / BASELINE MVP</p><h2>Compare with normal.</h2></div></div>
       <div class="dataset-note"><span>KolektorSDD</span><p>Labeled photos of cracks in the plastic embedding of electrical commutators.</p></div>
       <div class="method-animation-grid">
         <article class="method-card"><div class="method-animation"><img src="./method/01.gif" alt="" loading="lazy"></div><div class="method-card-copy"><span>01</span><div><h3>Build the reference</h3><p>Collect normal patches.</p></div></div></article>
@@ -110,10 +110,12 @@
           <figure class="change-graph"><picture><source media="(max-width:700px)" srcset="./ablation/change-figure-mobile.svg"><img src="./ablation/change-figure.svg" alt="Global-feature change scores stay low on the reference run and cross the alert limit after the switch, with a sustained alert at target frame 192" width="600" height="238" loading="lazy"></picture><figcaption>Development example · alert at new-run frame 192.</figcaption></figure>
           <details class="evidence-details"><summary>Compare change signals</summary><div class="change-control" aria-label="Visual-change comparison with a brightness histogram">
             <div class="change-control-head"><span>CHANGE SIGNAL</span><span>KNOWN SWITCHES <small>/ 16 runs</small></span><span>SAME RECORDING <small>/ 513 windows above limit</small></span></div>
+            <div class="change-control-row is-dino"><span>DINOv2 · current</span><strong>15 / 16</strong><div><i style="--extent:0%" aria-hidden="true"></i><strong>0 / 513</strong></div></div>
+            <div class="change-control-row is-trial"><span>DINOv2 · lower limit trial</span><strong>16 / 16</strong><div><i style="--extent:0.4%" aria-hidden="true"></i><strong>2 / 513</strong></div></div>
             <div class="change-control-row"><span>Brightness histogram</span><strong>16 / 16</strong><div><i style="--extent:65.5%" aria-hidden="true"></i><strong>336 / 513</strong></div></div>
-            <div class="change-control-row is-dino"><span>DINOv2</span><strong>15 / 16</strong><div><i style="--extent:0%" aria-hidden="true"></i><strong>0 / 513</strong></div></div>
           </div>
-          <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/CHANGE_REPRESENTATION_RESULTS.md">Change-signal results ↗</a></details>
+          <p class="change-control-note">The lower-limit trial caught one more known switch. Its two source windows were isolated, with no confirmed alert on that recording.</p>
+          <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/CHANGE_REPRESENTATION_RESULTS.md">Change-signal results ↗</a><a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/CHANGE_LIMIT_RESULTS.md">Lower-limit trial ↗</a></details>
           <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/SOURCE_CONTINUATION_FULL_RESULTS.md">Full source-run audit ↗</a>
         </div>
       </article>

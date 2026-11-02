@@ -30,6 +30,8 @@ const referenceFinal = read("experiments/unsupervised/results/reference_selectio
 const factorialFinal = read("experiments/unsupervised/results/reference_review_factorial_final.json");
 const fullContinuation = read("experiments/unsupervised/results/source_continuation_full.json");
 const changeControl = read("experiments/unsupervised/results/change_representation_audit.json");
+const changeTrialDevelopment = read("experiments/unsupervised/results/change_limit_development.json");
+const changeTrialFinal = read("experiments/unsupervised/results/change_limit_final.json");
 const earlier = readEarlier("experiments/unsupervised/results/tsfabrics.json");
 const feedback = read("experiments/unsupervised/results/feedback_validation_final.json");
 const siteCatalog = read("web/next-samples/catalog.json");
@@ -276,11 +278,30 @@ assert.deepEqual(changeCounts("development"), { runs: 5, histogram: 5, dino: 4 }
 assert.deepEqual(changeCounts("final"), { runs: 16, histogram: 16, dino: 15 });
 assert.equal(changeControl.source_histogram.windows_above_limit, 336);
 assert.equal(changeControl.source_histogram.first_alert_frame, 6432);
+for (const [phase, trial, expected] of [
+  ["development", changeTrialDevelopment, [5, 4, 5]],
+  ["final", changeTrialFinal, [16, 15, 16]],
+]) {
+  assert.equal(trial.protocol.factor, 0.75);
+  assert.equal(trial.protocol.phase, phase);
+  assert.deepEqual([trial.summary.runs, trial.summary.original_alerted, trial.summary.candidate_alerted], expected);
+  assert.deepEqual(trial.summary.candidate_before_join, []);
+  assert.equal(trial.source_control.windows, fullContinuation.window_count);
+  assert.equal(trial.source_control.candidate_windows_over, 2);
+  assert.equal(trial.source_control.candidate_first_alert, null);
+  assert.equal(trial.source_control.candidate_limit, trial.source_control.original_limit * trial.protocol.factor);
+  for (const [name, run] of Object.entries(trial.runs)) {
+    assert.equal(run.original_alarm, changeControl.phases[phase][name].dino_alert);
+    assert(run.candidate_alarm == null || run.candidate_alarm >= 1024);
+  }
+}
 const changePanel = site.match(/<article class="improvement" id="change"[\s\S]*?<\/article>/)?.[0];
 assert(changePanel?.includes("Brightness histogram</span><strong>16 / 16"));
-assert(changePanel.includes("DINOv2</span><strong>15 / 16"));
-assert(changePanel.includes("336 / 513") && changePanel.includes("0 / 513"));
+assert(changePanel.includes("DINOv2 · current</span><strong>15 / 16"));
+assert(changePanel.includes("DINOv2 · lower limit trial</span><strong>16 / 16"));
+assert(changePanel.includes("336 / 513") && changePanel.includes("0 / 513") && changePanel.includes("2 / 513"));
 assert(changePanel.includes("/CHANGE_REPRESENTATION_RESULTS.md"));
+assert(changePanel.includes("/CHANGE_LIMIT_RESULTS.md"));
 
 const selected = Object.values(feedback.runs).filter(run => run.status === "evaluated");
 assert.equal(selected.length, 15);
