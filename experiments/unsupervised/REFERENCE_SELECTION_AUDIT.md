@@ -41,27 +41,33 @@ normal changed run as typical.
 
 ## Reproduce
 
-On the authorized RTX 3090 server, from the repository root:
+On the authorized RTX 3090 server, from the repository root, run
+`bash experiments/unsupervised/run_reference_selection_audit.sh`.
+The script uses the repository-local model/temp caches and checks the actual
+NumPy, Pillow, PyTorch, and CUDA prerequisites. Scikit-learn is not needed.
+It writes `_verified` outputs so an older partial checkpoint is not accepted
+without the expanded per-run reproduction checks.
+The three commands it runs are:
 
 ```sh
-python experiments/unsupervised/reference_selection_audit.py \
+python3 experiments/unsupervised/reference_selection_audit.py \
   --zip experiments/unsupervised/data/TSfabrics.zip \
   --cache experiments/unsupervised/features \
   --baseline experiments/unsupervised/results/unlabeled_review_development.json \
   --phase development \
-  --out experiments/unsupervised/results/reference_selection_development.json
+  --out experiments/unsupervised/results/reference_selection_development_verified.json
 
-python experiments/unsupervised/reference_selection_audit.py \
+python3 experiments/unsupervised/reference_selection_audit.py \
   --zip experiments/unsupervised/data/TSfabrics.zip \
   --cache experiments/unsupervised/features \
   --baseline experiments/unsupervised/results/unlabeled_review_final.json \
   --phase final \
-  --out experiments/unsupervised/results/reference_selection_final.json
+  --out experiments/unsupervised/results/reference_selection_final_verified.json
 
-python experiments/unsupervised/summarize_reference_selection.py \
-  --development experiments/unsupervised/results/reference_selection_development.json \
-  --final experiments/unsupervised/results/reference_selection_final.json \
-  --out experiments/unsupervised/REFERENCE_SELECTION_RESULTS.md
+python3 experiments/unsupervised/summarize_reference_selection.py \
+  --development experiments/unsupervised/results/reference_selection_development_verified.json \
+  --final experiments/unsupervised/results/reference_selection_final_verified.json \
+  --out experiments/unsupervised/REFERENCE_SELECTION_RESULTS_VERIFIED.md
 ```
 
 The script checks that its selected-reference AP, eight-review episode yield,
