@@ -50,10 +50,15 @@ const defectRuns = Object.values(final.runs).filter(run => run.new_defect_episod
 assert.equal(defectRuns.length, 4);
 const handcraftedAP = average(defectRuns.map(run => run.methods.handcrafted_source.average_precision));
 const frozenAP = average(defectRuns.map(run => run.methods.source_knn.average_precision));
+const handcraftedAUROC = average(defectRuns.map(run => run.methods.handcrafted_source.auroc));
+const frozenAUROC = average(defectRuns.map(run => run.methods.source_knn.auroc));
 const wins = defectRuns.filter(run => run.methods.source_knn.average_precision > run.methods.handcrafted_source.average_precision).length;
 assert(site.includes(percent(handcraftedAP)) && site.includes(percent(frozenAP)));
 assert(site.includes(`leads in ${wins} of ${defectRuns.length} runs`));
-assert(site.includes("4 FINAL DEFECT RUNS") && demo.includes("four final defect runs"));
+assert(site.includes("COMPLETE METHOD COMPARISON · 4 DEFECT RUNS"));
+assert(site.includes("DINOv2 + selection") && demo.includes("DINOv2 + selection"));
+assert(demo.includes("four defect runs · combined method leads in two"));
+assert(site.includes(`Macro frame AUROC: ${handcraftedAUROC.toFixed(3)} → ${frozenAUROC.toFixed(3)}`));
 const apRows = [...site.matchAll(/class="run-ap-row" data-run="([^"]+)" style="--classic:([\d.]+)%;--dino:([\d.]+)%"/g)];
 assert.equal(apRows.length, defectRuns.length);
 for (const [, name, classic, dino] of apRows) {
@@ -143,6 +148,7 @@ assert.equal(referenceWins, 1);
 assert.equal(referenceRuns.filter(run => run.methods.selected.fp < run.methods.all.fp).length, 15);
 assert.equal(percent(allAP), "70.3%");
 assert.equal(percent(selectedAP), "85.4%");
+assert(referencePanel.includes(`Macro frame AP: ${percent(allAP)} → ${percent(selectedAP)}; selection leads in ${referenceWins} of 4 defect runs`));
 assert.deepEqual(factorialFinal.protocol.targets, referenceFinal.protocol.targets);
 const factorialRuns = Object.values(factorialFinal.runs);
 assert.equal(factorialRuns.length, 16);

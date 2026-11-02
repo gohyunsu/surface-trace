@@ -85,6 +85,7 @@
 .run-ap-track .is-dino{width:var(--dino)}
 .run-ap-row strong{color:#405173;font-size:11px;font-weight:500;text-align:right;white-space:nowrap}
 .run-ap-row strong small{color:#a4aec2;font-size:9px;font-weight:400}
+.run-ap-panel .evidence-details p{margin:8px 0 0;color:#7886a0;font-size:10px;line-height:1.55}
 .reference-display{padding:22px;background:#fff;border:1px solid #dce2ee;border-radius:8px;box-shadow:0 12px 35px #2b3b5c0b}
 .reference-example-label{margin:0 0 12px;color:#7886a6;font-size:9px;letter-spacing:.12em}
 .reference-maps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}

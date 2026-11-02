@@ -8,7 +8,7 @@
   <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <link rel="stylesheet" href="./site.css?v=e3bf410a4211">
   <link rel="stylesheet" href="./pipeline.css?v=473e03b425fe">
-  <link rel="stylesheet" href="./improvements.css?v=2f5ee81ab3ef">
+  <link rel="stylesheet" href="./improvements.css?v=add205d70e74">
   <script src="./ablation.js?v=e884db45faa8" defer></script>
   <script src="./review-routing.js?v=1676cde7d12a" defer></script>
 </head>
@@ -63,25 +63,26 @@
           <p class="improvement-input">Few labeled defects</p>
           <h3 id="foundation-title">Use frozen DINOv2 features.</h3>
           <p>A pretrained DINOv2-S/14 model describes each image patch. Distance from reference patches produces a localized anomaly map.</p>
-          <div class="improvement-measure"><span>FRAME-SCORE RANKING · 4 FINAL DEFECT RUNS</span><div><small>Handcrafted</small><strong>66.4%</strong><i aria-hidden="true">→</i><small>DINOv2</small><strong>85.4%</strong></div><p>Macro average precision · DINOv2 leads in 2 of 4 runs</p></div>
+          <div class="improvement-measure"><span>COMPLETE METHOD COMPARISON · 4 DEFECT RUNS</span><div><small>Handcrafted</small><strong>66.4%</strong><i aria-hidden="true">→</i><small>DINOv2 + selection</small><strong>85.4%</strong></div><p>Macro frame AP · combined method leads in 2 of 4 runs. Reference selection is compared below.</p></div>
         </div>
         <div class="improvement-display">
           <div class="ablation-gallery" aria-label="Handcrafted and DINOv2 heatmaps on the same recorded frames">
-            <div class="ablation-gallery-head"><div><p class="section-kicker">SELECTED FRAMES</p><h4>Same photo, two heatmaps.</h4></div><div class="ablation-gallery-controls"><span id="pairedCounter">01 / 16</span><button type="button" id="pairedPrev" aria-label="Previous photo">←</button><button type="button" id="pairedNext" aria-label="Next photo">→</button></div></div>
+            <div class="ablation-gallery-head"><div><p class="section-kicker">RECORDED EXAMPLES</p><h4>Same photo, two heatmaps.</h4></div><div class="ablation-gallery-controls"><span id="pairedCounter">01 / 16</span><button type="button" id="pairedPrev" aria-label="Previous photo">←</button><button type="button" id="pairedNext" aria-label="Next photo">→</button></div></div>
             <div class="ablation-case" id="pairedCase">
               <div class="ablation-case-label"><span id="pairedLabel">Normal · changed run</span><small id="pairedFrame">Frame 1,264</small></div>
               <div class="ablation-pair">
                 <figure><div class="ablation-heat"><img id="pairedClassicPhoto" src="./next-samples/sample-06.jpg" alt="Normal textile frame with the handcrafted anomaly map" loading="lazy"><img id="pairedClassicMap" src="./ablation/sample-06-classic.png" alt="" loading="lazy"></div><figcaption><span>Handcrafted</span><strong id="pairedClassicResult" class="ablation-review">False alarm</strong></figcaption></figure>
-                <figure><div class="ablation-heat"><img id="pairedSelectedPhoto" src="./next-samples/sample-06.jpg" alt="Same normal textile frame with the DINOv2 anomaly map" loading="lazy"><img id="pairedSelectedMap" src="./next-samples/sample-06-current.png" alt="" loading="lazy"></div><figcaption><span>DINOv2</span><strong id="pairedSelectedResult" class="ablation-clear">No false alarm</strong></figcaption></figure>
+                <figure><div class="ablation-heat"><img id="pairedSelectedPhoto" src="./next-samples/sample-06.jpg" alt="Same normal textile frame with the DINOv2 anomaly map" loading="lazy"><img id="pairedSelectedMap" src="./next-samples/sample-06-current.png" alt="" loading="lazy"></div><figcaption><span>DINOv2 + selection</span><strong id="pairedSelectedResult" class="ablation-clear">No false alarm</strong></figcaption></figure>
               </div>
             </div>
           </div>
           <div class="run-ap-panel" aria-label="Frame average precision on each of four final defect runs">
-            <div class="run-ap-head"><span>FRAME AP (%) BY RUN</span><div><span><i class="is-classic"></i>Handcrafted</span><span><i class="is-dino"></i>DINOv2</span></div></div>
+            <div class="run-ap-head"><span>FRAME AP (%) BY RUN</span><div><span><i class="is-classic"></i>Handcrafted</span><span><i class="is-dino"></i>DINOv2 + selection</span></div></div>
             <div class="run-ap-row" data-run="T1_S148_I108_1" style="--classic:93.9%;--dino:85.8%"><span>Run 01</span><div><div class="run-ap-track"><i class="is-classic"></i></div><div class="run-ap-track"><i class="is-dino"></i></div></div><strong>93.9 <small>/</small> 85.8</strong></div>
             <div class="run-ap-row" data-run="T1_S174_I108_1" style="--classic:98.5%;--dino:85.8%"><span>Run 02</span><div><div class="run-ap-track"><i class="is-classic"></i></div><div class="run-ap-track"><i class="is-dino"></i></div></div><strong>98.5 <small>/</small> 85.8</strong></div>
             <div class="run-ap-row" data-run="T1_S478_I118_2" style="--classic:62.0%;--dino:87.4%"><span>Run 03</span><div><div class="run-ap-track"><i class="is-classic"></i></div><div class="run-ap-track"><i class="is-dino"></i></div></div><strong>62.0 <small>/</small> 87.4</strong></div>
             <div class="run-ap-row" data-run="T2_S287_I185_1" style="--classic:11.1%;--dino:82.3%"><span>Run 04</span><div><div class="run-ap-track"><i class="is-classic"></i></div><div class="run-ap-track"><i class="is-dino"></i></div></div><strong>11.1 <small>/</small> 82.3</strong></div>
+            <details class="evidence-details"><summary>AUROC and metric scope</summary><p>Macro frame AUROC: 0.884 → 0.965 across the same four defect runs. AUROC and AP compare score rankings; neither counts the staff time or false alerts at the chosen limit.</p></details>
           </div>
         </div>
       </article>
@@ -193,7 +194,7 @@
             <div class="reference-audit-head"><span>FINAL 16 RUNS · EQUAL-SIZE BANKS</span><div><span><i class="is-all"></i>All startup</span><span><i class="is-selected"></i>Selected</span></div></div>
             <div class="reference-audit-row" data-metric="normal"><div><span>Normal frames flagged</span><strong>19,153 <i>→</i> 1,449</strong></div><div class="reference-audit-pair" aria-hidden="true"><span><i class="is-all" style="width:100%"></i></span><span><i class="is-selected" style="width:7.6%"></i></span></div><small>/ 26,088 normal frames</small></div>
             <div class="reference-audit-row" data-metric="defect"><div><span>Defect frames flagged</span><strong>851 <i>→</i> 313</strong></div><div class="reference-audit-pair" aria-hidden="true"><span><i class="is-all" style="width:100%"></i></span><span><i class="is-selected" style="width:36.8%"></i></span></div><small>/ 883 defect frames</small></div>
-            <p class="reference-audit-note">Each bank has its own source-calibrated alert limit.</p>
+            <p class="reference-audit-note">Macro frame AP: 70.3% → 85.4%; selection leads in 1 of 4 defect runs. Each bank has its own source-calibrated alert limit.</p>
           </div>
           <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/REFERENCE_SELECTION_RESULTS_VERIFIED.md">Full reference audit ↗</a>
           <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/SOURCE_THRESHOLD_RESULTS.md">Alert-limit audit ↗</a>

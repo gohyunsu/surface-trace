@@ -7,7 +7,7 @@ for a longer inspection demonstration.
 
 | Chapter | What appears | What to say |
 | --- | --- | --- |
-| Patch features | Three curated paired photos rotate: a changed-run normal where handcrafted falsely alerts, a defect where DINOv2 succeeds, and a defect where DINOv2 misses. The macro frame AP is 66.4%→85.4% over four defect-bearing runs, with DINOv2 ahead on two. | “The foundation features improve average ranking, but neither method wins every run. Here is a counterexample.” |
+| Patch features | Three curated paired photos rotate: a changed-run normal where handcrafted falsely alerts, a defect where DINOv2 succeeds, and a defect where DINOv2 misses. The complete handcrafted and DINOv2-plus-selection methods have macro frame AP 66.4%→85.4% over four defect-bearing runs, with the latter ahead on two. | “The combined method ranks frames better on average, but neither method wins every run. Here is a counterexample.” |
 | Visual shift | Source frame 3136 appears beside real frames 1, 32, 64, 96, and 192 of `T1_S478_I118_2`. The global-feature trace extends with each frame; three windows cross the limit by frame 96 and the signal remains high at frame 192. The two recordings are joined at a known boundary. | “The image distribution changed. Three consecutive windows confirmed an alert at frame 96. The signal still held after the early defect episode; it does not tell us what caused the shift.” |
 | Interval scores | The frozen DINOv2 score trace for 2,884 later frames and eight ranked, 16-frame-spaced candidates. | “We start with two photos. A defect or uncertain result opens the rest of the queue.” |
 | Eight checks | The six conditional requests begin dimmed. The first two reviewed photos are recorded defects, so the remaining six open. Each outcome appears after its photo is checked. | “Two checks come first. Because these reveal defects, we continue to eight. Confirmed defects never enter the normal reference.” |
@@ -35,7 +35,7 @@ version. Keep the run scope visible while moving between chapters.
 
 | Time | Screen action | Point to make |
 | --- | --- | --- |
-| 0:00–0:25 | Open `demo.html`, play the three paired photos, then pause on the counterexample. | DINOv2 improves four-run average frame AP from 66.4% to 85.4%, but misses remain. The paired heatmaps are examples; the AP comes from the four final defect runs. |
+| 0:00–0:25 | Open `demo.html`, play the three paired photos, then pause on the counterexample. | The DINOv2-plus-selection method has four-run average frame AP of 85.4% versus 66.4% for the handcrafted method, but misses remain. The paired heatmaps are examples; the AP comes from the four final defect runs. |
 | 0:25–0:45 | Select **Visual shift** and let the changed-run photos reach frame 96. | The overall appearance changed across two recordings. Three score windows confirm an alert; this does not identify the physical cause. |
 | 0:45–1:05 | Select **Interval scores**. Point to the score trace, the first two bright photos, and six dim photos. | Every plotted point is a recorded frame score. The eight candidate markers match their actual frames; only two checks are requested first. |
 | 1:05–1:35 | Select **Limited review** and reveal the first two outcomes. The remaining six become available. | Confirmed defects open the rest of this queue and stay out of the normal reference. No dataset label is shown before a requested check. |
@@ -52,9 +52,10 @@ The landing page shows a four-cell reference-choice × review-spacing comparison
 With the selected reference, eight highest-score reviews found 15 of 90 new
 defect episodes across four defect-bearing final runs; spacing the same eight
 requests by at least 16 frames found 26. The four-cell table distinguishes
-this from the all-startup reference comparison. DINOv2
-raised macro frame AP from 66.4% to 85.4% over handcrafted features, while
-leading on only two of four runs. These figures come from
+this from the all-startup reference comparison. The complete DINOv2-plus-selection
+method raised macro frame AP from 66.4% to 85.4% over the handcrafted method, while
+leading on only two of four runs. This comparison does not isolate the feature
+extractor. These figures come from
 `results/unlabeled_review_final.json` and
 `results/reference_review_factorial_final.json`, and are checked by
 `scripts/audit_site_evidence.js`.
