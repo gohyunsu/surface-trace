@@ -101,7 +101,13 @@
             <div><span>CHANGED RUN</span><figure><img src="./scenario/target-001.jpg" alt="Changed run frame 1" loading="lazy"><figcaption>1</figcaption></figure><figure><img src="./scenario/target-064.jpg" alt="Changed run frame 64" loading="lazy"><figcaption>64</figcaption></figure><figure><img src="./scenario/target-128.jpg" alt="Changed run frame 128" loading="lazy"><figcaption>128</figcaption></figure><figure><img src="./scenario/target-192.jpg" alt="Changed run frame 192, first sustained alert" loading="lazy"><figcaption>192 <em>ALERT</em></figcaption></figure></div>
           </div>
           <figure class="change-graph"><picture><source media="(max-width:700px)" srcset="./ablation/change-figure-mobile.svg"><img src="./ablation/change-figure.svg" alt="Global-feature change scores stay low on the reference run and cross the alert limit after the switch, with a sustained alert at target frame 192" width="600" height="238" loading="lazy"></picture><figcaption>Development example · alert at new-run frame 192.</figcaption></figure>
+          <div class="change-control" aria-label="Visual-change comparison with a brightness histogram">
+            <div class="change-control-head"><span>CHANGE SIGNAL</span><span>KNOWN SWITCHES <small>/ 16 runs</small></span><span>SAME RECORDING <small>/ 513 windows above limit</small></span></div>
+            <div class="change-control-row"><span>Brightness histogram</span><strong>16 / 16</strong><div><i style="--extent:65.5%" aria-hidden="true"></i><strong>336 / 513</strong></div></div>
+            <div class="change-control-row is-dino"><span>DINOv2</span><strong>15 / 16</strong><div><i style="--extent:0%" aria-hidden="true"></i><strong>0 / 513</strong></div></div>
+          </div>
           <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/SOURCE_CONTINUATION_FULL_RESULTS.md">Full source-run audit ↗</a>
+          <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/CHANGE_REPRESENTATION_RESULTS.md">Change-signal comparison ↗</a>
         </div>
       </article>
 

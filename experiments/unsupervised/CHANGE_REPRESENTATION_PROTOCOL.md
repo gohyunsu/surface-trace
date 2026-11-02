@@ -5,7 +5,7 @@
 The site reports a DINOv2 global-feature MMD alarm on 15 of 16 known joins
 between recorded TSFabrics production scenarios, and no alarm on a long
 continuation of its source recording. Would a much cheaper image-level
-brightness/texture histogram produce the same evidence? This is a
+brightness histogram produce the same evidence? This is a
 **representation ablation**, not a new real process-change benchmark.
 
 ## Fixed comparison before inspecting histogram outcomes

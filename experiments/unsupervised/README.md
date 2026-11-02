@@ -37,6 +37,12 @@ the visual-change negative control from 1,984 to 16,518 later frames in the
 same recorded scenario. None of its 513 score windows crosses the frozen MMD
 limit. This is a one-run continuity check, not an estimated false-alert rate
 or a test against annotated within-run process-change times.
+The [visual-change representation control](CHANGE_REPRESENTATION_RESULTS.md)
+uses the same MMD rule with a 32-bin grayscale histogram. It alerts on all
+sixteen known extended run joins versus fifteen for DINOv2, but crosses its
+own source-calibrated limit on 336/513 later windows of the same source
+recording versus zero for DINOv2. DINOv2 remains the current change signal;
+the result shows a sensitivity versus same-recording stability tradeoff.
 The [source-alert limit audit](SOURCE_THRESHOLD_RESULTS.md) tested five
 source-calibrated quantiles. A 97.5% candidate chosen on the five development
 runs raised defect-frame flags from 313 to 505 on the 16 follow-up runs, but

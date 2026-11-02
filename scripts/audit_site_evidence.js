@@ -17,6 +17,7 @@ const final = read("experiments/unsupervised/results/unlabeled_review_final.json
 const referenceFinal = read("experiments/unsupervised/results/reference_selection_final_verified.json");
 const factorialFinal = read("experiments/unsupervised/results/reference_review_factorial_final.json");
 const fullContinuation = read("experiments/unsupervised/results/source_continuation_full.json");
+const changeControl = read("experiments/unsupervised/results/change_representation_audit.json");
 const earlier = readEarlier("experiments/unsupervised/results/tsfabrics.json");
 const feedback = read("experiments/unsupervised/results/feedback_validation_final.json");
 const siteCatalog = read("web/next-samples/catalog.json");
@@ -198,6 +199,32 @@ assert.equal(fullContinuation.first_confirmed_alert_frame, null);
 const sourceLaterFrames = fullContinuation.test_frames[1] - fullContinuation.test_frames[0];
 assert(site.includes(`No alert across ${sourceLaterFrames.toLocaleString("en-US")} later frames of the same reference recording.`));
 assert(site.includes("/SOURCE_CONTINUATION_FULL_RESULTS.md"));
+assert.equal(changeControl.protocol.source, final.protocol.source);
+assert.deepEqual(changeControl.protocol.final, final.protocol.targets);
+assert.equal(changeControl.source_histogram.window_count, fullContinuation.window_count);
+assert.equal(changeControl.source_histogram.window_scores.length, fullContinuation.window_count);
+assert.equal(changeControl.source_histogram.windows_above_limit,
+  changeControl.source_histogram.window_scores.filter(score => score > changeControl.source_histogram.limit).length);
+assert.equal(changeControl.source_dino.windows_above_limit, fullContinuation.windows_above_limit);
+assert.equal(changeControl.source_dino.first_alert_frame, fullContinuation.first_confirmed_alert_frame);
+const changeCounts = phase => {
+  const rows = Object.values(changeControl.phases[phase]);
+  assert(rows.every(row => row.histogram_alert == null || row.histogram_alert >= changeControl.protocol.source_prelude[1] - changeControl.protocol.source_prelude[0]));
+  return {
+    runs: rows.length,
+    histogram: rows.filter(row => row.histogram_alert != null).length,
+    dino: rows.filter(row => row.dino_alert != null).length,
+  };
+};
+assert.deepEqual(changeCounts("development"), { runs: 5, histogram: 5, dino: 4 });
+assert.deepEqual(changeCounts("final"), { runs: 16, histogram: 16, dino: 15 });
+assert.equal(changeControl.source_histogram.windows_above_limit, 336);
+assert.equal(changeControl.source_histogram.first_alert_frame, 6432);
+const changePanel = site.match(/<article class="improvement" id="change"[\s\S]*?<\/article>/)?.[0];
+assert(changePanel?.includes("Brightness histogram</span><strong>16 / 16"));
+assert(changePanel.includes("DINOv2</span><strong>15 / 16"));
+assert(changePanel.includes("336 / 513") && changePanel.includes("0 / 513"));
+assert(changePanel.includes("/CHANGE_REPRESENTATION_RESULTS.md"));
 
 const selected = Object.values(feedback.runs).filter(run => run.status === "evaluated");
 assert.equal(selected.length, 15);
