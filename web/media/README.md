@@ -1,12 +1,13 @@
 # Recorded-run media
 
-`recorded-run-ko-1080p.mp4` is the 1920 × 1080, 3:20 Korean-narrated
-presentation video. It adds a seventh scene showing the complete evaluation
-score distributions for Run 04 and Run 01, including one run where the earlier
-method scores better. It then follows the recorded visual shift, time-spaced
-review, and separate update test. Short Korean chapter captions are embedded.
-The voice is generated with gTTS. The images and scores are saved experimental
-results; the presentation is a recorded replay.
+`recorded-run-ko-125x-1080p.mp4` is the 1920 × 1080 Korean-narrated
+presentation video at 1.25× speed (about 2:47). It shows two improved example
+runs, the four-run macro frame AP, the recorded visual shift, time-spaced
+review, and the separate update decision. The closing screen summarizes the
+validated gains and the update gate. Short Korean chapter captions are
+embedded. The voice is generated with gTTS, with DINOv2 spoken as
+“다이노 브이 투.” The images and scores are saved experimental results; the
+presentation is a recorded replay. The site keeps the full run-by-run results.
 
 To regenerate the MP4, build and serve `docs/` at
 `http://127.0.0.1:8766/`, then run:

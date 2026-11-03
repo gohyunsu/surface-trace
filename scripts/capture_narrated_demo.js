@@ -77,10 +77,52 @@ const slideHTML = `<!doctype html><html lang="en"><head><meta charset="utf-8"><s
   #narratedCaption em{position:absolute;right:24px;bottom:13px;font:normal 12px 'Segoe UI',sans-serif;
     color:#aabbd0}
 </style></head><body><main><header><div><div class="eyebrow">TSFABRICS · FULL RECORDED RUNS</div>
-<h1>Look beyond selected photos.</h1></div><span class="scope">4 defect runs · entire evaluation</span></header>
-<section class="chart-card"><div class="tabs"><span id="run04" class="active">Run 04</span>
-<span id="run01">Run 01</span></div><img id="distributionImage" src="./ablation/score_distribution_run_04.svg"
-alt="Full-run score distributions"><div class="note">Same recorded frames · normal and defect scores ranked within each method</div></section></main>
+<h1>Look beyond selected photos.</h1></div><span class="scope">4-run macro AP · 66.4% → 85.4%</span></header>
+<section class="chart-card"><div class="tabs"><span id="run03" class="active">Run 03</span>
+<span id="run04">Run 04</span></div><img id="distributionImage" src="./ablation/score_distribution_run_03.svg"
+alt="Full-run score distributions"><div class="note">Two improved examples from four evaluated defect runs · complete score distributions</div></section></main>
+<div id="narratedCaption"><small id="captionNumber"></small><span id="captionText"></span>
+<em>TSFabrics · CC BY 4.0</em></div></body></html>`;
+
+const summaryHTML = `<!doctype html><html lang="en"><head><meta charset="utf-8"><style>
+  *{box-sizing:border-box}body{margin:0;background:#f7f8f6;color:#25334d;font-family:'Segoe UI',Arial,sans-serif}
+  main{width:1680px;margin:54px auto}.eyebrow{font-size:17px;letter-spacing:.12em;color:#60799a}
+  h1{font-size:66px;line-height:1.08;letter-spacing:-.04em;margin:18px 0 28px;font-weight:600}
+  .trial{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:22px;align-items:center;
+    background:#263852;color:#fff;border-radius:14px;padding:38px 42px;min-height:200px}
+  .trial small,.metric small{display:block;font-size:15px;letter-spacing:.11em;text-transform:uppercase}
+  .trial small{color:#a3d8d2}.trial strong{display:block;margin-top:12px;font-size:32px;font-weight:600}
+  .trial p{font-size:19px;line-height:1.4;color:#cbd7e8;margin:8px 0 0}
+  .trial .result{padding-left:28px;border-left:1px solid #657894}.trial .result strong{font-size:42px;color:#afe0d5}
+  .trial .gate strong{font-size:34px;color:#fff}
+  .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:26px}
+  .metric{background:#fff;border:1px solid #dce2e8;border-radius:14px;padding:32px 35px;min-height:304px;
+    box-shadow:0 18px 55px #2434550e}.metric small{color:#60799a}.metric strong{display:block;margin:34px 0 13px;
+    font-size:61px;font-weight:600;letter-spacing:-.04em;color:#356e78}.metric p{font-size:22px;line-height:1.35;margin:0}
+  .metric span{display:block;margin-top:12px;font-size:17px;color:#6f7c8d}
+  .reveal{opacity:.14;transition:opacity .45s ease}.reveal.is-visible{opacity:1}
+  .foot{font-size:18px;color:#65748a;margin-top:22px}
+  #narratedCaption{position:fixed;left:120px;right:120px;bottom:20px;min-height:88px;
+    padding:18px 130px;display:flex;align-items:center;justify-content:center;border-radius:12px;
+    background:#263852;color:#f8fbff;font:500 25px/1.4 'Malgun Gothic',sans-serif;
+    text-align:center;box-shadow:0 10px 30px #15243920}
+  #narratedCaption small{position:absolute;left:24px;top:14px;font:500 13px 'Segoe UI',sans-serif;
+    letter-spacing:.08em;color:#9cd4d1}
+  #narratedCaption em{position:absolute;right:24px;bottom:13px;font:normal 12px 'Segoe UI',sans-serif;
+    color:#aabbd0}
+</style></head><body><main><div class="eyebrow">TSFABRICS · RECORDED VALIDATION</div>
+<h1>Verified gains. Controlled updates.</h1>
+<section class="trial"><div><small>Candidate reference · 15 later runs</small>
+<strong>Review → trial → validate</strong><p>Confirmed normal photos can inform a new reference.</p></div>
+<div class="result reveal" id="trialResult"><small>Trial · normal alerts</small><strong>1,050 → 0</strong>
+<p>Later evaluation frames</p></div><div class="result gate reveal" id="trialGate"><small>Update decision</small>
+<strong>Keep frozen</strong><p>Defect-detection gate not met</p></div></section>
+<div class="metrics" id="summaryMetrics"><div class="metric"><small>Frame anomaly ranking</small>
+<strong>66.4 → 85.4%</strong><p>Macro average precision</p><span>Four defect runs</span></div>
+<div class="metric"><small>Visual shift</small><strong>15 / 16</strong><p>Known run boundaries detected</p>
+<span>Separate change signal</span></div><div class="metric"><small>Limited review</small>
+<strong>15 → 26</strong><p>New defect episodes found</p><span>Same eight-check budget</span></div></div>
+<p class="foot">Frozen reference remains active until an update passes both checks.</p></main>
 <div id="narratedCaption"><small id="captionNumber"></small><span id="captionText"></span>
 <em>TSFabrics · CC BY 4.0</em></div></body></html>`;
 
@@ -99,11 +141,16 @@ alt="Full-run score distributions"><div class="note">Same recorded frames · nor
       bar.id = "narratedCaption";
       bar.innerHTML = '<small id="captionNumber"></small><span id="captionText"></span><em>TSFabrics · CC BY 4.0</em>';
       document.body.append(bar);
+      state.featureCases = state.featureCases.slice(0, 2);
+      document.querySelector('.demo-stage[data-scene="1"] .demo-callout span').textContent =
+        'Macro frame AP · four defect runs';
     });
     const slide = await context.newPage();
     await slide.goto(new URL("index.html", base).href, { waitUntil: "domcontentloaded" });
     await slide.setContent(slideHTML, { waitUntil: "load" });
     await slide.locator("#distributionImage").evaluate(image => image.decode());
+    const summary = await context.newPage();
+    await summary.setContent(summaryHTML, { waitUntil: "load" });
 
     let frame = 0;
     const caption = async (page, item, number) => page.evaluate(({ label, text }) => {
@@ -137,23 +184,23 @@ alt="Full-run score distributions"><div class="note">Same recorded frames · nor
     await chapter(1);
     let featureCase = -1;
     await capture(demo, segment("features"), 2, async (local, length) => {
-      const current = Math.min(2, Math.floor(local / length * 3));
+      const current = Math.min(1, Math.floor(local / length * 2));
       if (current !== featureCase) {
         featureCase = current;
         await demo.evaluate(index => renderFeature(index), current);
       }
     });
 
-    let shownRun = "04";
+    let shownRun = "03";
     await capture(slide, segment("distribution"), 3, async (local, length) => {
-      const run = local < length * .55 ? "04" : "01";
+      const run = local < length * .45 ? "03" : "04";
       if (run === shownRun) return;
       shownRun = run;
       await slide.evaluate(next => {
         const image = document.querySelector("#distributionImage");
         image.src = `./ablation/score_distribution_run_${next}.svg`;
+        document.querySelector("#run03").classList.toggle("active", next === "03");
         document.querySelector("#run04").classList.toggle("active", next === "04");
-        document.querySelector("#run01").classList.toggle("active", next === "01");
       }, run);
       await slide.locator("#distributionImage").evaluate(image => image.decode());
     });
@@ -192,15 +239,12 @@ alt="Full-run score distributions"><div class="note">Same recorded frames · nor
       throw new Error("Recorded eight-check result did not appear");
     }
 
-    await chapter(5);
-    await demo.evaluate(() => clearDecisionTimers());
-    let decisionPhase = -1;
-    await capture(demo, segment("decision"), 7, async (local, length) => {
-      const phase = Math.min(3, Math.floor(local / length * 4));
-      if (phase !== decisionPhase) {
-        decisionPhase = phase;
-        await demo.evaluate(value => renderDecision(value), phase);
-      }
+    await capture(summary, segment("decision"), 7, async (local, length) => {
+      const progress = local / length;
+      await summary.evaluate(value => {
+        document.querySelector("#trialResult").classList.toggle("is-visible", value >= .18);
+        document.querySelector("#trialGate").classList.toggle("is-visible", value >= .43);
+      }, progress);
     });
     if (frame !== plan.total_frames) throw new Error(`Captured ${frame}, expected ${plan.total_frames}`);
     console.log(JSON.stringify({ frames: frame, fps: plan.fps, duration: plan.duration_seconds,

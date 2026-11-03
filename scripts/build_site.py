@@ -96,7 +96,7 @@ def build(out: Path) -> tuple[int, int]:
             shutil.copyfile(asset, out / "unlabeled-demo" / asset.name)
     shutil.copyfile(WEB / "feedback" / "meeting-illustration.png", out / "feedback" / "meeting-illustration.png")
     shutil.copyfile(WEB / "media" / "recorded-run-1080p.gif", out / "media" / "recorded-run-1080p.gif")
-    shutil.copyfile(WEB / "media" / "recorded-run-ko-1080p.mp4", out / "media" / "recorded-run-ko-1080p.mp4")
+    shutil.copyfile(WEB / "media" / "recorded-run-ko-125x-1080p.mp4", out / "media" / "recorded-run-ko-125x-1080p.mp4")
 
     saved = np.load(MODEL)
     calibration_file = ROOT / "model" / "browser_calibration.json"
