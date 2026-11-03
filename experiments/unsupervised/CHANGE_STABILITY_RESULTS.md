@@ -21,6 +21,15 @@ constant, so this is an **unexplained within-run alert**, not a verified false
 alarm. The two recordings do not justify promoting the lower limit. The active
 limit remains unchanged.
 
+[Representative control frames](figures/change_control_contact_sheet.jpg) show
+the calibration segment of `T2_S466_I39_1`, its continuation, and the frame
+where the current limit first confirmed the alert. The alert at window end
+3,264 includes zero-based image index 3,263, which the sheet marks. These sparse
+images provide a visual audit, but cannot identify whether an unrecorded
+process adjustment or ordinary appearance variation caused the signal.
+The sheet is reproducible with
+[`inspect_change_control.py`](inspect_change_control.py).
+
 The original source continuation's 16,518 later frames had no confirmed alert
 under the current limit. That single source result therefore does not describe
 within-run stability across other settings. The new control is also post-hoc;

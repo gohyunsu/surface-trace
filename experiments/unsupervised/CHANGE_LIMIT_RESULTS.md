@@ -60,8 +60,9 @@ limit. These values are calculated from the saved score arrays in
 and [`results/change_limit_final.json`](results/change_limit_final.json).
 
 This is a retrospective sensitivity diagnostic, not a new threshold choice.
-It does not replace the additional independently calibrated continuity checks
-in [`CHANGE_STABILITY_PROTOCOL.md`](CHANGE_STABILITY_PROTOCOL.md).
+The subsequent [independently calibrated continuity check](CHANGE_STABILITY_RESULTS.md)
+found an unexplained within-run alert in one of two additional recordings
+under both limits; the 75% trial crossed all 59 continuation windows there.
 
 **Interpretation.** This fixed rule improves sensitivity on the measured
 joins between existing recordings without increasing *confirmed* alerts on

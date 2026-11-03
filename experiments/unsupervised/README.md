@@ -65,6 +65,8 @@ current 15/16 source-calibrated result. An [additional continuity protocol](CHAN
 tests the fixed factor after independently calibrating on two longer recordings
 without defect labels. This diagnostic reset is not the active fixed-source
 pipeline, and the lack of defect labels does not establish within-run stability.
+The [completed stability check](CHANGE_STABILITY_RESULTS.md) found one
+unexplained within-run alert under both limits, so the lower limit remains a trial.
 The [source-alert limit audit](SOURCE_THRESHOLD_RESULTS.md) tested five
 source-calibrated quantiles. A 97.5% candidate chosen on the five development
 runs raised defect-frame flags from 313 to 505 on the 16 follow-up runs, but
