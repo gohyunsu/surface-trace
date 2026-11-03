@@ -1,4 +1,28 @@
-# Recorded-run GIF
+# Recorded-run media
+
+`recorded-run-ko-1080p.mp4` is the 1920 × 1080, 3:20 Korean-narrated
+presentation video. It adds a seventh scene showing the complete evaluation
+score distributions for Run 04 and Run 01, including one run where the earlier
+method scores better. It then follows the recorded visual shift, time-spaced
+review, and separate update test. Short Korean chapter captions are embedded.
+The voice is generated with gTTS. The images and scores are saved experimental
+results; the presentation is a recorded replay.
+
+To regenerate the MP4, build and serve `docs/` at
+`http://127.0.0.1:8766/`, then run:
+
+```text
+python -m pip install gTTS imageio-ffmpeg
+python scripts/build_narrated_demo_audio.py --ffmpeg PATH_TO_FFMPEG
+node scripts/capture_narrated_demo.js
+python scripts/build_narrated_demo_video.py --ffmpeg PATH_TO_FFMPEG
+```
+
+`scripts/narrated_demo_script.json` holds the Korean narration. The captured
+frames and intermediate audio stay in ignored `out/narrated-demo/`. Copy the
+finished MP4 to `web/media/` and run `python scripts/build_site.py` to publish.
+
+## Short silent GIF
 
 `recorded-run-1080p.gif` is a 1920 x 1080 capture of the site's recorded-data
 replay, not live camera inference. It uses saved TSFabrics photos and model
