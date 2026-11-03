@@ -1,13 +1,16 @@
 # Recorded-run media
 
 `recorded-run-ko-125x-1080p.mp4` is the 1920 × 1080 Korean-narrated
-presentation video at 1.25× speed (about 2:47). It shows two improved example
-runs, the four-run macro frame AP, the recorded visual shift, time-spaced
-review, and the separate update decision. The closing screen summarizes the
-validated gains and the update gate. Short Korean chapter captions are
-embedded. The voice is generated with gTTS, with DINOv2 spoken as
-“다이노 브이 투.” The images and scores are saved experimental results; the
-presentation is a recorded replay. The site keeps the full run-by-run results.
+presentation video at 1.25× speed (about 3:51). Its nine scenes follow meeting
+feedback, the development and TSFabrics data choice, DINOv2 features, the
+recorded visual shift, time-spaced review, the actual interval summary page,
+full-run score distributions, separate update validation, and four feedback
+questions. Each scene has timed Korean explanatory captions. The questions ask
+for a 1–5 score, rationale, and priority improvement on implementation,
+dataset choice, method, and practical use. The voice is generated with gTTS,
+with DINOv2 spoken as “다이노 브이 투.” Images and scores are saved experimental
+results; the presentation is a recorded replay. The site keeps the full
+run-by-run results.
 
 To regenerate the MP4, build and serve `docs/` at
 `http://127.0.0.1:8766/`, then run:

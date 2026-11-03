@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 RATE = 48000
 FPS = 6
 TAIL_SECONDS = 1.0
+PLAYBACK_RATE = 1.25
 
 
 def stamp(seconds: float) -> str:
@@ -34,8 +35,13 @@ def main() -> None:
     if not args.ffmpeg.is_file():
         raise SystemExit(f"ffmpeg executable not found: {args.ffmpeg}")
     script = json.loads((ROOT / "scripts" / "narrated_demo_script.json").read_text(encoding="utf-8"))
-    if len(script) != 7 or len({item["id"] for item in script}) != 7:
-        raise SystemExit("Expected seven distinct narration scenes")
+    if len(script) != 9 or len({item["id"] for item in script}) != 9:
+        raise SystemExit("Expected nine distinct narration scenes")
+    for item in script:
+        cues = item["captions"]
+        times = [cue["at"] for cue in cues]
+        if not times or times[0] != 0 or times != sorted(set(times)) or times[-1] >= 1:
+            raise SystemExit(f"Invalid caption cues: {item['id']}")
     args.out.mkdir(parents=True, exist_ok=True)
 
     segments = []
@@ -53,7 +59,7 @@ def main() -> None:
                 raise SystemExit(f"Unexpected decoded audio format: {wav}")
             sample_count = source.getnframes()
             chunk = source.readframes(sample_count)
-        frames = math.ceil((sample_count / RATE + TAIL_SECONDS) * FPS)
+        frames = math.ceil((sample_count / RATE + TAIL_SECONDS + item.get("hold_seconds", 0)) * FPS)
         padded_samples = frames * RATE // FPS
         audio_chunks.append(chunk + bytes((padded_samples - sample_count) * 4))
         segments.append({**item, "audio_seconds": round(sample_count / RATE, 3),
@@ -73,9 +79,13 @@ def main() -> None:
             "duration_seconds": frame_cursor / FPS, "segments": segments}
     (args.out / "plan.json").write_text(json.dumps(plan, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     subtitles = []
-    for number, item in enumerate(segments, 1):
-        subtitles.append(f"{number}\n{stamp(item['start_frame'] / FPS)} --> "
-                         f"{stamp(item['end_frame'] / FPS)}\n{item['caption']}\n")
+    for item in segments:
+        for index, cue in enumerate(item["captions"]):
+            first = item["start_frame"] + round(cue["at"] * item["frames"])
+            last = item["start_frame"] + (round(item["captions"][index + 1]["at"] * item["frames"])
+                                          if index + 1 < len(item["captions"]) else item["frames"])
+            subtitles.append(f"{len(subtitles) + 1}\n{stamp(first / FPS / PLAYBACK_RATE)} --> "
+                             f"{stamp(last / FPS / PLAYBACK_RATE)}\n{cue['text']}\n")
     (args.out / "captions.srt").write_text("\n".join(subtitles), encoding="utf-8")
     print(f"Total: {frame_cursor / FPS:.2f}s; audio: {soundtrack}")
 
