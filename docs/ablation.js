@@ -93,3 +93,21 @@ if (gallery) {
     }
   }).catch(error => console.error("Paired frame gallery:", error));
 }
+
+const scoreDistribution = document.getElementById("score-distribution");
+if (scoreDistribution) {
+  const figure = document.getElementById("scoreDistributionFigure");
+  const mobile = document.getElementById("scoreDistributionMobile");
+  const buttons = [...scoreDistribution.querySelectorAll("[data-score-run]")];
+  for (const button of buttons) {
+    button.addEventListener("click", () => {
+      const run = button.dataset.scoreRun;
+      mobile.srcset = `./ablation/score_distribution_run_${run}_mobile.svg`;
+      figure.src = `./ablation/score_distribution_run_${run}.svg`;
+      figure.alt = `Run ${run}: normal and defect frame score distributions for the handcrafted and DINOv2 plus selected-reference methods`;
+      for (const option of buttons) {
+        option.setAttribute("aria-pressed", String(option === button));
+      }
+    });
+  }
+}

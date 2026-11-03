@@ -90,6 +90,22 @@ const { chromium } = require("playwright");
           await page.locator("#foundation .setting-check summary").click();
           await page.locator("#foundation").screenshot({ path: path.join(out, `foundation-setting-${viewport.label}.png`) });
           if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)) throw new Error(`setting check ${viewport.label}: horizontal overflow`);
+          await page.locator("#score-distribution summary").click();
+          await page.locator('#score-distribution [data-score-run="04"]').click();
+          await page.locator("#scoreDistributionFigure").evaluate(image => image.decode());
+          await page.locator("#score-distribution").screenshot({ path: path.join(out, `score-distribution-${viewport.label}.png`) });
+          const distributionLayout = await page.evaluate(() => {
+            const panel = document.querySelector("#score-distribution").getBoundingClientRect();
+            const copy = document.querySelector("#foundation .improvement-copy").getBoundingClientRect();
+            const overlapX = Math.min(panel.right, copy.right) - Math.max(panel.left, copy.left);
+            const overlapY = Math.min(panel.bottom, copy.bottom) - Math.max(panel.top, copy.top);
+            const scroller = document.querySelector(".score-distribution-scroller");
+            return { copyOverlap: overlapX > 1 && overlapY > 1,
+                     innerOverflow: scroller.scrollWidth > scroller.clientWidth + 1 };
+          });
+          if (distributionLayout.copyOverlap || distributionLayout.innerOverflow) {
+            throw new Error(`score distribution ${viewport.label}: layout overlap or horizontal scroll`);
+          }
           await page.locator("#change .evidence-details summary").click();
           await page.locator("#change").screenshot({ path: path.join(out, `change-comparison-${viewport.label}.png`) });
           if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)) throw new Error(`change comparison ${viewport.label}: horizontal overflow`);

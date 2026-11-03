@@ -134,10 +134,31 @@ button:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visi
 .change-control-note{margin:11px 1px 1px;color:#647087;font-size:11px;line-height:1.55}
 .change-display .evidence-link+.evidence-link{margin-left:15px}
 
+/* Full-run evidence stays compact until a visitor chooses to inspect it. */
+.score-distribution{grid-column:1/-1;min-width:0;margin-top:-8px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.score-distribution summary{display:flex;align-items:center;gap:14px;padding:17px 21px;cursor:pointer;list-style:none;color:var(--ink)}
+.score-distribution summary::-webkit-details-marker{display:none}
+.score-distribution summary span{font-size:15px;font-weight:500}
+.score-distribution summary small{margin-left:auto;color:var(--muted);font-size:11px}
+.score-distribution summary::after{content:"+";color:var(--accent);font-size:22px;line-height:1;font-weight:400}
+.score-distribution[open] summary{border-bottom:1px solid var(--line)}
+.score-distribution[open] summary::after{content:"−"}
+.score-distribution summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:8px}
+.score-distribution-content{padding:21px}
+.score-distribution-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:15px}
+.score-distribution-tabs button{padding:8px 13px;border:1px solid #dce2ed;border-radius:7px;background:#fff;color:#5d6b83;font:inherit;font-size:12px;cursor:pointer;transition:background .18s ease,border-color .18s ease}
+.score-distribution-tabs button:hover{background:#f3f5fc;border-color:#b8c1df}
+.score-distribution-tabs button[aria-pressed="true"]{border-color:#8175e6;background:#eeebff;color:#4439aa}
+.score-distribution-tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.score-distribution-scroller{max-width:100%;overflow-x:auto;border-radius:6px;background:#f8f8f6}
+.score-distribution-scroller img{display:block;width:100%;min-width:760px;max-width:none;height:auto}
+@media(max-width:900px){.score-distribution-scroller img{min-width:0}}
+
 /* Keep the explanation beside the result while reading a long comparison. */
 @media(min-width:1001px){
   .pipeline-landing .improvement{align-items:start}
   .pipeline-landing .improvement-copy{position:sticky;top:105px;align-self:start}
+  .pipeline-landing #foundation .improvement-copy{position:static}
 }
 
 /* Compact labels must remain legible at normal browser zoom. */
@@ -225,6 +246,9 @@ button:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visi
   .review-coverage-row{grid-template-columns:70px minmax(0,1fr) 50px;gap:9px;padding:11px 0}
   .inspector-page .inspect-main,.demo-main,.interval-main,.review-main{padding-top:34px}
   .pipeline-landing .main-nav a::after{bottom:0}
+  .score-distribution{margin-top:0}
+  .score-distribution summary{padding:15px 16px}
+  .score-distribution-content{padding:14px}
 }
 @media(max-width:390px){
   #foundation .improvement-measure>div{display:grid;grid-template-columns:1fr 14px 1fr;grid-template-rows:auto auto;align-items:end;gap:3px 6px}

@@ -63,6 +63,15 @@ percentile bin, with a shared vertical scale for the two methods:
 python experiments/unsupervised/plot_score_distribution.py \
   --result experiments/unsupervised/results/score_distribution_final.json \
   --out-dir experiments/unsupervised/figures
+python experiments/unsupervised/plot_score_distribution.py \
+  --result experiments/unsupervised/results/score_distribution_final.json \
+  --out-dir web/ablation
+python experiments/unsupervised/plot_score_distribution.py \
+  --result experiments/unsupervised/results/score_distribution_final.json \
+  --out-dir experiments/unsupervised/figures --layout stacked
+python experiments/unsupervised/plot_score_distribution.py \
+  --result experiments/unsupervised/results/score_distribution_final.json \
+  --out-dir web/ablation --layout stacked
 ```
 
 The plotter checks all four runs, bin edges, class counts, and normalized

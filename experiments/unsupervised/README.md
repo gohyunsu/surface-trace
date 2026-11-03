@@ -8,10 +8,15 @@ The latest label-free ranking and limited-review benchmark is documented in
 [UNLABELED_REVIEW_PROTOCOL.md](UNLABELED_REVIEW_PROTOCOL.md), with all-run
 [results](UNLABELED_REVIEW_RESULTS.md). Its fixed-run site replay is generated
 by `export_unlabeled_demo.py`.
-An [audit-only score-distribution export](SCORE_DISTRIBUTION_PROTOCOL.md) is
-prepared for all frames in the four final defect recordings. Its figure is
-withheld until recomputed AP and AUROC match the saved comparison; the curated
-photo gallery is not used as a distribution sample.
+The [full-run score-distribution audit](SCORE_DISTRIBUTION_RESULTS.md) compares
+normal and defect score ranks across all evaluated frames in the four final
+defect recordings. The exporter reproduced the saved AP and AUROC for both
+methods before generating the figures; the curated photo gallery is not used
+as a distribution sample.
+The [additional change-stability controls](CHANGE_STABILITY_RESULTS.md) found
+an unexplained within-run alert in one of two other defect-label-free
+recordings under both the current limit and the lower-limit trial. The lower
+limit remains inactive.
 The subsequent fixed eight-review update test is documented in
 [FEEDBACK_VALIDATION_PROTOCOL.md](FEEDBACK_VALIDATION_PROTOCOL.md) and
 [FEEDBACK_VALIDATION_RESULTS.md](FEEDBACK_VALIDATION_RESULTS.md). On 15 eligible

@@ -89,6 +89,27 @@ const { chromium } = require("playwright");
       assert.deepStrictEqual(failures, [], "Each paired photo and heatmap should load");
       await page.getByRole("button", { name: "Next photo" }).click();
     }
+    await page.locator("#score-distribution summary").click();
+    for (let run = 1; run <= 4; run++) {
+      const label = `Run ${String(run).padStart(2, "0")}`;
+      const button = page.locator("#score-distribution").getByRole("button", { name: label });
+      await button.click();
+      assert.strictEqual(await button.getAttribute("aria-pressed"), "true");
+      assert((await page.locator("#scoreDistributionFigure").getAttribute("src")).endsWith(`score_distribution_run_${String(run).padStart(2, "0")}.svg`));
+      assert(await page.locator("#scoreDistributionFigure").evaluate(async image => {
+        await image.decode();
+        return image.naturalWidth > 0;
+      }), `${label} distribution should render`);
+    }
+    const mobileDistribution = await browser.newPage({ viewport: { width: 390, height: 844 } });
+    await mobileDistribution.goto(base, { waitUntil: "networkidle" });
+    await mobileDistribution.locator("#score-distribution summary").click();
+    await mobileDistribution.locator('#score-distribution [data-score-run="04"]').click();
+    assert(await mobileDistribution.locator("#scoreDistributionFigure").evaluate(async image => {
+      await image.decode();
+      return image.currentSrc.endsWith("score_distribution_run_04_mobile.svg") && image.naturalWidth > 0;
+    }), "Mobile distribution should use the stacked recorded chart");
+    await mobileDistribution.close();
     for (const [selector, destination] of [["#baseline .method-foot a", "inspect.html"], ["#next .improvement-links .button", "demo.html?play=1"], ["#review .improvement-action", "interval.html"]]) {
       const link = page.locator(selector);
       assert((await link.getAttribute("href")).endsWith(destination));

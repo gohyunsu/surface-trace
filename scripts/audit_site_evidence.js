@@ -32,6 +32,8 @@ const fullContinuation = read("experiments/unsupervised/results/source_continuat
 const changeControl = read("experiments/unsupervised/results/change_representation_audit.json");
 const changeTrialDevelopment = read("experiments/unsupervised/results/change_limit_development.json");
 const changeTrialFinal = read("experiments/unsupervised/results/change_limit_final.json");
+const scoreDistribution = read("experiments/unsupervised/results/score_distribution_final.json");
+const changeStability = read("experiments/unsupervised/results/change_stability_controls.json");
 const earlier = readEarlier("experiments/unsupervised/results/tsfabrics.json");
 const feedback = read("experiments/unsupervised/results/feedback_validation_final.json");
 const siteCatalog = read("web/next-samples/catalog.json");
@@ -89,6 +91,35 @@ for (const [, name, classic, dino] of apRows) {
   assert(row.includes(`<strong>${classic} <small>/</small> ${dino}</strong>`));
 }
 assert.equal(new Set(apRows.map(row => row[1])).size, defectRuns.length);
+assert.equal(scoreDistribution.source, final.protocol.source);
+assert.equal(scoreDistribution.evaluation_start, 320);
+assert.deepEqual(Object.keys(scoreDistribution.runs), Object.keys(final.runs).filter(name => final.runs[name].new_defect_episodes > 0));
+const scoreMethods = ["handcrafted_source", "source_knn"];
+for (const [index, [name, distribution]] of Object.entries(scoreDistribution.runs).entries()) {
+  const recorded = final.runs[name];
+  for (const method of scoreMethods) {
+    const result = distribution.methods[method];
+    assert(Math.abs(result.average_precision - recorded.methods[method].average_precision) < 0.0005);
+    assert(Math.abs(result.auroc - recorded.methods[method].auroc) < 0.0005);
+    for (const [label, count] of [["normal", distribution.normal_frames], ["defect", distribution.defect_frames]]) {
+      const histogram = result.classes[label];
+      assert.equal(histogram.frames, count);
+      assert.equal(histogram.fraction_by_bin.length, 20);
+      assert(Math.abs(histogram.fraction_by_bin.reduce((sum, value) => sum + value, 0) - 1) < 1e-9);
+    }
+  }
+  const number = String(index + 1).padStart(2, "0");
+  for (const suffix of ["", "_mobile"]) {
+    const filename = `score_distribution_run_${number}${suffix}.svg`;
+    const figure = fs.readFileSync(path.join(root, "web", "ablation", filename));
+    assert(figure.equals(fs.readFileSync(path.join(root, "docs", "ablation", filename))));
+    assert(figure.equals(fs.readFileSync(path.join(root, "experiments", "unsupervised", "figures", filename))));
+  }
+  assert(site.includes(`data-score-run="${number}"`));
+}
+assert(site.includes('id="score-distribution"'));
+assert(galleryScript.includes('score_distribution_run_${run}.svg'));
+assert(galleryScript.includes('score_distribution_run_${run}_mobile.svg'));
 assert.equal(siteCatalog.source, final.protocol.source);
 assert.equal(siteCatalog.source, earlier.protocol.source);
 const featuredMatch = galleryScript.match(/const featured = \[([^\]]+)\]/);
@@ -305,6 +336,27 @@ assert(changePanel.includes("DINOv2 · lower limit trial</span><strong>16 / 16")
 assert(changePanel.includes("336 / 513") && changePanel.includes("0 / 513") && changePanel.includes("2 / 513"));
 assert(changePanel.includes("/CHANGE_REPRESENTATION_RESULTS.md"));
 assert(changePanel.includes("/CHANGE_LIMIT_RESULTS.md"));
+assert.equal(changeStability.protocol.factor, 0.75);
+assert.equal(changeStability.protocol.consecutive, 3);
+assert.equal(Object.keys(changeStability.runs).length, 2);
+for (const control of Object.values(changeStability.runs)) {
+  assert.equal(control.defect_labels, 0);
+  assert.equal(control.ambiguous_labels, 0);
+  assert.equal(control.window_scores.length, control.window_end_frames.length);
+  for (const [limit, prefix] of [[control.original_limit, "original"], [control.trial_limit, "trial"]]) {
+    let streak = 0;
+    let firstAlert = null;
+    for (let i = 0; i < control.window_scores.length; i++) {
+      streak = control.window_scores[i] > limit ? streak + 1 : 0;
+      if (streak === 3 && firstAlert == null) firstAlert = control.window_end_frames[i];
+    }
+    assert.equal(control[`${prefix}_first_alert`], firstAlert);
+  }
+}
+assert.equal(Object.values(changeStability.runs).filter(run => run.original_first_alert != null && run.trial_first_alert != null).length, 1);
+assert(changePanel.includes("unexplained within-run alert under both limits"));
+assert(changePanel.includes("trial remains inactive"));
+assert(changePanel.includes("/CHANGE_STABILITY_RESULTS.md"));
 
 const selected = Object.values(feedback.runs).filter(run => run.status === "evaluated");
 assert.equal(selected.length, 15);

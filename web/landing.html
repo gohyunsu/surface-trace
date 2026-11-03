@@ -92,6 +92,18 @@
             </div></details>
           </div>
         </div>
+        <details class="score-distribution" id="score-distribution">
+          <summary><span>Full-run score distributions</span><small>4 defect runs</small></summary>
+          <div class="score-distribution-content">
+            <div class="score-distribution-tabs" role="group" aria-label="Choose a recorded run">
+              <button type="button" data-score-run="01" aria-pressed="true">Run 01</button>
+              <button type="button" data-score-run="02" aria-pressed="false">Run 02</button>
+              <button type="button" data-score-run="03" aria-pressed="false">Run 03</button>
+              <button type="button" data-score-run="04" aria-pressed="false">Run 04</button>
+            </div>
+            <div class="score-distribution-scroller"><picture><source id="scoreDistributionMobile" media="(max-width:900px)" srcset="./ablation/score_distribution_run_01_mobile.svg"><img id="scoreDistributionFigure" src="./ablation/score_distribution_run_01.svg" alt="Run 01: normal and defect frame score distributions for the handcrafted and DINOv2 plus selected-reference methods" loading="lazy"></picture></div>
+          </div>
+        </details>
       </article>
 
       <article class="improvement" id="change" aria-labelledby="change-title">
@@ -115,8 +127,8 @@
             <div class="change-control-row is-trial"><span>DINOv2 · lower limit trial</span><strong>16 / 16</strong><div><i style="--extent:0.4%" aria-hidden="true"></i><strong>2 / 513</strong></div></div>
             <div class="change-control-row"><span>Brightness histogram</span><strong>16 / 16</strong><div><i style="--extent:65.5%" aria-hidden="true"></i><strong>336 / 513</strong></div></div>
           </div>
-          <p class="change-control-note">The lower-limit trial caught one more known switch. Its two source windows were isolated, with no confirmed alert on that recording.</p>
-          <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/CHANGE_REPRESENTATION_RESULTS.md">Change-signal results ↗</a><a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/CHANGE_LIMIT_RESULTS.md">Lower-limit trial ↗</a></details>
+          <p class="change-control-note">The lower limit caught one more known switch. In two additional defect-label-free recordings, one had an unexplained within-run alert under both limits; the trial remains inactive.</p>
+          <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/CHANGE_REPRESENTATION_RESULTS.md">Change signals ↗</a><a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/CHANGE_LIMIT_RESULTS.md">Limit trial ↗</a><a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/CHANGE_STABILITY_RESULTS.md">Stability check ↗</a></details>
           <a class="evidence-link" href="https://github.com/gohyunsu/surface-trace/blob/main/experiments/unsupervised/SOURCE_CONTINUATION_FULL_RESULTS.md">Full source-run audit ↗</a>
         </div>
       </article>
